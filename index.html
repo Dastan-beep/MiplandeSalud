@@ -625,6 +625,46 @@ body {
   .stats-row { grid-template-columns: 1fr 1fr; }
   .g3 { grid-template-columns: 1fr 1fr; }
 }
+
+/* ===== PANTALLA DE BIENVENIDA (ONBOARDING) ===== */
+.ob-overlay { position: fixed; inset: 0; z-index: 3000; background: linear-gradient(160deg, var(--verde-dark) 0%, #178361 55%, var(--verde) 100%);
+  display: flex; align-items: center; justify-content: center; padding: 1rem; overflow-y: auto; }
+.ob-overlay.hidden { display: none; }
+.ob-card { background: var(--surface); border-radius: 22px; padding: 1.6rem 1.4rem 1.3rem; max-width: 460px; width: 100%;
+  box-shadow: 0 18px 50px rgba(0,0,0,0.3); margin: auto; }
+.ob-logo { font-size: 34px; text-align: center; line-height: 1; margin-bottom: 6px; }
+.ob-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 25px; text-align: center; color: var(--text); line-height: 1.2; }
+.ob-sub { text-align: center; color: var(--text-2); font-size: 13px; margin: 6px 0 14px; }
+.ob-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 14px; }
+.ob-dot { width: 26px; height: 5px; border-radius: 4px; background: var(--border-2); transition: background .2s; }
+.ob-dot.on { background: var(--verde); }
+.ob-step { display: none; }
+.ob-step.on { display: block; }
+.ob-field { margin-bottom: 11px; }
+.ob-field label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+.ob-field input, .ob-field select { width: 100%; padding: 11px 12px; border: 1.5px solid var(--border-2); border-radius: 12px;
+  font-size: 15px; font-family: inherit; background: var(--bg); color: var(--text); }
+.ob-field input:focus, .ob-field select:focus { outline: none; border-color: var(--verde); background: #fff; }
+.ob-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ob-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ob-opt { padding: 12px 8px; border: 1.5px solid var(--border-2); border-radius: 14px; background: var(--bg); text-align: center;
+  font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; color: var(--text); line-height: 1.3; }
+.ob-opt small { display: block; font-weight: 400; color: var(--text-3); font-size: 11px; margin-top: 2px; }
+.ob-opt.on { border-color: var(--verde); background: var(--verde-light); color: var(--verde-dark); }
+.ob-err { color: var(--coral-dark); font-size: 12px; min-height: 16px; margin: 2px 0 6px; text-align: center; }
+.ob-nav { display: flex; gap: 10px; margin-top: 6px; }
+.ob-btn { flex: 1; padding: 13px; border-radius: 14px; border: 1.5px solid var(--border-2); background: var(--surface);
+  font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; color: var(--text); }
+.ob-btn.primary { background: var(--verde-dark); border-color: var(--verde-dark); color: #fff; flex: 2; }
+.ob-btn.primary:active { background: var(--verde); }
+.ob-sum { background: var(--verde-light); border-radius: 16px; padding: 14px; text-align: center; margin-bottom: 10px; }
+.ob-sum .big { font-family: 'DM Serif Display', Georgia, serif; font-size: 38px; color: var(--verde-dark); line-height: 1; }
+.ob-sum .lbl { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+.ob-macros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+.ob-macro { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 9px 4px; text-align: center; }
+.ob-macro b { display: block; font-size: 17px; }
+.ob-macro span { font-size: 11px; color: var(--text-2); }
+.ob-note { font-size: 12px; color: var(--amber); background: var(--amber-light); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; line-height: 1.4; }
 </style>
 </head>
 <body>
@@ -839,8 +879,15 @@ body {
       <button class="modal-close" onclick="closeModal('modalProfile')">✕</button>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-      <div><label style="font-size:11px;font-weight:700">Nombre</label><input class="sinput" id="inp-nombre" value="Vanessa"></div>
+      <div><label style="font-size:11px;font-weight:700">Nombre</label><input class="sinput" id="inp-nombre" value=""></div>
       <div><label style="font-size:11px;font-weight:700">Edad</label><input class="sinput" id="inp-edad" type="number" value="30"></div>
+    </div>
+    <div style="margin-bottom:8px">
+      <label style="font-size:11px;font-weight:700">Sexo</label>
+      <select class="sinput" id="inp-sexo">
+        <option value="mujer">Mujer</option>
+        <option value="hombre">Hombre</option>
+      </select>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
       <div><label style="font-size:11px;font-weight:700">Peso actual (kg)</label><input class="sinput" id="inp-peso" type="number" step="0.1" value="68"></div>
@@ -1040,6 +1087,61 @@ body {
   </div>
 </div>
 
+
+<!-- PANTALLA DE BIENVENIDA: pide datos la primera vez -->
+<div class="ob-overlay hidden" id="onboarding">
+  <div class="ob-card">
+    <div class="ob-logo">🥑</div>
+    <div class="ob-title" id="obTitle">¡Bienvenido/a a NutriFit!</div>
+    <div class="ob-sub" id="obSub">Cuéntanos de ti para calcular tu plan personalizado.</div>
+    <div class="ob-dots"><div class="ob-dot on"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+
+    <div class="ob-step on" id="obS1">
+      <div class="ob-field"><label>¿Cómo te llamas?</label><input id="ob-nombre" type="text" placeholder="Tu nombre" autocomplete="given-name"></div>
+      <div class="ob-field"><label>Sexo (para calcular tu gasto de energía)</label>
+        <div class="ob-choice">
+          <button type="button" class="ob-opt" id="obSexoMujer" onclick="obSetSexo('mujer')">👩 Mujer</button>
+          <button type="button" class="ob-opt" id="obSexoHombre" onclick="obSetSexo('hombre')">👨 Hombre</button>
+        </div></div>
+      <div class="ob-field"><label>Edad</label><input id="ob-edad" type="number" inputmode="numeric" placeholder="Ej: 28"></div>
+    </div>
+
+    <div class="ob-step" id="obS2">
+      <div class="ob-row">
+        <div class="ob-field"><label>Peso actual (kg)</label><input id="ob-peso" type="number" inputmode="decimal" step="0.1" placeholder="Ej: 68"></div>
+        <div class="ob-field"><label>Talla (cm)</label><input id="ob-talla" type="number" inputmode="numeric" placeholder="Ej: 163"></div>
+      </div>
+      <div class="ob-field"><label>Peso meta (kg)</label><input id="ob-meta" type="number" inputmode="decimal" step="0.1" placeholder="Ej: 60"></div>
+    </div>
+
+    <div class="ob-step" id="obS3">
+      <div class="ob-field"><label>¿Cuál es tu objetivo?</label>
+        <div class="ob-choice">
+          <button type="button" class="ob-opt" id="obGoalPerdida" onclick="obSetGoal('perdida')">🔥 Perder grasa<small>Déficit calórico</small></button>
+          <button type="button" class="ob-opt" id="obGoalGanancia" onclick="obSetGoal('ganancia')">💪 Ganar músculo<small>Superávit limpio</small></button>
+        </div></div>
+      <div class="ob-field"><label>Tu estilo de vida</label><select id="ob-ls"></select></div>
+    </div>
+
+    <div class="ob-step" id="obS4">
+      <div class="ob-sum"><div class="big" id="obKcal">0</div><div class="lbl" id="obKcalLbl">kcal al día</div></div>
+      <div class="ob-macros">
+        <div class="ob-macro"><b id="obProt">0g</b><span>Proteínas</span></div>
+        <div class="ob-macro"><b id="obCarb">0g</b><span>Carbohidratos</span></div>
+        <div class="ob-macro"><b id="obGras">0g</b><span>Grasas</span></div>
+      </div>
+      <div id="obNotes"></div>
+      <div style="font-size:11px;color:var(--text-3);text-align:center;margin-bottom:6px">Valores estimados. No reemplazan la consulta con un nutricionista. Puedes cambiar tus datos cuando quieras desde "Mi perfil".</div>
+    </div>
+
+    <div class="ob-err" id="obErr"></div>
+    <div class="ob-nav">
+      <button type="button" class="ob-btn" id="obBack" onclick="obBack()" style="display:none">← Atrás</button>
+      <button type="button" class="ob-btn primary" id="obNext" onclick="obNext()">Continuar →</button>
+    </div>
+  </div>
+</div>
+
 <!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
@@ -1047,7 +1149,7 @@ body {
 const INITIAL_FOODS = [
   // PLATOS PERUANOS DESGLOSABLES
   {
-    id: 1, n: "Lomo saltado tradicional", cat: "Platos peruanos", kcal: 485, p: 30, c: 44, g: 21, u: "1 plato (430g)", isComposite: true,
+    id: 1, n: "Lomo saltado tradicional", cat: "Platos peruanos", kcal: 637, p: 37, c: 66, g: 25, u: "1 plato (430g)", isComposite: true,
     desc: "Lomo de res al wok con cebolla roja, tomate, papas fritas y arroz blanco",
     ingredients: [
       { id:"ls-1", name:"Lomo o cuadril de res magro", currentGrams:140, baseGrams:140, kcalPer100g:135, p:22, c:0, g:5 },
@@ -1058,7 +1160,7 @@ const INITIAL_FOODS = [
     ]
   },
   {
-    id: 2, n: "Arroz con pollo criollo", cat: "Platos peruanos", kcal: 460, p: 32, c: 54, g: 12, u: "1 plato (400g)", isComposite: true,
+    id: 2, n: "Arroz con pollo criollo", cat: "Platos peruanos", kcal: 492, p: 43, c: 54, g: 11, u: "1 plato (400g)", isComposite: true,
     desc: "Arroz al culantro con verduras, presa de pollo y salsa criolla",
     ingredients: [
       { id:"ap-1", name:"Presa de pollo dorada", currentGrams:150, baseGrams:150, kcalPer100g:145, p:24, c:0, g:5 },
@@ -1068,7 +1170,7 @@ const INITIAL_FOODS = [
     ]
   },
   {
-    id: 3, n: "Ceviche de pescado clásico", cat: "Platos peruanos", kcal: 220, p: 28, c: 18, g: 3, u: "1 plato (320g)", isComposite: true,
+    id: 3, n: "Ceviche de pescado clásico", cat: "Platos peruanos", kcal: 295, p: 41, c: 28, g: 3, u: "1 plato (320g)", isComposite: true,
     desc: "Pescado fresco curado en limón piurano con camote y choclo",
     ingredients: [
       { id:"cev-1", name:"Filete de pescado fresco", currentGrams:180, baseGrams:180, kcalPer100g:95, p:21, c:0, g:1 },
@@ -1078,7 +1180,7 @@ const INITIAL_FOODS = [
     ]
   },
   {
-    id: 4, n: "Ají de gallina", cat: "Platos peruanos", kcal: 490, p: 31, c: 38, g: 23, u: "1 plato (380g)", isComposite: true,
+    id: 4, n: "Ají de gallina", cat: "Platos peruanos", kcal: 585, p: 48, c: 56, g: 19, u: "1 plato (380g)", isComposite: true,
     desc: "Pechuga deshilachada en crema de ají amarillo con papa y arroz",
     ingredients: [
       { id:"ag-1", name:"Pechuga de pollo deshilachada", currentGrams:140, baseGrams:140, kcalPer100g:130, p:27, c:0, g:2.5 },
@@ -1088,7 +1190,7 @@ const INITIAL_FOODS = [
     ]
   },
   {
-    id: 5, n: "Seco de res con frejoles", cat: "Platos peruanos", kcal: 540, p: 35, c: 48, g: 20, u: "1 plato (420g)", isComposite: true,
+    id: 5, n: "Seco de res con frejoles", cat: "Platos peruanos", kcal: 524, p: 46, c: 56, g: 13, u: "1 plato (420g)", isComposite: true,
     desc: "Carne guisada al culantro con frejoles canarios y arroz",
     ingredients: [
       { id:"sr-1", name:"Guiso de carne de res", currentGrams:150, baseGrams:150, kcalPer100g:160, p:22, c:2, g:7 },
@@ -1097,7 +1199,7 @@ const INITIAL_FOODS = [
     ]
   },
   {
-    id: 6, n: "Causa limeña con pollo y palta", cat: "Platos peruanos", kcal: 340, p: 18, c: 42, g: 12, u: "1 porción (250g)", isComposite: true,
+    id: 6, n: "Causa limeña con pollo y palta", cat: "Platos peruanos", kcal: 313, p: 20, c: 36, g: 11, u: "1 porción (250g)", isComposite: true,
     desc: "Papa amarilla sazonada rellena de pechuga deshilachada y palta",
     ingredients: [
       { id:"cl-1", name:"Masa de papa amarilla con ají", currentGrams:140, baseGrams:140, kcalPer100g:110, p:2, c:23, g:1.5 },
@@ -1105,11 +1207,368 @@ const INITIAL_FOODS = [
       { id:"cl-3", name:"Palta fuerte fresca", currentGrams:40, baseGrams:40, kcalPer100g:160, p:2, c:8, g:15 },
     ]
   },
-  { id: 7, n: "Tallarines verdes con bisteck", cat: "Platos peruanos", kcal: 560, p: 34, c: 62, g: 18, u: "1 plato" },
-  { id: 8, n: "Papa a la huancaína", cat: "Platos peruanos", kcal: 290, p: 9, c: 34, g: 14, u: "1 porción" },
+  {
+    id: 7, n: "Tallarines verdes con bisteck", cat: "Platos peruanos", kcal: 683, p: 40, c: 68, g: 28, u: "1 plato (~400g)", isComposite: true,
+    desc: "Tallarín en salsa de albahaca y espinaca con bistec a la plancha y papas",
+    ingredients: [
+      { id:"tv-1", name:"Tallarín cocido", currentGrams:180, baseGrams:180, kcalPer100g:135, p:5, c:26, g:1.2 },
+      { id:"tv-2", name:"Salsa verde (albahaca, espinaca, queso)", currentGrams:50, baseGrams:50, kcalPer100g:224, p:6, c:5, g:20 },
+      { id:"tv-3", name:"Bistec de res a la plancha", currentGrams:110, baseGrams:110, kcalPer100g:168, p:24, c:0, g:8 },
+      { id:"tv-4", name:"Papas fritas en bastones", currentGrams:60, baseGrams:60, kcalPer100g:239, p:3, c:32, g:11 },
+    ]
+  },
+  {
+    id: 8, n: "Papa a la huancaína", cat: "Platos peruanos", kcal: 308, p: 11, c: 35, g: 14, u: "1 porción (~270g)", isComposite: true,
+    desc: "Papa sancochada con crema de ají amarillo y queso, huevo y aceituna",
+    ingredients: [
+      { id:"ph-1", name:"Papa sancochada", currentGrams:150, baseGrams:150, kcalPer100g:89, p:2, c:20, g:0.1 },
+      { id:"ph-2", name:"Crema huancaína (queso, ají amarillo, galleta)", currentGrams:60, baseGrams:60, kcalPer100g:174, p:5, c:7, g:14 },
+      { id:"ph-3", name:"Huevo sancochado", currentGrams:40, baseGrams:40, kcalPer100g:146, p:13, c:1, g:10 },
+      { id:"ph-4", name:"Aceituna y lechuga", currentGrams:20, baseGrams:20, kcalPer100g:61, p:1, c:3, g:5 },
+    ]
+  },
   { id: 9, n: "Pollo a la brasa (1/4 sin piel)", cat: "Platos peruanos", kcal: 370, p: 34, c: 8, g: 18, u: "1/4 porción" },
-  { id: 10, n: "Sangrecita criolla con yuca", cat: "Platos peruanos", kcal: 260, p: 26, c: 32, g: 3, u: "1 plato" },
+  {
+    id: 10, n: "Sangrecita criolla con yuca", cat: "Platos peruanos", kcal: 336, p: 25, c: 50, g: 4, u: "1 plato (~250g)", isComposite: true,
+    desc: "Sangrecita guisada con cebolla y ají, acompañada de yuca sancochada",
+    ingredients: [
+      { id:"sg-1", name:"Sangrecita saltada con cebolla y ají", currentGrams:130, baseGrams:130, kcalPer100g:111, p:18, c:3, g:3 },
+      { id:"sg-2", name:"Yuca sancochada", currentGrams:120, baseGrams:120, kcalPer100g:160, p:1.4, c:38, g:0.3 },
+    ]
+  },
   { id: 11, n: "Menú criollo promedio", cat: "Platos peruanos", kcal: 690, p: 30, c: 80, g: 24, u: "1 menú completo" },
+
+  // ===== PLATOS COMUNES DE LIMA (supermercados, chifas, rotiserías y menú del día) =====
+  {
+    id: 100, n: "Arroz chaufa de pollo", cat: "Platos peruanos", kcal: 577, p: 37, c: 70, g: 16, u: "1 plato (~380g)", isComposite: true,
+    desc: "Arroz frito al wok con huevo, cebolla china y pollo (comida preparada de supermercado y chifa)",
+    ingredients: [
+      { id:"ch-1", name:"Arroz frito chaufa (con huevo y sillao)", currentGrams:220, baseGrams:220, kcalPer100g:173, p:3.2, c:31, g:4 },
+      { id:"ch-2", name:"Pollo cocido (pechuga/pierna)", currentGrams:90, baseGrams:90, kcalPer100g:144, p:27, c:0, g:4 },
+      { id:"ch-3", name:"Tortilla de huevo en tiras", currentGrams:40, baseGrams:40, kcalPer100g:142, p:12, c:1, g:10 },
+      { id:"ch-4", name:"Cebolla china y pimiento", currentGrams:30, baseGrams:30, kcalPer100g:33, p:1.5, c:6, g:0.3 },
+    ]
+  },
+  {
+    id: 101, n: "Tallarín saltado de pollo", cat: "Platos peruanos", kcal: 525, p: 39, c: 65, g: 12, u: "1 plato (~410g)", isComposite: true,
+    desc: "Fideos salteados al wok con pollo, cebolla, tomate y vainita",
+    ingredients: [
+      { id:"ts-1", name:"Tallarín saltado con sillao y aceite", currentGrams:230, baseGrams:230, kcalPer100g:154, p:4.5, c:26, g:3.5 },
+      { id:"ts-2", name:"Pollo cocido (pechuga/pierna)", currentGrams:100, baseGrams:100, kcalPer100g:144, p:27, c:0, g:4 },
+      { id:"ts-3", name:"Cebolla, tomate y pimiento salteados", currentGrams:80, baseGrams:80, kcalPer100g:34, p:1.5, c:6, g:0.4 },
+    ]
+  },
+  {
+    id: 102, n: "Tallarín saltado de carne", cat: "Platos peruanos", kcal: 514, p: 34, c: 65, g: 13, u: "1 plato (~410g)", isComposite: true,
+    desc: "Fideos salteados al wok con lomo, cebolla, tomate y vainita",
+    ingredients: [
+      { id:"tc-1", name:"Tallarín saltado con sillao y aceite", currentGrams:230, baseGrams:230, kcalPer100g:154, p:4.5, c:26, g:3.5 },
+      { id:"tc-2", name:"Lomo o cuadril de res", currentGrams:100, baseGrams:100, kcalPer100g:133, p:22, c:0, g:5 },
+      { id:"tc-3", name:"Cebolla, tomate y pimiento salteados", currentGrams:80, baseGrams:80, kcalPer100g:34, p:1.5, c:6, g:0.4 },
+    ]
+  },
+  {
+    id: 103, n: "Aeropuerto (chaufa + tallarín saltado)", cat: "Platos peruanos", kcal: 732, p: 41, c: 98, g: 19, u: "1 plato (~500g)", isComposite: true,
+    desc: "Combinado chifa de arroz chaufa y tallarín saltado con pollo",
+    ingredients: [
+      { id:"ae-1", name:"Arroz frito chaufa (con huevo y sillao)", currentGrams:180, baseGrams:180, kcalPer100g:173, p:3.2, c:31, g:4 },
+      { id:"ae-2", name:"Tallarín saltado con sillao y aceite", currentGrams:150, baseGrams:150, kcalPer100g:154, p:4.5, c:26, g:3.5 },
+      { id:"ae-3", name:"Pollo cocido (pechuga/pierna)", currentGrams:90, baseGrams:90, kcalPer100g:144, p:27, c:0, g:4 },
+      { id:"ae-4", name:"Tortilla de huevo en tiras", currentGrams:30, baseGrams:30, kcalPer100g:142, p:12, c:1, g:10 },
+      { id:"ae-5", name:"Cebolla, tomate y pimiento salteados", currentGrams:50, baseGrams:50, kcalPer100g:34, p:1.5, c:6, g:0.4 },
+    ]
+  },
+  {
+    id: 104, n: "Pollo saltado", cat: "Platos peruanos", kcal: 652, p: 45, c: 65, g: 24, u: "1 plato (~430g)", isComposite: true,
+    desc: "Pollo al wok con cebolla roja y tomate, papas fritas y arroz",
+    ingredients: [
+      { id:"ps-1", name:"Pollo cocido (pechuga/pierna)", currentGrams:140, baseGrams:140, kcalPer100g:144, p:27, c:0, g:4 },
+      { id:"ps-2", name:"Papas fritas en bastones", currentGrams:90, baseGrams:90, kcalPer100g:239, p:3, c:32, g:11 },
+      { id:"ps-3", name:"Arroz blanco cocido", currentGrams:110, baseGrams:110, kcalPer100g:126, p:2.7, c:28, g:0.3 },
+      { id:"ps-4", name:"Cebolla, tomate y pimiento salteados", currentGrams:80, baseGrams:80, kcalPer100g:34, p:1.5, c:6, g:0.4 },
+      { id:"ps-5", name:"Aceite y sillao (aderezo wok)", currentGrams:10, baseGrams:10, kcalPer100g:695, p:0, c:5, g:75 },
+    ]
+  },
+  {
+    id: 105, n: "Tacu tacu con lomo saltado", cat: "Platos peruanos", kcal: 640, p: 42, c: 61, g: 25, u: "1 plato (~430g)", isComposite: true,
+    desc: "Tortilla de arroz y frejol canario dorada, con lomo saltado y huevo frito",
+    ingredients: [
+      { id:"tt-1", name:"Tacu tacu (arroz con frejol frito)", currentGrams:200, baseGrams:200, kcalPer100g:186, p:5, c:28, g:6 },
+      { id:"tt-2", name:"Lomo o cuadril de res", currentGrams:110, baseGrams:110, kcalPer100g:133, p:22, c:0, g:5 },
+      { id:"tt-3", name:"Cebolla, tomate y pimiento salteados", currentGrams:70, baseGrams:70, kcalPer100g:34, p:1.5, c:6, g:0.4 },
+      { id:"tt-4", name:"Huevo frito", currentGrams:50, baseGrams:50, kcalPer100g:195, p:14, c:1, g:15 },
+    ]
+  },
+  {
+    id: 106, n: "Estofado de pollo con arroz y papa", cat: "Platos peruanos", kcal: 495, p: 39, c: 58, g: 12, u: "1 plato (~400g)", isComposite: true,
+    desc: "Pollo guisado en salsa de tomate con papa y arroz",
+    ingredients: [
+      { id:"ep-1", name:"Pollo estofado", currentGrams:150, baseGrams:150, kcalPer100g:163, p:22, c:3, g:7 },
+      { id:"ep-2", name:"Papa sancochada", currentGrams:100, baseGrams:100, kcalPer100g:89, p:2, c:20, g:0.1 },
+      { id:"ep-3", name:"Arroz blanco cocido", currentGrams:110, baseGrams:110, kcalPer100g:126, p:2.7, c:28, g:0.3 },
+      { id:"ep-4", name:"Salsa del estofado", currentGrams:40, baseGrams:40, kcalPer100g:57, p:1.5, c:6, g:3 },
+    ]
+  },
+  {
+    id: 107, n: "Carapulcra con sopa seca", cat: "Platos peruanos", kcal: 620, p: 24, c: 68, g: 28, u: "1 plato (~350g)", isComposite: true,
+    desc: "Guiso de papa seca, maní y cerdo con tallarines en salsa",
+    ingredients: [
+      { id:"cp-1", name:"Carapulcra (papa seca, maní y cerdo)", currentGrams:200, baseGrams:200, kcalPer100g:200, p:8, c:15, g:12 },
+      { id:"cp-2", name:"Sopa seca (tallarín con salsa verde)", currentGrams:150, baseGrams:150, kcalPer100g:147, p:5, c:25, g:3 },
+    ]
+  },
+  {
+    id: 108, n: "Tallarines rojos con pollo", cat: "Platos peruanos", kcal: 541, p: 42, c: 66, g: 12, u: "1 plato (~400g)", isComposite: true,
+    desc: "Fideos en salsa roja de tomate y carne con presa de pollo",
+    ingredients: [
+      { id:"tr-1", name:"Tallarín en salsa roja", currentGrams:250, baseGrams:250, kcalPer100g:146, p:5, c:26, g:2.5 },
+      { id:"tr-2", name:"Pollo dorado/guisado", currentGrams:120, baseGrams:120, kcalPer100g:141, p:24, c:0, g:5 },
+      { id:"tr-3", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:30, baseGrams:30, kcalPer100g:24, p:0.8, c:5, g:0.1 },
+    ]
+  },
+  {
+    id: 109, n: "Milanesa de pollo con arroz y papas fritas", cat: "Platos peruanos", kcal: 638, p: 32, c: 71, g: 25, u: "1 plato (~370g)", isComposite: true,
+    desc: "Filete de pollo apanado frito con arroz, papas fritas y ensalada",
+    ingredients: [
+      { id:"mp-1", name:"Milanesa de pollo apanada y frita", currentGrams:130, baseGrams:130, kcalPer100g:245, p:20, c:12, g:13 },
+      { id:"mp-2", name:"Arroz blanco cocido", currentGrams:110, baseGrams:110, kcalPer100g:126, p:2.7, c:28, g:0.3 },
+      { id:"mp-3", name:"Papas fritas en bastones", currentGrams:70, baseGrams:70, kcalPer100g:239, p:3, c:32, g:11 },
+      { id:"mp-4", name:"Ensalada fresca (lechuga, tomate, pepino)", currentGrams:60, baseGrams:60, kcalPer100g:22, p:1, c:4, g:0.2 },
+    ]
+  },
+  {
+    id: 110, n: "Bistec a lo pobre", cat: "Platos peruanos", kcal: 816, p: 44, c: 73, g: 39, u: "1 plato (~435g)", isComposite: true,
+    desc: "Bistec de res con huevo frito, plátano frito, papas fritas y arroz",
+    ingredients: [
+      { id:"bp-1", name:"Bistec de res a la plancha", currentGrams:140, baseGrams:140, kcalPer100g:178, p:22, c:0, g:10 },
+      { id:"bp-2", name:"Huevo frito", currentGrams:55, baseGrams:55, kcalPer100g:195, p:14, c:1, g:15 },
+      { id:"bp-3", name:"Plátano frito", currentGrams:60, baseGrams:60, kcalPer100g:238, p:1.5, c:31, g:12 },
+      { id:"bp-4", name:"Papas fritas en bastones", currentGrams:80, baseGrams:80, kcalPer100g:239, p:3, c:32, g:11 },
+      { id:"bp-5", name:"Arroz blanco cocido", currentGrams:100, baseGrams:100, kcalPer100g:126, p:2.7, c:28, g:0.3 },
+    ]
+  },
+  {
+    id: 111, n: "Arroz tapado", cat: "Platos peruanos", kcal: 647, p: 29, c: 74, g: 26, u: "1 plato (~400g)", isComposite: true,
+    desc: "Arroz con picadillo de carne, pasas y aceituna, tapado, con huevo frito y plátano",
+    ingredients: [
+      { id:"at-1", name:"Arroz blanco cocido", currentGrams:180, baseGrams:180, kcalPer100g:126, p:2.7, c:28, g:0.3 },
+      { id:"at-2", name:"Picadillo de carne con pasas y aceituna", currentGrams:120, baseGrams:120, kcalPer100g:170, p:14, c:6, g:10 },
+      { id:"at-3", name:"Huevo frito", currentGrams:50, baseGrams:50, kcalPer100g:195, p:14, c:1, g:15 },
+      { id:"at-4", name:"Plátano frito", currentGrams:50, baseGrams:50, kcalPer100g:238, p:1.5, c:31, g:12 },
+    ]
+  },
+  {
+    id: 112, n: "Escabeche de pollo con arroz", cat: "Platos peruanos", kcal: 533, p: 41, c: 55, g: 16, u: "1 plato (~420g)", isComposite: true,
+    desc: "Pollo frito bañado en escabeche de cebolla y ají amarillo, con arroz y camote",
+    ingredients: [
+      { id:"es-1", name:"Pollo frito", currentGrams:150, baseGrams:150, kcalPer100g:168, p:24, c:0, g:8 },
+      { id:"es-2", name:"Cebolla escabechada con ají y aceite", currentGrams:80, baseGrams:80, kcalPer100g:81, p:1, c:8, g:5 },
+      { id:"es-3", name:"Arroz blanco cocido", currentGrams:130, baseGrams:130, kcalPer100g:126, p:2.7, c:28, g:0.3 },
+      { id:"es-4", name:"Camote sancochado", currentGrams:60, baseGrams:60, kcalPer100g:87, p:1.6, c:20, g:0.1 },
+    ]
+  },
+  {
+    id: 113, n: "Chicharrón de pescado con yuca frita", cat: "Platos peruanos", kcal: 642, p: 34, c: 50, g: 34, u: "1 plato (~310g)", isComposite: true,
+    desc: "Trozos de pescado apanado y frito con yuca frita, salsa criolla y salsa tártara",
+    ingredients: [
+      { id:"cf-1", name:"Pescado apanado y frito", currentGrams:160, baseGrams:160, kcalPer100g:220, p:20, c:8, g:12 },
+      { id:"cf-2", name:"Yuca frita", currentGrams:90, baseGrams:90, kcalPer100g:248, p:1.5, c:38, g:10 },
+      { id:"cf-3", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:40, baseGrams:40, kcalPer100g:24, p:0.8, c:5, g:0.1 },
+      { id:"cf-4", name:"Salsa tártara", currentGrams:20, baseGrams:20, kcalPer100g:288, p:0.5, c:4, g:30 },
+    ]
+  },
+  {
+    id: 114, n: "Sudado de pescado con arroz y yuca", cat: "Platos peruanos", kcal: 511, p: 41, c: 71, g: 7, u: "1 plato (~490g)", isComposite: true,
+    desc: "Pescado al vapor en sofrito de tomate y cebolla, con yuca y arroz",
+    ingredients: [
+      { id:"sp-1", name:"Filete de pescado fresco", currentGrams:170, baseGrams:170, kcalPer100g:102, p:21, c:0, g:2 },
+      { id:"sp-2", name:"Sofrito de tomate y cebolla (caldo)", currentGrams:120, baseGrams:120, kcalPer100g:46, p:1, c:5, g:2.5 },
+      { id:"sp-3", name:"Yuca sancochada", currentGrams:90, baseGrams:90, kcalPer100g:160, p:1.4, c:38, g:0.3 },
+      { id:"sp-4", name:"Arroz blanco cocido", currentGrams:110, baseGrams:110, kcalPer100g:126, p:2.7, c:28, g:0.3 },
+    ]
+  },
+  {
+    id: 115, n: "Arroz con mariscos", cat: "Platos peruanos", kcal: 441, p: 23, c: 65, g: 10, u: "1 plato (~350g)", isComposite: true,
+    desc: "Arroz al ají panca con pota, conchas y camarones",
+    ingredients: [
+      { id:"am-1", name:"Arroz al ají panca con sofrito", currentGrams:220, baseGrams:220, kcalPer100g:158, p:3.5, c:28, g:3.5 },
+      { id:"am-2", name:"Mariscos mixtos (pota, conchas, camarón)", currentGrams:100, baseGrams:100, kcalPer100g:86, p:15, c:2, g:2 },
+      { id:"am-3", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:30, baseGrams:30, kcalPer100g:24, p:0.8, c:5, g:0.1 },
+    ]
+  },
+  {
+    id: 116, n: "Anticuchos de corazón con papa y choclo", cat: "Platos peruanos", kcal: 361, p: 27, c: 43, g: 9, u: "1 plato (~340g)", isComposite: true,
+    desc: "Brochetas de corazón de res marinadas al ají panca, con papa y choclo",
+    ingredients: [
+      { id:"an-1", name:"Anticucho de corazón a la parrilla", currentGrams:120, baseGrams:120, kcalPer100g:134, p:18, c:2, g:6 },
+      { id:"an-2", name:"Papa sancochada", currentGrams:120, baseGrams:120, kcalPer100g:89, p:2, c:20, g:0.1 },
+      { id:"an-3", name:"Choclo desgranado cocido", currentGrams:80, baseGrams:80, kcalPer100g:99, p:3, c:19, g:1.2 },
+      { id:"an-4", name:"Ají de rocoto y huacatay", currentGrams:20, baseGrams:20, kcalPer100g:69, p:1, c:5, g:5 },
+    ]
+  },
+  {
+    id: 117, n: "Chicharrón de cerdo con camote", cat: "Platos peruanos", kcal: 445, p: 28, c: 26, g: 25, u: "1 plato (~270g)", isComposite: true,
+    desc: "Trozos de cerdo fritos con camote sancochado y salsa criolla",
+    ingredients: [
+      { id:"cc-1", name:"Chicharrón de cerdo", currentGrams:100, baseGrams:100, kcalPer100g:329, p:26, c:0, g:25 },
+      { id:"cc-2", name:"Camote sancochado", currentGrams:120, baseGrams:120, kcalPer100g:87, p:1.6, c:20, g:0.1 },
+      { id:"cc-3", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:50, baseGrams:50, kcalPer100g:24, p:0.8, c:5, g:0.1 },
+    ]
+  },
+  {
+    id: 118, n: "Olluquito con charqui y arroz", cat: "Platos peruanos", kcal: 364, p: 14, c: 58, g: 8, u: "1 plato (~330g)", isComposite: true,
+    desc: "Guiso andino de olluco con carne seca, servido con arroz",
+    ingredients: [
+      { id:"ol-1", name:"Olluquito guisado con charqui", currentGrams:200, baseGrams:200, kcalPer100g:100, p:5, c:11, g:4 },
+      { id:"ol-2", name:"Arroz blanco cocido", currentGrams:130, baseGrams:130, kcalPer100g:126, p:2.7, c:28, g:0.3 },
+    ]
+  },
+  {
+    id: 119, n: "Papa rellena", cat: "Platos peruanos", kcal: 262, p: 9, c: 32, g: 11, u: "1 unidad (~200g)", isComposite: true,
+    desc: "Papa frita rellena de carne picada, huevo y aceituna, con salsa criolla",
+    ingredients: [
+      { id:"pr-1", name:"Masa de papa frita", currentGrams:120, baseGrams:120, kcalPer100g:145, p:2, c:23, g:5 },
+      { id:"pr-2", name:"Relleno de carne, huevo y aceituna", currentGrams:50, baseGrams:50, kcalPer100g:162, p:13, c:5, g:10 },
+      { id:"pr-3", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:30, baseGrams:30, kcalPer100g:24, p:0.8, c:5, g:0.1 },
+    ]
+  },
+  {
+    id: 130, n: "Caldo de gallina", cat: "Sopas y menestras", kcal: 441, p: 39, c: 42, g: 13, u: "1 plato hondo", isComposite: true,
+    desc: "Caldo con fideos, presa de gallina, papa y huevo",
+    ingredients: [
+      { id:"cg-1", name:"Caldo de gallina", currentGrams:300, baseGrams:300, kcalPer100g:23, p:1.5, c:2, g:1 },
+      { id:"cg-2", name:"Fideos cabello de ángel cocidos", currentGrams:80, baseGrams:80, kcalPer100g:129, p:5, c:25, g:1 },
+      { id:"cg-3", name:"Presa de gallina cocida", currentGrams:100, baseGrams:100, kcalPer100g:154, p:25, c:0, g:6 },
+      { id:"cg-4", name:"Papa sancochada", currentGrams:80, baseGrams:80, kcalPer100g:89, p:2, c:20, g:0.1 },
+      { id:"cg-5", name:"Huevo sancochado (½)", currentGrams:30, baseGrams:30, kcalPer100g:146, p:13, c:1, g:10 },
+    ]
+  },
+  {
+    id: 131, n: "Aguadito de pollo", cat: "Sopas y menestras", kcal: 434, p: 37, c: 44, g: 12, u: "1 plato hondo", isComposite: true,
+    desc: "Sopa verde de arroz con culantro, presa de pollo, papa y arvejas",
+    ingredients: [
+      { id:"ag-1", name:"Caldo de arroz al culantro", currentGrams:300, baseGrams:300, kcalPer100g:66, p:3, c:9, g:2 },
+      { id:"ag-2", name:"Presa de pollo cocida", currentGrams:100, baseGrams:100, kcalPer100g:154, p:25, c:0, g:6 },
+      { id:"ag-3", name:"Papa sancochada", currentGrams:70, baseGrams:70, kcalPer100g:89, p:2, c:20, g:0.1 },
+      { id:"ag-4", name:"Arvejas y zanahoria", currentGrams:40, baseGrams:40, kcalPer100g:48, p:3, c:8, g:0.4 },
+    ]
+  },
+  {
+    id: 132, n: "Chupe de camarones", cat: "Sopas y menestras", kcal: 448, p: 32, c: 40, g: 18, u: "1 plato hondo", isComposite: true,
+    desc: "Sopa cremosa de camarones con papa, choclo, huevo y queso fresco",
+    ingredients: [
+      { id:"cu-1", name:"Caldo cremoso de camarones (leche y ají panca)", currentGrams:250, baseGrams:250, kcalPer100g:63, p:3, c:6, g:3 },
+      { id:"cu-2", name:"Camarones", currentGrams:60, baseGrams:60, kcalPer100g:98, p:20, c:1, g:1.5 },
+      { id:"cu-3", name:"Papa sancochada", currentGrams:80, baseGrams:80, kcalPer100g:89, p:2, c:20, g:0.1 },
+      { id:"cu-4", name:"Choclo desgranado cocido", currentGrams:40, baseGrams:40, kcalPer100g:99, p:3, c:19, g:1.2 },
+      { id:"cu-5", name:"Huevo pochado", currentGrams:50, baseGrams:50, kcalPer100g:146, p:13, c:1, g:10 },
+      { id:"cu-6", name:"Queso fresco", currentGrams:20, baseGrams:20, kcalPer100g:242, p:18, c:2, g:18 },
+    ]
+  },
+  {
+    id: 133, n: "Lentejas con arroz y pollo a la plancha", cat: "Sopas y menestras", kcal: 577, p: 55, c: 69, g: 9, u: "1 plato (~470g)", isComposite: true,
+    desc: "Menestra clásica del menú: lentejas guisadas, arroz y pechuga a la plancha",
+    ingredients: [
+      { id:"le-1", name:"Lentejas guisadas", currentGrams:180, baseGrams:180, kcalPer100g:120, p:7.5, c:17, g:2.5 },
+      { id:"le-2", name:"Arroz blanco cocido", currentGrams:130, baseGrams:130, kcalPer100g:126, p:2.7, c:28, g:0.3 },
+      { id:"le-3", name:"Pechuga de pollo a la plancha", currentGrams:120, baseGrams:120, kcalPer100g:156, p:31, c:0, g:3.6 },
+      { id:"le-4", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:40, baseGrams:40, kcalPer100g:24, p:0.8, c:5, g:0.1 },
+    ]
+  },
+  {
+    id: 134, n: "Frejoles canarios con arroz y bistec", cat: "Sopas y menestras", kcal: 592, p: 43, c: 71, g: 15, u: "1 plato (~470g)", isComposite: true,
+    desc: "Frejoles guisados con arroz, bistec a la plancha y salsa criolla",
+    ingredients: [
+      { id:"fr-1", name:"Frejoles canarios guisados", currentGrams:180, baseGrams:180, kcalPer100g:114, p:7, c:18, g:1.5 },
+      { id:"fr-2", name:"Arroz blanco cocido", currentGrams:130, baseGrams:130, kcalPer100g:126, p:2.7, c:28, g:0.3 },
+      { id:"fr-3", name:"Bistec de res a la plancha", currentGrams:120, baseGrams:120, kcalPer100g:178, p:22, c:0, g:10 },
+      { id:"fr-4", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:40, baseGrams:40, kcalPer100g:24, p:0.8, c:5, g:0.1 },
+    ]
+  },
+  {
+    id: 135, n: "1/4 pollo rostizado con papas fritas y ensalada", cat: "Sopas y menestras", kcal: 853, p: 47, c: 52, g: 51, u: "1 combo (~445g)", isComposite: true,
+    desc: "Combo de rotisería de supermercado: 1/4 de pollo con piel, papas fritas, ensalada y cremas",
+    ingredients: [
+      { id:"pq-1", name:"Pollo rostizado con piel (carne comestible)", currentGrams:190, baseGrams:190, kcalPer100g:196, p:22, c:0, g:12 },
+      { id:"pq-2", name:"Papas fritas en bastones", currentGrams:150, baseGrams:150, kcalPer100g:239, p:3, c:32, g:11 },
+      { id:"pq-3", name:"Ensalada fresca (lechuga, tomate, pepino)", currentGrams:80, baseGrams:80, kcalPer100g:22, p:1, c:4, g:0.2 },
+      { id:"pq-4", name:"Cremas (ají y mayonesa)", currentGrams:25, baseGrams:25, kcalPer100g:419, p:0.5, c:3, g:45 },
+    ]
+  },
+  {
+    id: 140, n: "Tamal de pollo", cat: "Desayuno", kcal: 377, p: 20, c: 39, g: 16, u: "1 unidad (~235g)", isComposite: true,
+    desc: "Masa de maíz con pollo, huevo y aceituna, envuelto en hoja de plátano",
+    ingredients: [
+      { id:"tp-1", name:"Masa de maíz sazonada con ají amarillo", currentGrams:160, baseGrams:160, kcalPer100g:164, p:3.5, c:24, g:6 },
+      { id:"tp-2", name:"Relleno de pollo", currentGrams:50, baseGrams:50, kcalPer100g:150, p:24, c:0, g:6 },
+      { id:"tp-3", name:"Huevo sancochado, aceituna y maní", currentGrams:25, baseGrams:25, kcalPer100g:160, p:10, c:3, g:12 },
+    ]
+  },
+  {
+    id: 141, n: "Tamal de chancho", cat: "Desayuno", kcal: 418, p: 18, c: 40, g: 21, u: "1 unidad (~225g)", isComposite: true,
+    desc: "Masa de maíz con trozo de cerdo, maní y aceituna, en hoja de plátano",
+    ingredients: [
+      { id:"tch-1", name:"Masa de maíz sazonada con ají panca", currentGrams:160, baseGrams:160, kcalPer100g:164, p:3.5, c:24, g:6 },
+      { id:"tch-2", name:"Relleno de cerdo", currentGrams:50, baseGrams:50, kcalPer100g:223, p:22, c:0, g:15 },
+      { id:"tch-3", name:"Maní molido y aceituna", currentGrams:15, baseGrams:15, kcalPer100g:297, p:10, c:8, g:25 },
+    ]
+  },
+  {
+    id: 142, n: "Humita salada", cat: "Desayuno", kcal: 223, p: 7, c: 28, g: 9, u: "1 unidad (~130g)", isComposite: true,
+    desc: "Choclo molido con queso fresco, cocido en su hoja",
+    ingredients: [
+      { id:"hu-1", name:"Masa de choclo con cebolla y ají", currentGrams:110, baseGrams:110, kcalPer100g:159, p:3.5, c:25, g:5 },
+      { id:"hu-2", name:"Queso fresco", currentGrams:20, baseGrams:20, kcalPer100g:242, p:18, c:2, g:18 },
+    ]
+  },
+  {
+    id: 143, n: "Pan con chicharrón y camote", cat: "Desayuno", kcal: 658, p: 30, c: 69, g: 29, u: "1 sándwich (~260g)", isComposite: true,
+    desc: "Sándwich de pan francés con chicharrón de cerdo, camote frito y salsa criolla",
+    ingredients: [
+      { id:"pc-1", name:"Pan francés", currentGrams:80, baseGrams:80, kcalPer100g:298, p:10, c:60, g:2 },
+      { id:"pc-2", name:"Chicharrón de cerdo", currentGrams:80, baseGrams:80, kcalPer100g:329, p:26, c:0, g:25 },
+      { id:"pc-3", name:"Camote frito", currentGrams:60, baseGrams:60, kcalPer100g:244, p:2, c:32, g:12 },
+      { id:"pc-4", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:40, baseGrams:40, kcalPer100g:24, p:0.8, c:5, g:0.1 },
+    ]
+  },
+  {
+    id: 144, n: "Empanada de carne al horno", cat: "Snacks", kcal: 260, p: 9, c: 27, g: 13, u: "1 unidad (~100g)", isComposite: true,
+    desc: "Empanada de masa horneada rellena de carne, huevo y aceituna (panadería de supermercado)",
+    ingredients: [
+      { id:"em-1", name:"Masa de empanada horneada", currentGrams:55, baseGrams:55, kcalPer100g:343, p:7, c:45, g:15 },
+      { id:"em-2", name:"Relleno de carne, cebolla, huevo y pasas", currentGrams:45, baseGrams:45, kcalPer100g:158, p:12, c:5, g:10 },
+    ]
+  },
+  {
+    id: 145, n: "Choclo con queso", cat: "Snacks", kcal: 245, p: 12, c: 29, g: 9, u: "1 choclo + queso (~190g)", isComposite: true,
+    desc: "Mazorca de choclo cocida con queso fresco, snack tradicional",
+    ingredients: [
+      { id:"cq-1", name:"Choclo cocido", currentGrams:150, baseGrams:150, kcalPer100g:99, p:3, c:19, g:1.2 },
+      { id:"cq-2", name:"Queso fresco", currentGrams:40, baseGrams:40, kcalPer100g:242, p:18, c:2, g:18 },
+    ]
+  },
+  {
+    id: 150, n: "Mazamorra morada", cat: "Postres", kcal: 196, p: 1, c: 48, g: 0, u: "1 vaso (200g)", isComposite: true,
+    desc: "Postre de maíz morado con frutas y harina de camote",
+    ingredients: [
+      { id:"mm-1", name:"Mazamorra morada", currentGrams:200, baseGrams:200, kcalPer100g:98, p:0.3, c:24, g:0.1 },
+    ]
+  },
+  {
+    id: 151, n: "Arroz con leche", cat: "Postres", kcal: 210, p: 4, c: 36, g: 5, u: "1 porción (150g)", isComposite: true,
+    desc: "Arroz cocido en leche con canela y azúcar",
+    ingredients: [
+      { id:"al-1", name:"Arroz con leche", currentGrams:150, baseGrams:150, kcalPer100g:140, p:3, c:24, g:3.5 },
+    ]
+  },
+  {
+    id: 152, n: "Picarones con miel de chancaca", cat: "Postres", kcal: 492, p: 4, c: 79, g: 18, u: "3 unidades (~130g)", isComposite: true,
+    desc: "Anillos fritos de camote y zapallo con miel de chancaca (3 unidades)",
+    ingredients: [
+      { id:"pi-1", name:"Picarones fritos", currentGrams:90, baseGrams:90, kcalPer100g:404, p:4, c:52, g:20 },
+      { id:"pi-2", name:"Miel de chancaca", currentGrams:40, baseGrams:40, kcalPer100g:320, p:0, c:80, g:0 },
+    ]
+  },
 
   // PRODUCTOS DE SUPERMERCADO (METRO / PLAZA VEA / TOTTUS)
   { id: 40, n: "Pechuga de pollo San Fernando (100g)", cat: "Supermercado", kcal: 115, p: 25, c: 0, g: 1.5, u: "100g crudo" },
@@ -1155,14 +1614,15 @@ function getAllFoods() {
   return [...customFoods, ...INITIAL_FOODS];
 }
 
-const CATEGORIES = ["Todos", "Platos peruanos", "Supermercado", "Desayuno", "Bebidas", "Snacks", "Mis Alimentos"];
+const CATEGORIES = ["Todos", "Platos peruanos", "Sopas y menestras", "Supermercado", "Desayuno", "Bebidas", "Snacks", "Postres", "Mis Alimentos"];
 
 // ===== 2. PERFIL DE USUARIO Y METAS =====
 let perfil = null;
 try { perfil = JSON.parse(localStorage.getItem('nutrifit_perfil') || 'null'); } catch(e){}
 if (!perfil) {
   perfil = {
-    nombre: "Vanessa",
+    nombre: "Usuario",
+    sexo: "mujer",
     edad: 30,
     peso: 68,
     talla: 163,
@@ -1171,6 +1631,9 @@ if (!perfil) {
     goal: "perdida", // 'perdida' | 'ganancia'
   };
 }
+if (!perfil.sexo) perfil.sexo = 'mujer';
+let onboardingDone = false;
+try { onboardingDone = localStorage.getItem('nutrifit_onboarded') === '1'; } catch(e){}
 
 let platoItems = [];
 try { platoItems = JSON.parse(localStorage.getItem('nutrifit_plate_items') || '[]'); } catch(e){}
@@ -1193,7 +1656,7 @@ const LS_FACTORS = { sedentario: 1.2, ligero: 1.375, moderado: 1.55, activo: 1.7
 
 function recalculateMacros() {
   const { peso, talla, edad, ls, goal } = perfil;
-  const bmr = 10 * peso + 6.25 * talla - 5 * edad - 161;
+  const bmr = 10 * peso + 6.25 * talla - 5 * edad + (perfil.sexo === 'hombre' ? 5 : -161);
   const tdee = Math.round(bmr * (LS_FACTORS[ls] || 1.375));
 
   let kcal = tdee;
@@ -1201,7 +1664,7 @@ function recalculateMacros() {
 
   if (goal === 'perdida') {
     const deficit = Math.min(500, Math.round(tdee * 0.20));
-    kcal = Math.max(1250, tdee - deficit);
+    kcal = Math.max(perfil.sexo === 'hombre' ? 1500 : 1250, tdee - deficit);
     deltaText = `déficit -${deficit} kcal`;
   } else {
     const surplus = Math.round(tdee * 0.12);
@@ -2050,6 +2513,7 @@ function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
 function openProfileModal() {
   document.getElementById('inp-nombre').value = perfil.nombre;
+  document.getElementById('inp-sexo').value = perfil.sexo || 'mujer';
   document.getElementById('inp-edad').value = perfil.edad;
   document.getElementById('inp-peso').value = perfil.peso;
   document.getElementById('inp-talla').value = perfil.talla;
@@ -2060,7 +2524,8 @@ function openProfileModal() {
 }
 
 function guardarPerfil() {
-  perfil.nombre = document.getElementById('inp-nombre').value.trim() || 'Vanessa';
+  perfil.nombre = document.getElementById('inp-nombre').value.trim() || 'Usuario';
+  perfil.sexo = document.getElementById('inp-sexo').value;
   perfil.edad = parseInt(document.getElementById('inp-edad').value) || 30;
   perfil.peso = parseFloat(document.getElementById('inp-peso').value) || 68;
   perfil.talla = parseFloat(document.getElementById('inp-talla').value) || 163;
@@ -2110,9 +2575,139 @@ function triggerPWAInstall() {
   }
 }
 
+
+// ===== PANTALLA DE BIENVENIDA (ONBOARDING) =====
+let obStep = 1, obSexo = 'mujer', obGoal = 'perdida';
+const OB_TITLES = [
+  ['¡Bienvenido/a a NutriFit!', 'Cuéntanos de ti para calcular tu plan personalizado.'],
+  ['Tu cuerpo y tu meta', 'Con estos datos estimamos tus calorías y macros.'],
+  ['Tu objetivo', 'Elige hacia dónde quieres ir y cómo es tu día a día.'],
+  ['¡Tu plan está listo!', 'Esto es lo que necesitas cada día.']
+];
+
+function obFillLs() {
+  const opts = [
+    ['sedentario', 'Sedentario (oficina, poco movimiento)'],
+    ['ligero', 'Ligero (caminatas, 1–2 días de ejercicio)'],
+    ['moderado', 'Moderado (3–4 días de ejercicio)'],
+    ['activo', 'Activo (5–6 días de ejercicio)'],
+    ['deportista', 'Deportista (entrenamiento diario)']
+  ];
+  if (obSexo === 'mujer') opts.push(['embarazo', 'Embarazo / lactancia']);
+  const sel = document.getElementById('ob-ls');
+  const cur = sel.value || perfil.ls || 'moderado';
+  sel.innerHTML = opts.map(o => `<option value="${o[0]}">${o[1]}</option>`).join('');
+  sel.value = opts.some(o => o[0] === cur) ? cur : 'moderado';
+}
+
+function obSetSexo(s) {
+  obSexo = s;
+  document.getElementById('obSexoMujer').classList.toggle('on', s === 'mujer');
+  document.getElementById('obSexoHombre').classList.toggle('on', s === 'hombre');
+}
+function obSetGoal(g) {
+  obGoal = g;
+  document.getElementById('obGoalPerdida').classList.toggle('on', g === 'perdida');
+  document.getElementById('obGoalGanancia').classList.toggle('on', g === 'ganancia');
+}
+
+function showOnboarding() {
+  const known = perfil.nombre && perfil.nombre !== 'Usuario';
+  document.getElementById('ob-nombre').value = known ? perfil.nombre : '';
+  document.getElementById('ob-edad').value = known ? perfil.edad : '';
+  document.getElementById('ob-peso').value = known ? perfil.peso : '';
+  document.getElementById('ob-talla').value = known ? perfil.talla : '';
+  document.getElementById('ob-meta').value = known ? perfil.meta : '';
+  obSetSexo(perfil.sexo || 'mujer');
+  obSetGoal(perfil.goal || 'perdida');
+  obFillLs();
+  obStep = 1;
+  obRender();
+  document.getElementById('onboarding').classList.remove('hidden');
+}
+
+function obRender() {
+  for (let i = 1; i <= 4; i++) document.getElementById('obS' + i).classList.toggle('on', i === obStep);
+  document.querySelectorAll('.ob-dot').forEach((d, i) => d.classList.toggle('on', i < obStep));
+  document.getElementById('obTitle').textContent = OB_TITLES[obStep - 1][0];
+  document.getElementById('obSub').textContent = OB_TITLES[obStep - 1][1];
+  document.getElementById('obBack').style.display = (obStep > 1 && obStep < 4) ? 'block' : 'none';
+  document.getElementById('obNext').textContent = obStep === 3 ? 'Calcular mi plan →' : obStep === 4 ? 'Entrar a NutriFit ✓' : 'Continuar →';
+  document.getElementById('obErr').textContent = '';
+}
+
+function obBack() { if (obStep > 1 && obStep < 4) { obStep--; obRender(); } }
+
+function obValidate() {
+  const num = id => parseFloat(document.getElementById(id).value);
+  if (obStep === 1) {
+    if (!document.getElementById('ob-nombre').value.trim()) return 'Escribe tu nombre.';
+    const e = num('ob-edad');
+    if (!(e >= 12 && e <= 100)) return 'Ingresa una edad válida (12 a 100 años).';
+  }
+  if (obStep === 2) {
+    const p = num('ob-peso'), t = num('ob-talla'), m = num('ob-meta');
+    if (!(p >= 30 && p <= 300)) return 'Ingresa tu peso actual en kg (30 a 300).';
+    if (!(t >= 100 && t <= 230)) return 'Ingresa tu talla en cm (100 a 230).';
+    if (!(m >= 30 && m <= 300)) return 'Ingresa tu peso meta en kg (30 a 300).';
+  }
+  return '';
+}
+
+function obNext() {
+  if (obStep === 4) return obFinish();
+  const err = obValidate();
+  if (err) { document.getElementById('obErr').textContent = err; return; }
+
+  if (obStep === 2) {
+    // sugerir objetivo según peso meta
+    const p = parseFloat(document.getElementById('ob-peso').value);
+    const m = parseFloat(document.getElementById('ob-meta').value);
+    obSetGoal(m > p ? 'ganancia' : 'perdida');
+    obFillLs();
+  }
+  if (obStep === 3) {
+    perfil.nombre = document.getElementById('ob-nombre').value.trim();
+    perfil.sexo = obSexo;
+    perfil.edad = parseInt(document.getElementById('ob-edad').value);
+    perfil.peso = parseFloat(document.getElementById('ob-peso').value);
+    perfil.talla = parseFloat(document.getElementById('ob-talla').value);
+    perfil.meta = parseFloat(document.getElementById('ob-meta').value);
+    perfil.goal = obGoal;
+    perfil.ls = document.getElementById('ob-ls').value;
+    recalculateMacros();
+    const m = perfil.macros;
+    document.getElementById('obKcal').textContent = m.kcal.toLocaleString();
+    document.getElementById('obKcalLbl').textContent = `kcal al día · ${m.deltaText}`;
+    document.getElementById('obProt').textContent = m.prot + 'g';
+    document.getElementById('obCarb').textContent = m.carb + 'g';
+    document.getElementById('obGras').textContent = m.gras + 'g';
+
+    const notes = [];
+    const imcMeta = perfil.meta / ((perfil.talla / 100) ** 2);
+    if (imcMeta < 18.5) notes.push(`Tu peso meta da un IMC de ${imcMeta.toFixed(1)}, por debajo del rango saludable (18.5–24.9). Considera una meta más alta o consúltalo con un profesional.`);
+    if (perfil.goal === 'perdida' && perfil.meta >= perfil.peso) notes.push('Elegiste perder grasa, pero tu peso meta es igual o mayor al actual. Puedes ajustarlo en "Mi perfil".');
+    if (perfil.goal === 'ganancia' && perfil.meta <= perfil.peso) notes.push('Elegiste ganar músculo, pero tu peso meta es igual o menor al actual. Puedes ajustarlo en "Mi perfil".');
+    if (perfil.edad < 18) notes.push('Esta calculadora está pensada para adultos. En menores de 18 años consulta a un pediatra o nutricionista.');
+    if (perfil.ls === 'embarazo') notes.push('En embarazo o lactancia, tu plan debe ser supervisado por tu médico u obstetra.');
+    document.getElementById('obNotes').innerHTML = notes.map(n => `<div class="ob-note">⚠️ ${n}</div>`).join('');
+  }
+  obStep++;
+  obRender();
+}
+
+function obFinish() {
+  try { localStorage.setItem('nutrifit_onboarded', '1'); } catch(e){}
+  onboardingDone = true;
+  document.getElementById('onboarding').classList.add('hidden');
+  updateUI();
+  showSec('inicio', document.querySelectorAll('.nav-btn')[0]);
+}
+
 // INICIALIZACIÓN
 window.onload = () => {
   updateUI();
+  if (!onboardingDone) showOnboarding();
   
   // REGISTRO DEL SERVICE WORKER (PWA & MODO OFFLINE)
   if ('serviceWorker' in navigator) {
