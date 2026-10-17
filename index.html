@@ -676,6 +676,8 @@ body {
     <button id="btnPWAInstall" onclick="triggerPWAInstall()" style="background:rgba(255,255,255,0.22);color:#fff;border:1px solid rgba(255,255,255,0.35);border-radius:99px;padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px">
       📲 Instalar App en celular
     </button>
+    <button id="btnCloud" onclick="cloudToggle()" style="background:rgba(255,255,255,0.22);color:#fff;border:1px solid rgba(255,255,255,0.35);border-radius:99px;padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px">☁️ Iniciar sesión</button>
+    <span id="cloudStatus" style="font-size:11px;color:rgba(255,255,255,0.9)"></span>
   </div>
   <h1 id="headerTitle">Mi Plan de Salud</h1>
   <p id="headerSub">Calculado para la gastronomía y supermercados del Perú</p>
@@ -1097,6 +1099,7 @@ body {
     <div class="ob-dots"><div class="ob-dot on"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
 
     <div class="ob-step on" id="obS1">
+      <div style="text-align:center;margin-bottom:12px"><button type="button" class="ob-btn" style="flex:none;padding:8px 14px;font-size:13px" onclick="cloudToggle()">☁️ ¿Ya usaste NutriFit? Inicia sesión y recupera tus datos</button></div>
       <div class="ob-field"><label>¿Cómo te llamas?</label><input id="ob-nombre" type="text" placeholder="Tu nombre" autocomplete="given-name"></div>
       <div class="ob-field"><label>Sexo (para calcular tu gasto de energía)</label>
         <div class="ob-choice">
@@ -2704,6 +2707,8 @@ function obFinish() {
   showSec('inicio', document.querySelectorAll('.nav-btn')[0]);
 }
 
+window.cloudToggle = function(){ alert('La sincronización con la nube no pudo cargar (¿sin internet?). Inténtalo de nuevo en unos segundos.'); };
+
 // INICIALIZACIÓN
 window.onload = () => {
   updateUI();
@@ -2716,6 +2721,130 @@ window.onload = () => {
       .catch(err => console.log('ServiceWorker info:', err));
   }
 };
+</script>
+
+<!-- ===== FIREBASE: inicio de sesión con Google + respaldo en la nube ===== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAeORuxkEfPNzM4AAWM-qVerqBOBOxVxnc",
+  authDomain: "nutrifit-b8cd5.firebaseapp.com",
+  projectId: "nutrifit-b8cd5",
+  storageBucket: "nutrifit-b8cd5.firebasestorage.app",
+  messagingSenderId: "545160044913",
+  appId: "1:545160044913:web:a45c6d7056901b02f996d0"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const PREFIX = 'nutrifit_';
+const TS_KEY = 'nutrifit_updated_at';
+const rawSet = Storage.prototype.setItem;
+let user = null, applying = false, timer = null, lastSent = '';
+
+const $ = id => document.getElementById(id);
+function setStatus(t) { const el = $('cloudStatus'); if (el) el.textContent = t; }
+function setBtn() {
+  const b = $('btnCloud'); if (!b) return;
+  b.textContent = user ? '☁️ ' + (user.displayName || user.email || 'Cuenta').split(' ')[0] + ' · Salir' : '☁️ Iniciar sesión';
+}
+
+// Junta todo lo que la app guarda en el teléfono
+function collect() {
+  const d = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k.startsWith(PREFIX) && k !== TS_KEY) d[k] = localStorage.getItem(k);
+  }
+  return d;
+}
+
+// Cada vez que la app guarda algo, se programa el respaldo en la nube
+Storage.prototype.setItem = function (k, v) {
+  rawSet.call(this, k, v);
+  if (this === window.localStorage && typeof k === 'string' && k.startsWith(PREFIX) && k !== TS_KEY && !applying) schedule();
+};
+function schedule() { if (!user) return; clearTimeout(timer); timer = setTimeout(() => upload(false), 1500); }
+
+function handleErr(e) {
+  console.warn('Firebase:', e);
+  const c = e && e.code || '';
+  if (c === 'permission-denied') setStatus('⚠️ Sin permiso: revisa las reglas de Firestore');
+  else if (c === 'unavailable' || /offline/i.test(e && e.message || '')) setStatus('Sin conexión: se guardará al volver');
+  else setStatus('⚠️ No se pudo sincronizar');
+}
+
+async function upload(force) {
+  if (!user) return;
+  const data = collect();
+  const json = JSON.stringify(data);
+  if (!force && json === lastSent) return;
+  try {
+    setStatus('Guardando…');
+    const ts = Date.now();
+    await setDoc(doc(db, 'usuarios', user.uid, 'datos', 'app'), { data, updatedAt: ts });
+    rawSet.call(localStorage, TS_KEY, String(ts));
+    lastSent = json;
+    setStatus('☁️ Guardado ✓');
+  } catch (e) { handleErr(e); }
+}
+
+async function initialSync() {
+  setStatus('Sincronizando…');
+  try {
+    const snap = await getDoc(doc(db, 'usuarios', user.uid, 'datos', 'app'));
+    const localTs = Number(localStorage.getItem(TS_KEY) || 0);
+    if (!snap.exists()) { await upload(true); return; }
+    const c = snap.data();
+    const cTs = c.updatedAt || 0;
+    if (cTs > localTs) {
+      const localHasData = !!localStorage.getItem('nutrifit_onboarded');
+      if (localTs === 0 && localHasData &&
+          !confirm('Encontramos datos guardados en tu cuenta.\n\nAceptar = usar los datos de tu cuenta (reemplaza los de este dispositivo).\nCancelar = mantener los de este dispositivo (reemplaza los de tu cuenta).')) {
+        await upload(true); return;
+      }
+      applying = true;
+      Object.entries(c.data || {}).forEach(([k, v]) => rawSet.call(localStorage, k, v));
+      rawSet.call(localStorage, TS_KEY, String(cTs));
+      applying = false;
+      setStatus('Cargando tus datos…');
+      location.reload();
+      return;
+    }
+    if (cTs < localTs) { await upload(true); return; }
+    lastSent = JSON.stringify(collect());
+    setStatus('☁️ Sincronizado ✓');
+  } catch (e) { handleErr(e); }
+}
+
+window.cloudToggle = async function () {
+  if (user) {
+    if (confirm('¿Cerrar sesión?\n\nTus datos quedan guardados en la nube y en este dispositivo.')) await signOut(auth);
+    return;
+  }
+  try {
+    await signInWithPopup(auth, new GoogleAuthProvider());
+  } catch (e) {
+    const c = e.code || '';
+    if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return;
+    if (c === 'auth/unauthorized-domain') alert('Falta autorizar este dominio en Firebase:\nAuthentication → Configuración → Dominios autorizados → agrega dastan-beep.github.io');
+    else if (c === 'auth/operation-not-allowed') alert('Activa Google como método de acceso en Firebase → Authentication → Método de acceso.');
+    else if (c === 'auth/popup-blocked') alert('El navegador bloqueó la ventana de inicio de sesión. Permite las ventanas emergentes para este sitio e inténtalo otra vez.');
+    else alert('No se pudo iniciar sesión (' + (c || e.message) + ').');
+  }
+};
+
+onAuthStateChanged(auth, u => {
+  user = u;
+  setBtn();
+  if (u) initialSync(); else setStatus('');
+});
+window.addEventListener('online', () => { if (user) upload(true); });
 </script>
 </body>
 </html>
