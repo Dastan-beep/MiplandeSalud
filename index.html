@@ -503,22 +503,71 @@ body {
 .history-day-card {
   background: var(--bg);
   border-radius: var(--radius-sm);
-  padding: 10px 12px;
-  margin-bottom: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
   border: 1px solid var(--border);
 }
 .history-day-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  padding-bottom: 5px;
+  border-bottom: 1px dashed var(--border);
 }
-.history-day-items {
+.dia-comida-bloque {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 8px 10px;
+  margin-top: 7px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+.dia-comida-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.dia-comida-tipo {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.dia-comida-hora {
+  font-size: 10.5px;
+  color: var(--text-3);
+  font-weight: normal;
+}
+.dia-comida-kcal {
   font-size: 12px;
+  font-weight: 700;
+  color: var(--coral-dark);
+}
+.dia-comida-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 3px;
+}
+.dia-item-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 11px;
   color: var(--text-2);
-  line-height: 1.4;
+}
+.dia-item-pill strong {
+  color: var(--coral-dark);
 }
 
 /* ONBOARDING */
@@ -706,13 +755,16 @@ body {
       <div id="metasMacrosLive"></div>
     </div>
 
-    <!-- PLATO ACTUAL CON OPCIÓN DE GUARDAR COMO PLATO COMPLETO -->
+    <!-- PLATO ACTUAL CON OPCIÓN DE REGISTRAR COMIDA DEL DÍA Y GUARDAR RECETA -->
     <div class="plato-card">
       <div class="plato-header">
-        <span class="plato-title">🍽️ Mi Plato Actual</span>
-        <div class="plato-actions">
-          <button class="plato-btn-save" onclick="guardarPlatoActualModal()">💾 Guardar este plato</button>
-          <button class="plato-clear" onclick="clearPlato()">Limpiar</button>
+        <div>
+          <span class="plato-title">🍽️ Mi Plato Actual</span>
+          <div style="font-size:11.5px;color:var(--text-3);margin-top:2px" id="platoSubtituloEstado">Arma tu comida aquí con el botón + y luego regístrala</div>
+        </div>
+        <div class="plato-actions" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          <button class="plato-btn-save" onclick="guardarPlatoActualModal()" title="Guardar como receta favorita">💾 Guardar receta</button>
+          <button class="plato-clear" onclick="clearPlato()" title="Vaciar ingredientes de este plato sin tocar las comidas ya registradas">Limpiar plato</button>
         </div>
       </div>
       <div id="platoItems"><div class="plato-empty">Tu plato está vacío. Agrega alimentos abajo.</div></div>
@@ -722,6 +774,17 @@ body {
         <div class="mt-box"><div class="mt-val" id="pt-prot">0g</div><div class="mt-lbl">Proteína</div></div>
         <div class="mt-box"><div class="mt-val" id="pt-carb">0g</div><div class="mt-lbl">Carbos</div></div>
         <div class="mt-box"><div class="mt-val" id="pt-gras">0g</div><div class="mt-lbl">Grasas</div></div>
+      </div>
+
+      <!-- BOTÓN PRINCIPAL PARA REGISTRAR LA COMIDA DEL DÍA -->
+      <div style="margin-top:10px">
+        <button class="btn-action btn-action-primary" style="width:100%;justify-content:center;padding:12px;font-size:13.5px;font-weight:700;background:var(--verde);color:#fff;border-radius:10px;box-shadow:0 3px 10px rgba(29,158,117,0.25)" onclick="abrirModalRegistrarComida()">
+          ✅ Registrar esta comida en mi día (Desayuno, Almuerzo, Cena...)
+        </button>
+      </div>
+
+      <!-- RESUMEN DE LO REGISTRADO HOY -->
+      <div id="resumenComidasHoyEnPlato" style="margin-top:10px;font-size:12px;color:var(--text-2);background:var(--bg);padding:8px 10px;border-radius:8px;border:1px solid var(--border)">
       </div>
     </div>
 
@@ -818,19 +881,71 @@ body {
 
 <!-- MODAL: GUARDAR PLATO ACTUAL -->
 <div class="modal-overlay hidden" id="modalGuardarPlato">
-  <div class="modal-box" style="max-width:400px">
+  <div class="modal-box" style="max-width:420px">
     <div class="modal-head">
-      <div class="modal-title">Guardar este Plato</div>
+      <div>
+        <div class="modal-title">Guardar este Plato</div>
+        <div style="font-size:11.5px;color:var(--text-3)">Guárdalo como plantilla favorita para volver a usarlo cuando quieras</div>
+      </div>
       <button class="modal-close" onclick="closeModal('modalGuardarPlato')">✕</button>
     </div>
     <div style="margin-bottom:10px">
-      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Nombre del plato o comida:</label>
-      <input class="sinput" id="inp-nombre-plato-guardado" placeholder="Ej: Mi almuerzo habitual, Cena ligera con pollo">
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Nombre del plato o combinación:</label>
+      <input class="sinput" id="inp-nombre-plato-guardado" placeholder="Ej: Mi desayuno fit con avena, Almuerzo pollo con arroz">
     </div>
-    <div id="resumenGuardarPlato" style="font-size:12px;color:var(--text-2);background:var(--bg);padding:8px 10px;border-radius:8px;margin-bottom:12px"></div>
-    <button class="btn-action btn-action-primary" style="width:100%;justify-content:center;padding:11px" onclick="confirmarGuardarPlato()">
-      💾 Guardar Plato en Favoritos
-    </button>
+    <div id="resumenGuardarPlato" style="font-size:12px;color:var(--text-2);background:var(--bg);padding:8px 10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--border)"></div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button class="btn-action btn-action-primary" style="width:100%;justify-content:center;padding:11px" onclick="confirmarGuardarPlato(false)">
+        💾 Guardar como Plato Favorito
+      </button>
+      <button class="btn-action" style="width:100%;justify-content:center;padding:11px;background:var(--verde);color:#fff;font-weight:700" onclick="confirmarGuardarPlato(true)">
+        💾 Guardar y ✅ Registrar en mi día hoy
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: REGISTRAR COMIDA EN MI DÍA (DESAYUNO, ALMUERZO, CENA, SNACK) -->
+<div class="modal-overlay hidden" id="modalRegistrarComida">
+  <div class="modal-box" style="max-width:440px">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">✅ Registrar Comida en mi Día</div>
+        <div style="font-size:11.5px;color:var(--text-3)">Se sumará a tus calorías de hoy y liberará tu plato</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalRegistrarComida')">✕</button>
+    </div>
+
+    <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:6px">Selecciona qué comida es:</label>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px" id="gridTiposComida">
+      <button type="button" class="cb on btn-tipo-comida" data-tipo="🌅 Desayuno" onclick="seleccionarTipoComida('🌅 Desayuno', this)">🌅 Desayuno</button>
+      <button type="button" class="cb btn-tipo-comida" data-tipo="🥗 Almuerzo" onclick="seleccionarTipoComida('🥗 Almuerzo', this)">🥗 Almuerzo</button>
+      <button type="button" class="cb btn-tipo-comida" data-tipo="🌙 Cena" onclick="seleccionarTipoComida('🌙 Cena', this)">🌙 Cena</button>
+      <button type="button" class="cb btn-tipo-comida" data-tipo="🍎 Snack / Merienda" onclick="seleccionarTipoComida('🍎 Snack / Merienda', this)">🍎 Snack / Merienda</button>
+    </div>
+
+    <div style="margin-bottom:12px">
+      <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:4px">Nombre o detalle (opcional):</label>
+      <input class="sinput" id="inp-nombre-comida-registro" placeholder="Ej: Surtido y huevos, Almuerzo criollo..." style="margin-bottom:0">
+    </div>
+
+    <div id="resumenComidaARegistrar" style="font-size:12px;color:var(--text-2);background:var(--bg);padding:10px 12px;border-radius:8px;margin-bottom:12px;border:1px solid var(--border)"></div>
+
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px">
+      <input type="checkbox" id="chk-guardar-favorito-tambien" style="cursor:pointer">
+      <label for="chk-guardar-favorito-tambien" style="font-size:12px;color:var(--text-2);cursor:pointer">
+        Guardar también como favorito en <strong>Mis Platos Guardados</strong>
+      </label>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button class="btn-action btn-action-primary" style="width:100%;justify-content:center;padding:12px;font-size:13.5px;font-weight:700;background:var(--verde);color:#fff;border-radius:10px" onclick="confirmarRegistrarComida()">
+        ✅ Confirmar y Sumar a Hoy
+      </button>
+      <button class="btn-action" style="width:100%;justify-content:center;padding:9px;font-size:12px" onclick="closeModal('modalRegistrarComida')">
+        Cancelar
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1264,9 +1379,79 @@ if (!perfil.sexo) perfil.sexo = 'mujer';
 let onboardingDone = false;
 try { onboardingDone = localStorage.getItem('nutrifit_onboarded') === '1'; } catch(e){}
 
-// HISTORIAL POR DÍAS
+// HISTORIAL POR DÍAS (SOPORTE DE MÚLTIPLES COMIDAS SECUENCIALES: DESAYUNO, ALMUERZO, CENA, ETC.)
 let historyDays = {};
 try { historyDays = JSON.parse(localStorage.getItem('nutrifit_history_days') || '{}'); } catch(e){}
+
+function recalcularTotalesDia(diaKey, save = true) {
+  const d = historyDays[diaKey];
+  if (!d) return;
+  if (!Array.isArray(d.meals)) d.meals = [];
+  let totKcal = 0, totP = 0, totC = 0, totG = 0;
+  const flatItems = [];
+  d.meals.forEach(m => {
+    if (m.totals) {
+      totKcal += m.totals.kcal || 0;
+      totP += m.totals.prot || 0;
+      totC += m.totals.carb || 0;
+      totG += m.totals.gras || 0;
+    }
+    if (Array.isArray(m.items)) flatItems.push(...m.items);
+  });
+  d.totals = {
+    kcal: Math.round(totKcal),
+    prot: +totP.toFixed(1),
+    carb: +totC.toFixed(1),
+    gras: +totG.toFixed(1)
+  };
+  d.items = flatItems;
+  if (save) {
+    try { localStorage.setItem('nutrifit_history_days', JSON.stringify(historyDays)); } catch(e){}
+  }
+}
+
+function normalizarHistoryDays() {
+  if (!historyDays || typeof historyDays !== 'object') historyDays = {};
+  let modified = false;
+  Object.keys(historyDays).forEach(k => {
+    const d = historyDays[k];
+    if (!d) return;
+    if (!Array.isArray(d.meals)) {
+      const legacyItems = Array.isArray(d.items) ? d.items : [];
+      if (legacyItems.length > 0) {
+        d.meals = [{
+          id: 'meal_leg_' + k,
+          tipo: '🍽️ Comida',
+          nombre: 'Comida registrada',
+          hora: '',
+          items: legacyItems.map(it => ({ ...it })),
+          totals: d.totals || legacyItems.reduce((acc, f) => ({
+            kcal: acc.kcal + (f.kcal || 0),
+            prot: +(acc.prot + (f.p || 0)).toFixed(1),
+            carb: +(acc.carb + (f.c || 0)).toFixed(1),
+            gras: +(acc.gras + (f.g || 0)).toFixed(1)
+          }), { kcal: 0, prot: 0, carb: 0, gras: 0 })
+        }];
+      } else {
+        d.meals = [];
+      }
+      modified = true;
+    }
+    recalcularTotalesDia(k, false);
+  });
+  if (modified) {
+    try { localStorage.setItem('nutrifit_history_days', JSON.stringify(historyDays)); } catch(e){}
+  }
+}
+normalizarHistoryDays();
+
+function getDiaHoyRegistradoTotals() {
+  const today = getTodayKey();
+  if (historyDays[today] && historyDays[today].totals) {
+    return historyDays[today].totals;
+  }
+  return { kcal: 0, prot: 0, carb: 0, gras: 0 };
+}
 
 // HISTORIAL DE PESO SEMANAL
 let weightLog = [];
@@ -1450,67 +1635,64 @@ function setModoPeso(modo) {
   renderGraficaPesoSemanal();
 }
 
-function syncTodayToHistory() {
-  const today = getTodayKey();
-  const totals = getPlatoTotals();
-  if (platoItems.length > 0) {
-    historyDays[today] = {
-      date: today,
-      totals,
-      items: platoItems.map(p => ({
-        n: p.n,
-        kcal: p.kcal,
-        u: p.u,
-        p: p.p,
-        c: p.c,
-        g: p.g
-      }))
-    };
-  }
-  localStorage.setItem('nutrifit_history_days', JSON.stringify(historyDays));
-}
-
 function eliminarHistorialDia(diaKey) {
-  if (confirm(`¿Eliminar el registro de comidas del ${diaKey}?`)) {
+  if (confirm(`¿Eliminar todos los registros de comidas del día ${diaKey}?`)) {
     delete historyDays[diaKey];
-    if (diaKey === getTodayKey()) {
-      platoItems = [];
-      localStorage.setItem('nutrifit_plate_items', '[]');
-      renderPlato();
-    }
     localStorage.setItem('nutrifit_history_days', JSON.stringify(historyDays));
     renderHistorialDias();
+    renderMetasMacrosLive();
     renderGraficaSemanaCalorias();
+    renderPlato();
+    mostrarToast(`Registro del día ${diaKey} eliminado.`);
   }
 }
 
-function eliminarItemHistorialDia(diaKey, itemIdx) {
-  if (!historyDays[diaKey] || !historyDays[diaKey].items) return;
-  const item = historyDays[diaKey].items[itemIdx];
-  const nombre = item ? item.n : 'este alimento';
-  if (confirm(`¿Eliminar "${nombre}" de las comidas de este día?`)) {
-    historyDays[diaKey].items.splice(itemIdx, 1);
-    const tot = historyDays[diaKey].items.reduce((acc, f) => ({
-      kcal: acc.kcal + f.kcal,
-      prot: +(acc.prot + f.p).toFixed(1),
-      carb: +(acc.carb + f.c).toFixed(1),
-      gras: +(acc.gras + f.g).toFixed(1)
-    }), { kcal: 0, prot: 0, carb: 0, gras: 0 });
-    historyDays[diaKey].totals = tot;
-    if (diaKey === getTodayKey()) {
-      platoItems.splice(itemIdx, 1);
-      localStorage.setItem('nutrifit_plate_items', JSON.stringify(platoItems));
-      renderPlato();
-    }
+function eliminarComidaRegistrada(diaKey, mealId) {
+  if (!historyDays[diaKey] || !Array.isArray(historyDays[diaKey].meals)) return;
+  const meal = historyDays[diaKey].meals.find(m => m.id === mealId);
+  const nombre = meal ? meal.nombre : 'esta comida';
+  if (confirm(`¿Eliminar "${nombre}" de las comidas del día ${diaKey}?`)) {
+    historyDays[diaKey].meals = historyDays[diaKey].meals.filter(m => m.id !== mealId);
+    recalcularTotalesDia(diaKey);
     localStorage.setItem('nutrifit_history_days', JSON.stringify(historyDays));
     renderHistorialDias();
+    renderMetasMacrosLive();
     renderGraficaSemanaCalorias();
+    renderPlato();
+    mostrarToast(`Comida "${nombre}" eliminada.`);
+  }
+}
+
+function eliminarItemDeComidaRegistrada(diaKey, mealId, itemIdx) {
+  if (!historyDays[diaKey] || !Array.isArray(historyDays[diaKey].meals)) return;
+  const meal = historyDays[diaKey].meals.find(m => m.id === mealId);
+  if (!meal || !Array.isArray(meal.items)) return;
+  const item = meal.items[itemIdx];
+  const nombre = item ? item.n : 'este alimento';
+  if (confirm(`¿Quitar "${nombre}" de ${meal.nombre}?`)) {
+    meal.items.splice(itemIdx, 1);
+    if (!meal.items.length) {
+      historyDays[diaKey].meals = historyDays[diaKey].meals.filter(m => m.id !== mealId);
+    } else {
+      meal.totals = meal.items.reduce((acc, f) => ({
+        kcal: acc.kcal + (f.kcal || 0),
+        prot: +(acc.prot + (f.p || 0)).toFixed(1),
+        carb: +(acc.carb + (f.c || 0)).toFixed(1),
+        gras: +(acc.gras + (f.g || 0)).toFixed(1)
+      }), { kcal: 0, prot: 0, carb: 0, gras: 0 });
+    }
+    recalcularTotalesDia(diaKey);
+    localStorage.setItem('nutrifit_history_days', JSON.stringify(historyDays));
+    renderHistorialDias();
+    renderMetasMacrosLive();
+    renderGraficaSemanaCalorias();
+    renderPlato();
   }
 }
 
 function renderHistorialDias() {
-  syncTodayToHistory();
   const c = document.getElementById('historialDiasContainer');
+  if (!c) return;
   const todayKey = getTodayKey();
   const dates = Object.keys(historyDays).sort().reverse();
 
@@ -1527,6 +1709,7 @@ function renderHistorialDias() {
 
   c.innerHTML = dates.slice(0, 14).map(d => {
     const dayData = historyDays[d];
+    if (!dayData || !dayData.totals) return '';
     const targetKcal = perfil.macros.kcal;
     const diffKcal = dayData.totals.kcal - targetKcal;
     const isToday = d === todayKey;
@@ -1541,12 +1724,51 @@ function renderHistorialDias() {
       badgeText = `${Math.abs(diffKcal)} kcal bajo meta`;
     }
 
-    const itemsListHtml = (dayData.items || []).map((it, itIdx) => `
-      <span style="display:inline-flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 8px;margin:2px 4px 2px 0;font-size:11.5px">
-        <span>${it.n} <strong style="color:var(--coral-dark)">(${it.kcal} kcal)</strong></span>
-        <button onclick="eliminarItemHistorialDia('${d}', ${itIdx})" title="Borrar comida" style="background:none;border:none;color:var(--coral-dark);cursor:pointer;font-size:11px;padding:0 2px;line-height:1">✕</button>
-      </span>
-    `).join('');
+    const meals = Array.isArray(dayData.meals) && dayData.meals.length > 0 ? dayData.meals : [];
+
+    let mealsHtml = '';
+    if (meals.length > 0) {
+      mealsHtml = meals.map(m => {
+        const itemsPills = (m.items || []).map((it, itIdx) => `
+          <span class="dia-item-pill">
+            <span>${it.n} <small>(${it.u || '1 porc.'}${it.mult && it.mult !== 1 ? ' · ' + it.mult + 'x' : ''})</small></span>
+            <strong>${it.kcal} kcal</strong>
+            <button onclick="eliminarItemDeComidaRegistrada('${d}', '${m.id}', ${itIdx})" title="Quitar este alimento" style="background:none;border:none;color:var(--coral-dark);cursor:pointer;font-size:11px;padding:0 2px;line-height:1">✕</button>
+          </span>
+        `).join('');
+
+        return `
+          <div class="dia-comida-bloque">
+            <div class="dia-comida-header">
+              <span class="dia-comida-tipo">
+                <span>${m.nombre}</span>
+                ${m.hora ? `<span class="dia-comida-hora">(${m.hora})</span>` : ''}
+              </span>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span class="dia-comida-kcal">${m.totals ? m.totals.kcal : 0} kcal</span>
+                <button onclick="eliminarComidaRegistrada('${d}', '${m.id}')" title="Eliminar este plato completo" style="background:none;border:none;color:var(--coral-dark);cursor:pointer;font-size:12px;padding:2px">🗑️</button>
+              </div>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);margin-bottom:4px">
+              P: ${m.totals ? m.totals.prot : 0}g · C: ${m.totals ? m.totals.carb : 0}g · G: ${m.totals ? m.totals.gras : 0}g
+            </div>
+            <div class="dia-comida-items">
+              ${itemsPills || '<em>Sin detalles</em>'}
+            </div>
+          </div>
+        `;
+      }).join('');
+    } else if (Array.isArray(dayData.items) && dayData.items.length > 0) {
+      mealsHtml = (dayData.items || []).map((it, itIdx) => `
+        <span class="dia-item-pill">
+          <span>${it.n}</span>
+          <strong>${it.kcal} kcal</strong>
+          <button onclick="eliminarItemHistorialDia('${d}', ${itIdx})" title="Borrar comida" style="background:none;border:none;color:var(--coral-dark);cursor:pointer;font-size:11px;padding:0 2px;line-height:1">✕</button>
+        </span>
+      `).join('');
+    } else {
+      mealsHtml = '<div style="color:var(--text-3);font-size:12px;padding:6px 0">Sin comidas registradas en este día.</div>';
+    }
 
     return `
       <div class="history-day-card" style="${isToday ? 'border: 1.5px solid var(--verde);background:rgba(29,158,117,0.03)' : ''}">
@@ -1557,19 +1779,19 @@ function renderHistorialDias() {
           </div>
           <div style="display:flex;align-items:center;gap:8px">
             <span style="color:var(--coral-dark);font-weight:700">${dayData.totals.kcal} kcal <span style="font-size:11px;font-weight:normal;color:var(--text-3)">/ ${targetKcal}</span></span>
-            <button onclick="eliminarHistorialDia('${d}')" title="Eliminar registro" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:12px">✕</button>
+            <button onclick="eliminarHistorialDia('${d}')" title="Eliminar registro de todo el día" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:13px">✕</button>
           </div>
         </div>
         <div style="font-size:12px;color:var(--text-2);margin-bottom:6px">
-          <strong>P:</strong> ${dayData.totals.prot}g · <strong>C:</strong> ${dayData.totals.carb}g · <strong>G:</strong> ${dayData.totals.gras}g
+          <strong>Total del día:</strong> <strong>P:</strong> ${dayData.totals.prot}g · <strong>C:</strong> ${dayData.totals.carb}g · <strong>G:</strong> ${dayData.totals.gras}g
         </div>
-        <div class="history-day-items" style="margin-top:4px">
-          ${itemsListHtml || '<em>Sin comidas guardadas</em>'}
+        <div>
+          ${mealsHtml}
         </div>
         ${isToday ? `
-          <div style="margin-top:8px;padding-top:6px;border-top:1px dashed var(--border);display:flex;justify-content:flex-end">
-            <button class="cb on" onclick="showSec('combinador', document.querySelectorAll('.nav-btn')[1])" style="font-size:11px;padding:3px 10px">
-              🍽️ Modificar comidas de hoy en Mi Plato →
+          <div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--border);display:flex;justify-content:flex-end">
+            <button class="cb on" onclick="showSec('combinador', document.querySelectorAll('.nav-btn')[1])" style="font-size:11.5px;padding:4px 12px">
+              ➕ Agregar / Registrar otra comida en Mi Plato →
             </button>
           </div>` : ''}
       </div>`;
@@ -1593,7 +1815,10 @@ function renderGraficaSemanaCalorias() {
     const key = d.toISOString().split('T')[0];
     const dayName = d.toLocaleDateString('es-PE', { weekday: 'short' });
     labels.push(dayName.charAt(0).toUpperCase() + dayName.slice(1));
-    const k = (historyDays[key] && historyDays[key].totals.kcal) || (key === getTodayKey() ? getPlatoTotals().kcal : 0);
+    const isToday = key === getTodayKey();
+    const regKcal = (historyDays[key] && historyDays[key].totals && historyDays[key].totals.kcal) || 0;
+    const draftKcal = isToday ? getPlatoTotals().kcal : 0;
+    const k = regKcal + draftKcal;
     data.push(k);
     sumKcal += k;
   }
@@ -1781,17 +2006,35 @@ function renderGraficaPesoSemanal() {
 // ===== 4. COMBINADOR Y MI PLATO =====
 function renderMetasMacrosLive() {
   const m = perfil.macros;
-  const t = getPlatoTotals();
+  const reg = getDiaHoyRegistradoTotals();
+  const draft = getPlatoTotals();
+
+  const curKcal = reg.kcal + draft.kcal;
+  const curProt = +(reg.prot + draft.prot).toFixed(1);
+  const curCarb = +(reg.carb + draft.carb).toFixed(1);
+  const curGras = +(reg.gras + draft.gras).toFixed(1);
+
   const items = [
-    { n: 'Calorías', cur: t.kcal, max: m.kcal, unit: 'kcal', col: 'var(--coral)' },
-    { n: 'Proteínas', cur: t.prot, max: m.prot, unit: 'g', col: 'var(--azul)' },
-    { n: 'Carbohidratos', cur: t.carb, max: m.carb, unit: 'g', col: 'var(--amber)' },
-    { n: 'Grasas', cur: t.gras, max: m.gras, unit: 'g', col: 'var(--verde)' }
+    { n: 'Calorías', cur: curKcal, max: m.kcal, unit: 'kcal', col: 'var(--coral)' },
+    { n: 'Proteínas', cur: curProt, max: m.prot, unit: 'g', col: 'var(--azul)' },
+    { n: 'Carbohidratos', cur: curCarb, max: m.carb, unit: 'g', col: 'var(--amber)' },
+    { n: 'Grasas', cur: curGras, max: m.gras, unit: 'g', col: 'var(--verde)' }
   ];
 
-  document.getElementById('metasMacrosLive').innerHTML = items.map(it => {
+  let headerNote = '';
+  if (reg.kcal > 0 && draft.kcal > 0) {
+    headerNote = `<div style="font-size:11.5px;color:var(--text-2);margin-bottom:8px;background:var(--bg);padding:7px 10px;border-radius:6px;border:1px solid var(--border)">
+      📌 <strong>Hoy registrado:</strong> ${reg.kcal} kcal + <strong>Plato actual:</strong> +${draft.kcal} kcal = <strong>${curKcal} kcal acumuladas</strong>
+    </div>`;
+  } else if (reg.kcal > 0) {
+    headerNote = `<div style="font-size:11.5px;color:var(--verde-dark);margin-bottom:8px;background:rgba(29,158,117,0.06);padding:7px 10px;border-radius:6px;border:1px solid rgba(29,158,117,0.2)">
+      ✅ <strong>Llevas ${reg.kcal} kcal registradas hoy</strong> en tu día. Tu plato actual está libre para armar tu siguiente comida.
+    </div>`;
+  }
+
+  document.getElementById('metasMacrosLive').innerHTML = headerNote + items.map(it => {
     const pct = Math.min(Math.round((it.cur / it.max) * 100), 125);
-    const remaining = it.max - it.cur;
+    const remaining = Math.round(it.max - it.cur);
     const remainingText = remaining > 0 ? `${remaining} ${it.unit} restantes` : '¡Meta cumplida!';
     return `
       <div style="margin-bottom:8px">
@@ -1815,8 +2058,17 @@ function getPlatoTotals() {
 
 function renderPlato() {
   const el = document.getElementById('platoItems');
+  const subEl = document.getElementById('platoSubtituloEstado');
+  const resumenHoyEl = document.getElementById('resumenComidasHoyEnPlato');
+  const reg = getDiaHoyRegistradoTotals();
+  const todayMeals = (historyDays[getTodayKey()] && historyDays[getTodayKey()].meals) || [];
+
   if (!platoItems.length) {
-    el.innerHTML = '<div class="plato-empty">Tu plato está vacío. Agrega alimentos abajo con el botón <strong>+</strong>.</div>';
+    if (todayMeals.length > 0) {
+      el.innerHTML = '<div class="plato-empty">🍽️ Tu plato actual está listo para tu siguiente comida.<br><span style="font-size:11.5px;color:var(--verde-dark);font-weight:600">Busca alimentos abajo con el botón <strong>+</strong> para armar tu siguiente comida (ej: almuerzo o cena).</span></div>';
+    } else {
+      el.innerHTML = '<div class="plato-empty">Tu plato está vacío. Agrega alimentos abajo con el botón <strong>+</strong>.</div>';
+    }
   } else {
     el.innerHTML = platoItems.map((f, i) => `
       <div class="plato-item">
@@ -1846,9 +2098,37 @@ function renderPlato() {
   document.getElementById('pt-carb').textContent = t.carb + 'g';
   document.getElementById('pt-gras').textContent = t.gras + 'g';
 
+  if (subEl) {
+    if (platoItems.length) {
+      subEl.innerHTML = `Componiendo comida (${platoItems.length} ingrediente${platoItems.length > 1 ? 's' : ''}) · Pulsa "Registrar esta comida" para guardarla en tu día.`;
+    } else if (todayMeals.length) {
+      subEl.innerHTML = `Listo para tu próxima comida · Ya tienes ${todayMeals.length} comida(s) registrada(s) hoy.`;
+    } else {
+      subEl.innerHTML = 'Arma tu comida aquí con el botón + y luego regístrala';
+    }
+  }
+
+  if (resumenHoyEl) {
+    if (todayMeals.length > 0) {
+      const nombresComidas = todayMeals.map(m => `<strong>${m.nombre}</strong> (${m.totals.kcal} kcal)`).join(', ');
+      resumenHoyEl.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+          <span>📅 <strong>Hoy registrado:</strong> ${nombresComidas}</span>
+          <span style="font-weight:700;color:var(--coral-dark)">${reg.kcal} / ${perfil.macros.kcal} kcal</span>
+        </div>
+        <div style="font-size:11px;color:var(--text-3)">Tus comidas registradas quedan guardadas en Inicio y no se borran al limpiar este plato.</div>
+      `;
+    } else {
+      resumenHoyEl.innerHTML = `
+        <div style="color:var(--text-3);font-size:11.5px">
+          ℹ️ Aún no has registrado comidas hoy. Agrega alimentos a tu plato y pulsa <strong>"✅ Registrar esta comida en mi día"</strong>.
+        </div>
+      `;
+    }
+  }
+
   localStorage.setItem('nutrifit_plate_items', JSON.stringify(platoItems));
   renderMetasMacrosLive();
-  syncTodayToHistory();
 }
 
 function cambiarPorcionPlato(i, delta) {
@@ -1875,24 +2155,149 @@ function cambiarPorcionPlato(i, delta) {
   it.g = +(baseG * newMult).toFixed(1);
 
   renderPlato();
-  renderHistorialDias();
+  renderMetasMacrosLive();
   renderGraficaSemanaCalorias();
 }
 
 function removePlatoItem(i) {
   platoItems.splice(i, 1);
   renderPlato();
-  renderHistorialDias();
+  renderMetasMacrosLive();
   renderGraficaSemanaCalorias();
 }
 
 function clearPlato() {
-  if (platoItems.length && confirm('¿Deseas vaciar tu plato actual?')) {
-    platoItems = [];
-    renderPlato();
-    renderHistorialDias();
-    renderGraficaSemanaCalorias();
+  if (!platoItems.length) {
+    alert('Tu plato actual ya está vacío.');
+    return;
   }
+  if (confirm('¿Vaciar los alimentos de este plato actual?\n\n(Tus comidas ya registradas en el día como Desayuno o Almuerzo seguirán guardadas intactas)')) {
+    platoItems = [];
+    localStorage.setItem('nutrifit_plate_items', '[]');
+    renderPlato();
+    renderMetasMacrosLive();
+    renderGraficaSemanaCalorias();
+    mostrarToast('Plato vaciado. Listo para armar tu siguiente comida.');
+  }
+}
+
+// ===== REGISTRO DE COMIDAS EN EL DÍA (DESAYUNO, ALMUERZO, CENA, SNACK) =====
+window.currentMealTypeSelected = '🌅 Desayuno';
+
+function abrirModalRegistrarComida() {
+  if (!platoItems.length) {
+    alert('Primero agrega alimentos a tu plato con el botón + abajo (ej: avena, frutas, pollo, arroz) antes de registrar tu comida.');
+    return;
+  }
+  const t = getPlatoTotals();
+  const resumenEl = document.getElementById('resumenComidaARegistrar');
+  if (resumenEl) {
+    resumenEl.innerHTML = `
+      <div style="font-weight:700;margin-bottom:4px">Contenido a registrar (${platoItems.length} alimentos):</div>
+      <div style="margin-bottom:6px">${platoItems.map(p => `• ${p.n} (${p.kcal} kcal)`).join('<br>')}</div>
+      <div style="border-top:1px dashed var(--border);padding-top:5px;font-weight:700;color:var(--coral-dark)">
+        Totales: ${t.kcal} kcal · P: ${t.prot}g · C: ${t.carb}g · G: ${t.gras}g
+      </div>
+    `;
+  }
+
+  // Preseleccionar tipo según la hora del día
+  const hr = new Date().getHours();
+  let defaultTipo = '🌅 Desayuno';
+  if (hr >= 12 && hr < 17) defaultTipo = '🥗 Almuerzo';
+  else if (hr >= 17 && hr < 20) defaultTipo = '🍎 Snack / Merienda';
+  else if (hr >= 20 || hr < 5) defaultTipo = '🌙 Cena';
+
+  const btns = document.querySelectorAll('.btn-tipo-comida');
+  btns.forEach(b => {
+    b.classList.toggle('on', b.getAttribute('data-tipo') === defaultTipo);
+  });
+  window.currentMealTypeSelected = defaultTipo;
+
+  const inp = document.getElementById('inp-nombre-comida-registro');
+  if (inp) inp.value = '';
+
+  const chk = document.getElementById('chk-guardar-favorito-tambien');
+  if (chk) chk.checked = false;
+
+  openModal('modalRegistrarComida');
+}
+
+function seleccionarTipoComida(tipo, btnEl) {
+  window.currentMealTypeSelected = tipo;
+  const btns = document.querySelectorAll('.btn-tipo-comida');
+  btns.forEach(b => b.classList.remove('on'));
+  if (btnEl) btnEl.classList.add('on');
+}
+
+function confirmarRegistrarComida() {
+  if (!platoItems.length) {
+    alert('Tu plato está vacío. Agrega alimentos antes de registrar.');
+    closeModal('modalRegistrarComida');
+    return;
+  }
+  const tipo = window.currentMealTypeSelected || '🌅 Desayuno';
+  const inp = document.getElementById('inp-nombre-comida-registro');
+  const detalle = inp ? inp.value.trim() : '';
+  const nombreFinal = detalle ? `${tipo} (${detalle})` : tipo;
+
+  const today = getTodayKey();
+  if (!historyDays[today]) {
+    historyDays[today] = {
+      date: today,
+      meals: [],
+      items: [],
+      totals: { kcal: 0, prot: 0, carb: 0, gras: 0 }
+    };
+  }
+  if (!Array.isArray(historyDays[today].meals)) historyDays[today].meals = [];
+
+  const t = getPlatoTotals();
+  const nuevaComida = {
+    id: 'meal_' + Date.now(),
+    tipo: tipo,
+    nombre: nombreFinal,
+    hora: new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' }),
+    items: JSON.parse(JSON.stringify(platoItems)),
+    totals: { ...t }
+  };
+
+  historyDays[today].meals.push(nuevaComida);
+  recalcularTotalesDia(today);
+  localStorage.setItem('nutrifit_history_days', JSON.stringify(historyDays));
+
+  // Opción de guardar también como plato favorito
+  const chk = document.getElementById('chk-guardar-favorito-tambien');
+  if (chk && chk.checked) {
+    const nuevoPlato = {
+      id: 'plato_' + Date.now(),
+      n: nombreFinal,
+      cat: 'Mis Alimentos',
+      u: 'plato guardado',
+      kcal: t.kcal,
+      p: t.prot,
+      c: t.carb,
+      g: t.gras,
+      items: JSON.parse(JSON.stringify(platoItems)),
+      isSavedDish: true
+    };
+    savedDishes.unshift(nuevoPlato);
+    localStorage.setItem('nutrifit_saved_dishes', JSON.stringify(savedDishes));
+    updateMisPlatosCount();
+  }
+
+  // Vaciar plato actual para la siguiente comida
+  platoItems = [];
+  localStorage.setItem('nutrifit_plate_items', '[]');
+
+  closeModal('modalRegistrarComida');
+
+  renderPlato();
+  renderMetasMacrosLive();
+  renderHistorialDias();
+  renderGraficaSemanaCalorias();
+
+  mostrarToast(`✅ ¡${nombreFinal} (${t.kcal} kcal) registrado! Tu plato está listo para la siguiente comida.`);
 }
 
 // GUARDAR EL PLATO ACTUAL COMO PLATO FAVORITO Y PODER MODIFICARLO
@@ -1910,7 +2315,7 @@ function guardarPlatoActualModal() {
   openModal('modalGuardarPlato');
 }
 
-function confirmarGuardarPlato() {
+function confirmarGuardarPlato(registrarTambien = false) {
   const nombre = document.getElementById('inp-nombre-plato-guardado').value.trim();
   if (!nombre) {
     alert('Ingresa un nombre para tu plato guardado.');
@@ -1940,10 +2345,79 @@ function confirmarGuardarPlato() {
 
   savedDishes.unshift(nuevoPlato);
   localStorage.setItem('nutrifit_saved_dishes', JSON.stringify(savedDishes));
+  updateMisPlatosCount();
+
+  if (registrarTambien) {
+    const today = getTodayKey();
+    if (!historyDays[today]) {
+      historyDays[today] = { date: today, meals: [], items: [], totals: { kcal: 0, prot: 0, carb: 0, gras: 0 } };
+    }
+    if (!Array.isArray(historyDays[today].meals)) historyDays[today].meals = [];
+
+    const meal = {
+      id: 'meal_' + Date.now(),
+      tipo: '🍽️ Comida',
+      nombre: nombre,
+      hora: new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' }),
+      items: JSON.parse(JSON.stringify(platoItems)),
+      totals: { ...t }
+    };
+    historyDays[today].meals.push(meal);
+    recalcularTotalesDia(today);
+
+    // Vaciar plato actual para la siguiente comida
+    platoItems = [];
+    localStorage.setItem('nutrifit_plate_items', '[]');
+  }
 
   closeModal('modalGuardarPlato');
-  updateMisPlatosCount();
-  alert(`¡Plato "${nombre}" guardado con éxito! Puedes cargarlo o modificarlo en "Mis Platos Guardados".`);
+  renderPlato();
+  renderMetasMacrosLive();
+  renderHistorialDias();
+  renderGraficaSemanaCalorias();
+
+  if (registrarTambien) {
+    mostrarToast(`✅ ¡"${nombre}" guardado en favoritos y registrado en tu día!`);
+  } else {
+    mostrarToast(`💾 ¡Plato "${nombre}" guardado en favoritos!`);
+  }
+}
+
+function registrarPlatoGuardadoDirecto(idx) {
+  const p = savedDishes[idx];
+  if (!p) return;
+  const today = getTodayKey();
+  if (!historyDays[today]) {
+    historyDays[today] = { date: today, meals: [], items: [], totals: { kcal: 0, prot: 0, carb: 0, gras: 0 } };
+  }
+  if (!Array.isArray(historyDays[today].meals)) historyDays[today].meals = [];
+
+  const tipo = prompt(`¿Cómo deseas registrar "${p.n}" en tu día de hoy?\n\n1 = 🌅 Desayuno\n2 = 🥗 Almuerzo\n3 = 🌙 Cena\n4 = 🍎 Snack\n(O escribe el nombre):`, p.n);
+  if (!tipo) return;
+
+  let nombreFinal = tipo.trim();
+  if (nombreFinal === '1') nombreFinal = '🌅 Desayuno';
+  else if (nombreFinal === '2') nombreFinal = '🥗 Almuerzo';
+  else if (nombreFinal === '3') nombreFinal = '🌙 Cena';
+  else if (nombreFinal === '4') nombreFinal = '🍎 Snack / Merienda';
+
+  const meal = {
+    id: 'meal_' + Date.now(),
+    tipo: nombreFinal,
+    nombre: p.n + (nombreFinal !== p.n ? ` (${nombreFinal})` : ''),
+    hora: new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' }),
+    items: JSON.parse(JSON.stringify(p.items || [])),
+    totals: { kcal: p.kcal, prot: p.p, carb: p.c, gras: p.g }
+  };
+  historyDays[today].meals.push(meal);
+  recalcularTotalesDia(today);
+
+  closeModal('modalMisPlatos');
+  renderPlato();
+  renderMetasMacrosLive();
+  renderHistorialDias();
+  renderGraficaSemanaCalorias();
+  mostrarToast(`✅ ¡"${p.n}" registrado en tu día (${p.kcal} kcal)!`);
 }
 
 function updateMisPlatosCount() {
@@ -1967,6 +2441,7 @@ function openMisPlatosModal() {
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button class="btn-action btn-action-primary" style="padding:5px 12px;font-size:11.5px" onclick="cargarPlatoGuardado(${idx})">📥 Cargar a mi plato</button>
+          <button class="btn-action" style="padding:5px 12px;font-size:11.5px;background:rgba(29,158,117,0.1);color:var(--verde-dark);border-color:var(--verde)" onclick="registrarPlatoGuardadoDirecto(${idx})">⚡ Registrar en mi día</button>
           <button class="btn-action" style="padding:5px 12px;font-size:11.5px" onclick="abrirEditarPlatoGuardado(${idx})">✏️ Modificar plato</button>
           <button class="btn-action" style="padding:5px 12px;font-size:11.5px;color:var(--coral-dark)" onclick="eliminarPlatoGuardado(${idx})">🗑️ Eliminar</button>
         </div>
@@ -2668,6 +3143,24 @@ function toggleMetaCheck(i) {
 function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
 function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
+function mostrarToast(msg, dur = 3200) {
+  let t = document.getElementById('appToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'appToast';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--verde);color:#fff;padding:12px 22px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.25);z-index:99999;transition:all 0.25s cubic-bezier(0.4, 0, 0.2, 1);opacity:0;pointer-events:none;max-width:90%;text-align:center';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(20px)';
+  }, dur);
+}
+
 function openProfileModal() {
   document.getElementById('inp-nombre').value = perfil.nombre;
   document.getElementById('inp-sexo').value = perfil.sexo || 'mujer';
@@ -2990,5 +3483,3 @@ window.addEventListener('online', () => { if (user) upload(true); });
 </script>
 </body>
 </html>
-
-
