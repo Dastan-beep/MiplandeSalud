@@ -1,4 +1,4 @@
-const CACHE = 'nutrifit-peru-v3';
+const CACHE = 'nutrifit-peru-v4';
 // Solo archivos locales que EXISTEN en el repo
 const LOCAL_ASSETS = [
   './',
@@ -11,6 +11,18 @@ const LOCAL_ASSETS = [
 const EXTRA_ASSETS = [
   'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
   'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap'
+];
+
+// Servicios de Firebase/Google: nunca se interceptan (inicio de sesión y base de datos necesitan la red directa)
+const BYPASS_HOSTS = [
+  'firestore.googleapis.com',
+  'identitytoolkit.googleapis.com',
+  'securetoken.googleapis.com',
+  'www.googleapis.com',
+  'accounts.google.com',
+  'apis.google.com',
+  'firebaseapp.com',
+  'firebaseinstallations.googleapis.com'
 ];
 
 self.addEventListener('install', e => {
@@ -34,11 +46,16 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   if (e.request.url.includes('/api/')) return;
 
+  const host = new URL(e.request.url).hostname;
+  if (BYPASS_HOSTS.some(h => host === h || host.endsWith('.' + h))) return;
+
   e.respondWith(
     fetch(e.request)
       .then(res => {
-        const clone = res.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
+        if (res && res.ok) {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone)).catch(() => {});
+        }
         return res;
       })
       .catch(() =>
