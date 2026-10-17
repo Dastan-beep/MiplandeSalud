@@ -1,4 +1,4 @@
-const CACHE = 'nutrifit-peru-v2';
+const CACHE = 'nutrifit-peru-v3';
 // Solo archivos locales que EXISTEN en el repo
 const LOCAL_ASSETS = [
   './',
