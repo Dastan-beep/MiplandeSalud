@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NutriFit Perú 2026 — Nutrición, Macros y Recetas Criollas</title>
-<meta name="description" content="Calculadora de macros y calorías adaptada a platos peruanos y supermercados locales con desglose de recetas, escáner de etiquetas y asistente IA.">
+<meta name="description" content="Calculadora de macros y calorías adaptada a platos peruanos y alimentos locales con registro diario, peso semanal y guardado de platos.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
@@ -57,7 +57,7 @@ body {
 /* HEADER */
 .header {
   background: linear-gradient(135deg, var(--verde-dark), #178361);
-  padding: 1.5rem 1.25rem 1.4rem;
+  padding: 1.4rem 1.25rem 1.3rem;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -79,19 +79,18 @@ body {
   text-transform: uppercase;
   padding: 4px 12px;
   border-radius: 99px;
-  margin-bottom: 6px;
   backdrop-filter: blur(4px);
 }
 .header h1 {
   font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 26px;
+  font-size: 25px;
   line-height: 1.2;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 .header p {
   color: rgba(255,255,255,0.8);
   font-size: 13px;
-  margin-bottom: .85rem;
+  margin-bottom: .75rem;
 }
 
 /* DYNAMIC GOAL SWITCHER */
@@ -102,7 +101,7 @@ body {
   border-radius: var(--radius);
   padding: 8px 12px;
   max-width: 540px;
-  margin: 0 auto .85rem;
+  margin: 0 auto .75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -162,10 +161,10 @@ body {
   background: rgba(255,255,255,0.12);
   border: 1px solid rgba(255,255,255,0.16);
   border-radius: var(--radius-sm);
-  padding: 8px 6px;
+  padding: 7px 5px;
   text-align: center;
 }
-.stat-val { font-size: 17px; font-weight: 700; color: #fff; }
+.stat-val { font-size: 16px; font-weight: 700; color: #fff; }
 .stat-lbl { font-size: 10px; color: rgba(255,255,255,0.7); margin-top: 1px; }
 
 /* NAV WRAP */
@@ -232,6 +231,9 @@ body {
   text-transform: uppercase;
   letter-spacing: .06em;
   margin-bottom: .75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .sec-head {
   font-family: 'DM Serif Display', Georgia, serif;
@@ -244,7 +246,7 @@ body {
 .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: .75rem; }
 .mc { background: var(--bg); border-radius: var(--radius-sm); padding: .75rem .9rem; border: 1px solid var(--border); }
 .ml { font-size: 11px; color: var(--text-3); margin-bottom: 2px; }
-.mv { font-size: 19px; font-weight: 700; color: var(--text); }
+.mv { font-size: 18px; font-weight: 700; color: var(--text); }
 .ms { font-size: 11px; color: var(--text-3); margin-top: 2px; }
 .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; }
 .bt { background: var(--verde-light); color: var(--verde-dark); }
@@ -254,17 +256,7 @@ body {
 .bp { background: var(--purple-light); color: var(--purple-dark); }
 
 .pb { height: 8px; background: rgba(0,0,0,0.06); border-radius: 4px; overflow: hidden; margin: 5px 0 2px; }
-.pf { height: 100%; border-radius: 4px; transition: width .4s ease; }
-.tip {
-  background: var(--verde-light);
-  border-radius: var(--radius-sm);
-  padding: .85rem 1rem;
-  font-size: 12.5px;
-  color: var(--verde-dark);
-  line-height: 1.6;
-  margin-bottom: .75rem;
-  border-left: 3px solid var(--verde);
-}
+.pf { height: 100%; border-radius: 4px; transition: width .35s ease; }
 
 /* INPUTS & SEARCH */
 .sinput {
@@ -283,7 +275,7 @@ body {
 .sinput:focus { border-color: var(--verde); }
 .cf { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: .75rem; }
 .cb {
-  padding: 5px 13px;
+  padding: 5px 12px;
   border-radius: 99px;
   border: 1px solid var(--border-2);
   background: transparent;
@@ -343,20 +335,29 @@ body {
   border-bottom: 1px solid var(--border);
 }
 .plato-title { font-size: 13px; font-weight: 700; color: var(--verde-dark); text-transform: uppercase; letter-spacing: .06em; }
+.plato-actions { display: flex; gap: 8px; align-items: center; }
+.plato-btn-save {
+  font-size: 12px; color: var(--verde-dark); background: var(--verde-light);
+  border: 1px solid var(--verde); border-radius: 8px; padding: 4px 10px;
+  cursor: pointer; font-weight: 600; font-family: inherit;
+}
 .plato-clear { font-size: 12px; color: var(--text-3); cursor: pointer; background: none; border: none; font-family: inherit; }
 .plato-clear:hover { color: var(--coral); }
 .plato-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 7px 0;
+  padding: 8px 0;
   border-bottom: 0.5px solid var(--border);
   font-size: 13px;
   gap: 8px;
 }
 .plato-item:last-of-type { border-bottom: none; }
-.pi-name { flex: 1; color: var(--text); font-weight: 500; }
-.pi-cal { font-size: 12px; color: var(--coral-dark); font-weight: 600; text-align: right; min-width: 60px; }
+.pi-info { flex: 1; }
+.pi-name { font-weight: 600; color: var(--text); }
+.pi-macros { font-size: 11px; color: var(--text-2); margin-top: 1px; }
+.pi-macros span { margin-right: 6px; }
+.pi-cal { font-size: 13px; color: var(--coral-dark); font-weight: 700; text-align: right; min-width: 65px; }
 .pi-remove {
   width: 24px; height: 24px; border-radius: 50%;
   background: var(--coral-light); color: var(--coral-dark);
@@ -365,7 +366,7 @@ body {
   flex-shrink: 0; transition: all .15s;
 }
 .pi-remove:hover { background: var(--coral); color: #fff; }
-.plato-empty { text-align: center; padding: 2rem 0; color: var(--text-3); font-size: 13px; }
+.plato-empty { text-align: center; padding: 1.7rem 0; color: var(--text-3); font-size: 13px; }
 .macro-total-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -378,136 +379,30 @@ body {
 .mt-val { font-size: 17px; font-weight: 700; color: var(--text); }
 .mt-lbl { font-size: 10px; color: var(--text-3); margin-top: 1px; text-transform: uppercase; }
 
-/* FOOD RESULT LIST */
+/* NUEVA LISTA LIMPIA DE ALIMENTOS (SIN DESGLOSAR, SIN CALORÍAS EN LA FILA) */
 .food-result-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 9px 0;
+  padding: 11px 8px;
   border-bottom: 0.5px solid var(--border);
-  font-size: 13px;
-  gap: 8px;
-}
-.food-result-item:last-child { border-bottom: none; }
-.fri-name { flex: 1; color: var(--text); font-weight: 500; }
-.fri-macros { font-size: 11px; color: var(--text-3); text-align: right; white-space: nowrap; }
-.fri-actions { display: flex; align-items: center; gap: 4px; }
-.fri-btn-breakdown {
-  padding: 4px 9px;
-  background: var(--amber-light);
-  color: var(--amber);
-  border: 1px solid rgba(186,117,23,0.3);
-  border-radius: 99px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .15s;
-}
-.fri-btn-breakdown:hover { background: var(--amber); color: #fff; }
-.fri-add {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--verde-dark); color: #fff; border: none;
-  font-size: 18px; cursor: pointer; display: flex;
-  align-items: center; justify-content: center; flex-shrink: 0;
-  transition: background .15s;
-}
-.fri-add:hover { background: var(--verde); }
-
-/* CHAT NUTRICHOACH */
-.chat-container {
-  display: flex;
-  flex-direction: column;
-  height: 520px;
-  background: var(--surface);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-}
-.chat-head {
-  background: linear-gradient(135deg, var(--verde-dark), #145e4a);
-  color: #fff;
-  padding: 1rem 1.25rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
+  font-size: 13.5px;
   gap: 10px;
 }
-.msg {
-  max-width: 82%;
-  padding: 10px 14px;
-  border-radius: 14px;
-  font-size: 13px;
-  line-height: 1.5;
+.food-result-item:hover { background: rgba(0,0,0,0.015); }
+.food-result-item:last-child { border-bottom: none; }
+.fri-name { flex: 1; color: var(--text); font-weight: 600; line-height: 1.3; }
+.fri-unit { font-size: 11.5px; font-weight: 400; color: var(--text-3); margin-left: 4px; }
+.fri-actions { display: flex; align-items: center; gap: 4px; }
+.fri-add {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--verde-dark); color: #fff; border: none;
+  font-size: 20px; font-weight: bold; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+  transition: transform .1s, background .15s;
 }
-.msg-ai {
-  align-self: flex-start;
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-top-left-radius: 2px;
-}
-.msg-user {
-  align-self: flex-end;
-  background: var(--verde-dark);
-  color: #fff;
-  border-top-right-radius: 2px;
-}
-.chat-input-bar {
-  display: flex;
-  gap: 6px;
-  padding: 10px;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-}
-.chat-input {
-  flex: 1;
-  padding: 10px 14px;
-  border: 1px solid var(--border-2);
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-family: inherit;
-  outline: none;
-}
-.chat-send {
-  padding: 10px 18px;
-  background: var(--verde-dark);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-}
-.chat-quick-actions {
-  display: flex;
-  gap: 5px;
-  overflow-x: auto;
-  padding: 8px 10px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  scrollbar-width: none;
-}
-.chat-chip {
-  flex-shrink: 0;
-  padding: 4px 10px;
-  border-radius: 99px;
-  font-size: 11px;
-  background: var(--bg);
-  border: 1px solid var(--border-2);
-  color: var(--text-2);
-  cursor: pointer;
-  white-space: nowrap;
-}
-.chat-chip:hover { border-color: var(--verde); color: var(--verde-dark); }
+.fri-add:hover { background: var(--verde); transform: scale(1.08); }
+.fri-add:active { transform: scale(0.95); }
 
 /* MODALS */
 .modal-overlay {
@@ -533,22 +428,6 @@ body {
 }
 .modal-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 20px; color: var(--text); }
 .modal-close { background: none; border: none; font-size: 20px; color: var(--text-3); cursor: pointer; line-height: 1; }
-
-.ingredient-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 0; border-bottom: 1px solid var(--border); gap: 8px; font-size: 12.5px;
-}
-.ing-ctrl { display: flex; align-items: center; gap: 4px; }
-.ing-btn {
-  width: 24px; height: 24px; border-radius: 6px;
-  background: var(--bg); border: 1px solid var(--border-2);
-  cursor: pointer; font-weight: bold;
-}
-.ing-input {
-  width: 54px; text-align: center; padding: 2px;
-  font-size: 12px; font-weight: bold; border: 1px solid var(--border-2);
-  border-radius: 6px; font-family: monospace;
-}
 
 /* MENÚ SEMANAL */
 .daynav { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: .85rem; }
@@ -620,13 +499,29 @@ body {
 }
 .float-btn:hover { background: var(--verde); }
 
-@media(max-width: 480px) {
-  .header h1 { font-size: 22px; }
-  .stats-row { grid-template-columns: 1fr 1fr; }
-  .g3 { grid-template-columns: 1fr 1fr; }
+/* HISTORIAL POR DÍA & PESO SEMANAL */
+.history-day-card {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+}
+.history-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.history-day-items {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.4;
 }
 
-/* ===== PANTALLA DE BIENVENIDA (ONBOARDING) ===== */
+/* ONBOARDING */
 .ob-overlay { position: fixed; inset: 0; z-index: 3000; background: linear-gradient(160deg, var(--verde-dark) 0%, #178361 55%, var(--verde) 100%);
   display: flex; align-items: center; justify-content: center; padding: 1rem; overflow-y: auto; }
 .ob-overlay.hidden { display: none; }
@@ -665,6 +560,12 @@ body {
 .ob-macro b { display: block; font-size: 17px; }
 .ob-macro span { font-size: 11px; color: var(--text-2); }
 .ob-note { font-size: 12px; color: var(--amber); background: var(--amber-light); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; line-height: 1.4; }
+
+@media(max-width: 480px) {
+  .header h1 { font-size: 22px; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .g3 { grid-template-columns: 1fr 1fr; }
+}
 </style>
 </head>
 <body>
@@ -680,9 +581,9 @@ body {
     <span id="cloudStatus" style="font-size:11px;color:rgba(255,255,255,0.9)"></span>
   </div>
   <h1 id="headerTitle">Mi Plan de Salud</h1>
-  <p id="headerSub">Calculado para la gastronomía y supermercados del Perú</p>
+  <p id="headerSub">Calculado para la gastronomía y alimentos de Perú</p>
 
-  <!-- REQUISITO 1: SELECTOR DE OBJETIVO DINÁMICO -->
+  <!-- SELECTOR DE OBJETIVO DINÁMICO -->
   <div class="goal-bar">
     <div>
       <div class="goal-title">Objetivo Actual:</div>
@@ -707,7 +608,6 @@ body {
   <div class="nav">
     <button class="nav-btn on" onclick="showSec('inicio', this)">🏠 Inicio</button>
     <button class="nav-btn" onclick="showSec('combinador', this)">🍽️ Mi Plato / Combinar</button>
-    <button class="nav-btn" onclick="showSec('coach', this)">🤖 NutriCoach IA</button>
     <button class="nav-btn" onclick="showSec('semana', this)">📅 Menú Semanal</button>
     <button class="nav-btn" onclick="showSec('calorias', this)">📋 Base Alimentos</button>
     <button class="nav-btn" onclick="showSec('ejercicio', this)">🏋️ Ejercicio</button>
@@ -717,33 +617,82 @@ body {
 
 <div class="content">
 
-  <!-- ================= INICIO ================= -->
+  <!-- ================= INICIO: RESUMEN POR DÍA, GRÁFICA SEMANAL Y REGISTRO DE PESO ================= -->
   <div id="sec-inicio" class="sec on">
     <h2 class="sec-head" id="welcomeTitle">¡Hola! 👋</h2>
-    <p class="sec-sub">Tu resumen metabólico según tu objetivo actual.</p>
+    <p class="sec-sub">Tu resumen metabólico, historial diario y evolución de peso.</p>
 
+    <!-- METRICS GENERALES -->
     <div class="g2">
       <div class="mc"><div class="ml">Peso actual</div><div class="mv" id="i-peso">—</div><div class="ms" id="i-imc">IMC: —</div></div>
       <div class="mc"><div class="ml">Peso meta</div><div class="mv" id="i-meta">—</div><div class="ms" id="i-imcmeta">IMC meta: —</div></div>
     </div>
 
     <div class="g3">
-      <div class="mc"><div class="ml">Meta calórica</div><div class="mv" id="i-kcal">—</div><div class="ms" id="i-delta">—</div></div>
-      <div class="mc"><div class="ml">Agua diaria</div><div class="mv" id="i-agua">—</div><div class="ms">mínimo en litros</div></div>
-      <div class="mc"><div class="ml">Tiempo estimado</div><div class="mv" id="i-tiempo">—</div><div class="ms">a ritmo saludable</div></div>
+      <div class="mc"><div class="ml">Meta diaria</div><div class="mv" id="i-kcal">—</div><div class="ms" id="i-delta">—</div></div>
+      <div class="mc"><div class="ml">Agua diaria</div><div class="mv" id="i-agua">—</div><div class="ms">mínimo diario</div></div>
+      <div class="mc"><div class="ml">Tiempo est.</div><div class="mv" id="i-tiempo">—</div><div class="ms">hacia tu meta</div></div>
     </div>
 
+    <!-- CONTROL Y REGISTRO DE PESO (SEMANAL O DIARIO) -->
     <div class="card">
-      <div class="card-title">Proyección de peso estimada</div>
-      <div style="height:190px"><canvas id="chartPeso"></canvas></div>
+      <div class="card-title">
+        <span>⚖️ Control y Evolución de Peso</span>
+        <div style="display:flex;gap:4px">
+          <button type="button" class="cb on" id="btnModoSemanal" onclick="setModoPeso('semanal')">📅 Semanal (Recomendado)</button>
+          <button type="button" class="cb" id="btnModoDiario" onclick="setModoPeso('diario')">📆 Diario (Opcional)</button>
+        </div>
+      </div>
+      <div id="pesoModoInfo" style="font-size:12px;color:var(--text-2);background:var(--bg);border-radius:var(--radius-sm);padding:8px 10px;margin-bottom:10px;border:1px solid var(--border)">
+        💡 <strong>Recomendación Semanal:</strong> Pésate 1 vez por semana en ayunas (ej: cada lunes). Así evitas el estrés y las falsas alarmas por retención de líquidos o digestión.
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
+        <div style="flex:1;min-width:140px">
+          <label style="font-size:11px;font-weight:700;display:block;margin-bottom:2px" id="lblFechaPeso">Semana / Fecha</label>
+          <input type="date" id="inp-fecha-peso" class="sinput" style="margin-bottom:0">
+        </div>
+        <div style="flex:1;min-width:130px">
+          <label style="font-size:11px;font-weight:700;display:block;margin-bottom:2px" id="lblPesoValor">Peso (kg)</label>
+          <input type="number" id="inp-peso-semanal" step="0.1" placeholder="Ej: 67.5" class="sinput" style="margin-bottom:0">
+        </div>
+        <div style="align-self:flex-end">
+          <button class="btn-action btn-action-primary" id="btnGuardarPesoTxt" onclick="guardarPesoSemanal()" style="padding:10px 14px">
+            💾 Guardar Peso Semanal
+          </button>
+        </div>
+      </div>
+      <div style="height:190px;margin-bottom:8px"><canvas id="chartPeso"></canvas></div>
+      <div style="margin-top:8px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-3);letter-spacing:.05em;margin-bottom:4px">Historial de registros:</div>
+        <div id="historialPesoLista" style="max-height:130px;overflow-y:auto;font-size:12px;color:var(--text-2)"></div>
+      </div>
     </div>
 
+    <!-- GRÁFICA SEMANAL DE CALORÍAS -->
     <div class="card">
-      <div class="card-title">Distribución diaria de macronutrientes</div>
+      <div class="card-title">
+        <span>📊 Calorías Consumidas en la Semana</span>
+        <span style="font-size:11px;color:var(--verde-dark);font-weight:600" id="semanaPromedioKcal">Promedio: 0 kcal/día</span>
+      </div>
+      <div style="height:185px;margin-bottom:6px"><canvas id="chartSemanaCalorias"></canvas></div>
+    </div>
+
+    <!-- RESUMEN DE COMIDAS GUARDADAS POR DÍA -->
+    <div class="card">
+      <div class="card-title">
+        <span>📅 Mis Comidas Guardadas por Día</span>
+        <span style="font-size:11px;color:var(--text-3);font-weight:normal">Resumen con conteo total de calorías y macros</span>
+      </div>
+      <div id="historialDiasContainer">
+        <div style="color:var(--text-3);font-size:13px;text-align:center;padding:1rem">No hay comidas registradas aún. Arma tu comida en "Mi Plato" para ver el conteo de tu día.</div>
+      </div>
+    </div>
+
+    <!-- MACROS RECOMENDADOS -->
+    <div class="card">
+      <div class="card-title">Macronutrientes diarios recomendados</div>
       <div id="macroDisplay"></div>
     </div>
-
-    <div class="tip" id="lifestyleTip">💡 Configura tu perfil para personalizar recomendaciones peruanas.</div>
   </div>
 
   <!-- ================= COMBINADOR / MI PLATO ================= -->
@@ -757,11 +706,14 @@ body {
       <div id="metasMacrosLive"></div>
     </div>
 
-    <!-- PLATO ACTUAL -->
+    <!-- PLATO ACTUAL CON OPCIÓN DE GUARDAR COMO PLATO COMPLETO -->
     <div class="plato-card">
       <div class="plato-header">
-        <span class="plato-title">🍽️ Alimentos agregados a mi plato</span>
-        <button class="plato-clear" onclick="clearPlato()">Limpiar todo</button>
+        <span class="plato-title">🍽️ Mi Plato Actual</span>
+        <div class="plato-actions">
+          <button class="plato-btn-save" onclick="guardarPlatoActualModal()">💾 Guardar este plato</button>
+          <button class="plato-clear" onclick="clearPlato()">Limpiar</button>
+        </div>
       </div>
       <div id="platoItems"><div class="plato-empty">Tu plato está vacío. Agrega alimentos abajo.</div></div>
 
@@ -773,53 +725,19 @@ body {
       </div>
     </div>
 
-    <!-- REQUISITO 3 y 4: BOTONES DE DOBLE MODALIDAD Y CREACIÓN -->
+    <!-- BOTONES DE ACCIÓN (SIN EVALUAR IA) -->
     <div class="action-toolbar">
       <button class="btn-action" onclick="openLabelModal()">🏷️ Ingreso por Etiqueta Nutricional</button>
       <button class="btn-action" onclick="openCustomFoodModal()">➕ Crear Alimento Propio (Memoria)</button>
-      <button class="btn-action btn-action-primary" onclick="showSec('coach', document.querySelectorAll('.nav-btn')[2]); askPlateAnalysis();">✨ Evaluar con NutriCoach IA</button>
+      <button class="btn-action" onclick="openMisPlatosModal()">📁 Mis Platos Guardados (<span id="countMisPlatos">0</span>)</button>
     </div>
 
-    <!-- BANCO DE COMIDAS PERUANAS Y SUPERMERCADO -->
+    <!-- BANCO DE COMIDAS (LIMPIO, SIN DESGLOSAR, SIN CALORÍAS EN LA FILA) -->
     <div class="card">
-      <div class="card-title">Banco de Alimentos Peruanos & Supermercado</div>
-      <input class="sinput" id="combSearch" placeholder="Buscar lomo saltado, pollo San Fernando, Gloria, quinua, camote..." oninput="renderCombResults()">
+      <div class="card-title">Lista de Alimentos & Comidas Peruanas</div>
+      <input class="sinput" id="combSearch" placeholder="Buscar locro, vainita, lomo saltado, pollo, arroz, camote..." oninput="renderCombResults()">
       <div class="cf" id="combCats"></div>
       <div id="combResults"></div>
-    </div>
-  </div>
-
-  <!-- ================= NUTRICHOACH IA ================= -->
-  <div id="sec-coach" class="sec">
-    <h2 class="sec-head">NutriCoach IA Perú 🤖</h2>
-    <p class="sec-sub">Asistente nutricional experto en comida peruana y tus macros</p>
-
-    <div class="chat-container">
-      <div class="chat-head">
-        <div>
-          <div style="font-weight:700;font-size:14px">NutriCoach Perú</div>
-          <div style="font-size:11px;opacity:0.8">Asesor de nutrición deportiva y platos criollos</div>
-        </div>
-        <button onclick="clearChat()" style="background:none;border:none;color:#fff;font-size:12px;cursor:pointer">🔄 Reiniciar</button>
-      </div>
-
-      <div class="chat-quick-actions">
-        <button class="chat-chip" onclick="askCoachPrompt('¿Cómo preparar un Lomo Saltado Fit bajo en calorías y alto en proteína?')">🍲 Lomo Saltado Fit</button>
-        <button class="chat-chip" onclick="askCoachPrompt('¿Cuáles son las proteínas más baratas en Metro y Plaza Vea?')">🛒 Proteínas en el súper</button>
-        <button class="chat-chip" onclick="askCoachPrompt('¿Qué es mejor para mi meta: arroz blanco, camote o quinua?')">🍚 Arroz vs Camote</button>
-        <button class="chat-chip" onclick="askPlateAnalysis()">⚡ Analizar mi plato de hoy</button>
-      </div>
-
-      <div class="chat-messages" id="chatMessages">
-        <div class="msg msg-ai">
-          ¡Hola! Soy <strong>NutriCoach Perú</strong> 👋. Puedo analizar tu plato actual, recomendarte cómo hacer recetas peruanas más saludables o guiarte en tus compras de supermercado. ¿En qué te ayudo hoy?
-        </div>
-      </div>
-
-      <div class="chat-input-bar">
-        <input class="chat-input" id="chatInput" placeholder="Haz una pregunta a NutriCoach..." onkeydown="if(event.key==='Enter') sendChat()">
-        <button class="chat-send" onclick="sendChat()">Enviar</button>
-      </div>
     </div>
   </div>
 
@@ -868,12 +786,121 @@ body {
 
 <!-- BOTÓN FLOTANTE PERFIL -->
 <div class="float-btn-group">
-  <button class="float-btn" onclick="openProfileModal()">✏️ Editar Perfil</button>
+  <button class="float-btn" onclick="openProfileModal()">✏️ Mi Perfil</button>
 </div>
 
 <!-- ================= MODALES ================= -->
 
-<!-- MODAL 1: PERFIL -->
+<!-- MODAL: AGREGAR CON PORCIÓN -->
+<div class="modal-overlay hidden" id="modalPorcion">
+  <div class="modal-box" style="max-width:380px">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="mpTitle">Agregar Alimento</div>
+        <div style="font-size:12px;color:var(--text-3)" id="mpSub"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalPorcion')">✕</button>
+    </div>
+    <div style="margin-bottom:12px">
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Cantidad de porciones:</label>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="btn-action" style="padding:6px 12px;font-size:16px" onclick="ajustarPorcionInput(-0.5)">-</button>
+        <input type="number" id="inp-porcion-val" value="1" step="0.25" min="0.25" max="10" class="sinput" style="text-align:center;font-weight:bold;font-size:16px;margin-bottom:0">
+        <button class="btn-action" style="padding:6px 12px;font-size:16px" onclick="ajustarPorcionInput(0.5)">+</button>
+      </div>
+    </div>
+    <div id="mpPreview" style="background:var(--bg);border-radius:10px;padding:8px 12px;font-size:12px;color:var(--text-2);margin-bottom:12px"></div>
+    <button class="btn-action btn-action-primary" style="width:100%;justify-content:center;padding:11px" onclick="confirmarAgregarAlPlato()">
+      + Agregar a Mi Plato
+    </button>
+  </div>
+</div>
+
+<!-- MODAL: GUARDAR PLATO ACTUAL -->
+<div class="modal-overlay hidden" id="modalGuardarPlato">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-head">
+      <div class="modal-title">Guardar este Plato</div>
+      <button class="modal-close" onclick="closeModal('modalGuardarPlato')">✕</button>
+    </div>
+    <div style="margin-bottom:10px">
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Nombre del plato o comida:</label>
+      <input class="sinput" id="inp-nombre-plato-guardado" placeholder="Ej: Mi almuerzo habitual, Cena ligera con pollo">
+    </div>
+    <div id="resumenGuardarPlato" style="font-size:12px;color:var(--text-2);background:var(--bg);padding:8px 10px;border-radius:8px;margin-bottom:12px"></div>
+    <button class="btn-action btn-action-primary" style="width:100%;justify-content:center;padding:11px" onclick="confirmarGuardarPlato()">
+      💾 Guardar Plato en Favoritos
+    </button>
+  </div>
+</div>
+
+<!-- MODAL: MIS PLATOS GUARDADOS -->
+<div class="modal-overlay hidden" id="modalMisPlatos">
+  <div class="modal-box" style="max-width:500px">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">Mis Platos Guardados</div>
+        <div style="font-size:11px;color:var(--text-3)">Tus combinaciones y platos completos favoritos guardados</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalMisPlatos')">✕</button>
+    </div>
+    <div id="listaMisPlatosGuardados" style="max-height:360px;overflow-y:auto"></div>
+  </div>
+</div>
+
+<!-- MODAL: MODIFICAR PLATO GUARDADO -->
+<div class="modal-overlay hidden" id="modalEditarPlatoGuardado">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">✏️ Modificar Plato Guardado</div>
+        <div style="font-size:11.5px;color:var(--text-3)">Edita el nombre, porciones o agrega/quita ingredientes</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalEditarPlatoGuardado')">✕</button>
+    </div>
+
+    <div style="margin-bottom:10px">
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Nombre del plato:</label>
+      <input class="sinput" id="edit-plato-nombre" placeholder="Nombre de este plato">
+    </div>
+
+    <!-- Lista de ingredientes en este plato -->
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <label style="font-size:12px;font-weight:700">Ingredientes y Porciones:</label>
+        <span style="font-size:11px;color:var(--text-3)">Ajusta con - y +</span>
+      </div>
+      <div id="edit-plato-items-list" style="max-height:220px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;padding:6px;background:var(--bg)"></div>
+    </div>
+
+    <!-- Añadir ingrediente a esta receta -->
+    <div style="background:var(--surface);border:1px dashed var(--border-2);border-radius:10px;padding:8px 10px;margin-bottom:12px">
+      <div style="font-size:11.5px;font-weight:700;color:var(--verde-dark);margin-bottom:5px">+ Añadir otro ingrediente a esta receta:</div>
+      <div style="display:flex;gap:6px">
+        <select class="sinput" id="edit-plato-add-select" style="flex:1;margin-bottom:0;font-size:12.5px"></select>
+        <button class="btn-action btn-action-primary" onclick="agregarItemAPlatoEditado()" style="padding:6px 12px;white-space:nowrap">+ Añadir</button>
+      </div>
+    </div>
+
+    <!-- Totales recalculados -->
+    <div style="background:var(--verde-light);border-radius:12px;padding:10px;margin-bottom:12px;text-align:center;border:1px solid rgba(29,158,117,0.2)">
+      <div style="font-size:10px;color:var(--verde-dark);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Nuevos Totales de este Plato</div>
+      <div style="font-size:20px;font-weight:700;color:var(--verde-dark)" id="edit-plato-total-kcal">0 kcal</div>
+      <div style="font-size:12px;color:var(--text-2);font-weight:500" id="edit-plato-total-macros">P: 0g · C: 0g · G: 0g</div>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-action btn-action-primary" style="flex:1;justify-content:center;padding:11px" onclick="guardarCambiosPlatoEditado()">
+        💾 Guardar Cambios
+      </button>
+      <button class="btn-action" style="flex:1;justify-content:center;padding:11px" onclick="guardarYCargarPlatoEditado()">
+        📥 Guardar y Cargar a Mi Plato
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: PERFIL -->
 <div class="modal-overlay hidden" id="modalProfile">
   <div class="modal-box">
     <div class="modal-head">
@@ -921,72 +948,20 @@ body {
   </div>
 </div>
 
-<!-- MODAL 2: REQUISITO 2 - DESGLOSE DE RECETA / PLATO COMPUESTO -->
-<div class="modal-overlay hidden" id="modalBreakdown">
-  <div class="modal-box" style="max-width:520px">
-    <div class="modal-head">
-      <div>
-        <div class="modal-title" id="mbTitle">Lomo Saltado</div>
-        <div style="font-size:11px;color:var(--text-3);margin-top:2px" id="mbDesc">Desglose de ingredientes criollos</div>
-      </div>
-      <button class="modal-close" onclick="closeModal('modalBreakdown')">✕</button>
-    </div>
-
-    <!-- BANNER TOTALES RECETA -->
-    <div class="card" style="background:var(--bg);margin-bottom:12px;padding:10px">
-      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:6px">
-        <span>Peso total calculado: <span id="mbTotalGrams">430</span>g</span>
-        <button onclick="resetMbIngredients()" style="background:none;border:none;color:var(--verde-dark);font-size:11px;cursor:pointer;text-decoration:underline">Restaurar original</button>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;text-align:center">
-        <div style="background:#fff;padding:4px;border-radius:6px"><strong id="mbKcal" style="color:var(--coral-dark)">485</strong><div style="font-size:9px;color:var(--text-3)">kcal</div></div>
-        <div style="background:#fff;padding:4px;border-radius:6px"><strong id="mbProt" style="color:var(--azul-dark)">30g</strong><div style="font-size:9px;color:var(--text-3)">Prot</div></div>
-        <div style="background:#fff;padding:4px;border-radius:6px"><strong id="mbCarb" style="color:var(--amber)">44g</strong><div style="font-size:9px;color:var(--text-3)">Carb</div></div>
-        <div style="background:#fff;padding:4px;border-radius:6px"><strong id="mbGras" style="color:var(--verde)">21g</strong><div style="font-size:9px;color:var(--text-3)">Gras</div></div>
-      </div>
-    </div>
-
-    <!-- LISTA DE INGREDIENTES CON PESOS INDEPENDIENTES -->
-    <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-3);margin-bottom:6px">
-      Pesar ingredientes por separado:
-    </div>
-    <div id="mbIngredientsList" style="max-height:220px;overflow-y:auto;margin-bottom:12px"></div>
-
-    <!-- ACCIONES DE REGISTRO FLEXIBLES -->
-    <div style="display:flex;flex-direction:column;gap:6px">
-      <button class="btn-action btn-action-primary" style="justify-content:center;padding:10px" onclick="addCustomizedDishToPlate()">
-        ✓ Registrar plato completo modificado
-      </button>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-        <button class="btn-action" style="justify-content:center" onclick="addSeparateIngredientsToPlate()">
-          ⚖️ Desglosar al plato
-        </button>
-        <button class="btn-action" style="justify-content:center" onclick="addStandardDishToPlate()">
-          Original estándar
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL 3: REQUISITO 3 - INGRESO POR ETIQUETA NUTRICIONAL -->
+<!-- MODAL: INGRESO POR ETIQUETA NUTRICIONAL -->
 <div class="modal-overlay hidden" id="modalLabel">
   <div class="modal-box">
     <div class="modal-head">
       <div>
         <div class="modal-title">Ingreso por Etiqueta</div>
-        <div style="font-size:11px;color:var(--text-3)">Copia los valores del empaque (Metro, Plaza Vea, etc.)</div>
+        <div style="font-size:11px;color:var(--text-3)">Copia los valores del empaque del producto</div>
       </div>
       <button class="modal-close" onclick="closeModal('modalLabel')">✕</button>
     </div>
 
     <div style="margin-bottom:8px">
-      <label style="font-size:11px;font-weight:700">Producto o Alimento *</label>
-      <input class="sinput" id="lbl-nombre" placeholder="Ej: Yogur Griego Natural">
-    </div>
-    <div style="margin-bottom:8px">
-      <label style="font-size:11px;font-weight:700">Marca (Opcional)</label>
-      <input class="sinput" id="lbl-marca" placeholder="Ej: Danlac / Gloria / San Fernando">
+      <label style="font-size:11px;font-weight:700">Alimento o Producto *</label>
+      <input class="sinput" id="lbl-nombre" placeholder="Ej: Yogur Griego Natural, Avena en hojuelas">
     </div>
 
     <div style="background:var(--bg);padding:8px 10px;border-radius:var(--radius-sm);margin-bottom:8px">
@@ -1021,7 +996,7 @@ body {
     <div style="margin-bottom:10px">
       <label style="font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer">
         <input type="checkbox" id="lbl-saveLib" checked>
-        <span>Guardar en mi despensa permanente (Memoria de usuario)</span>
+        <span>Guardar en mi memoria permanente para usarlo siempre</span>
       </label>
     </div>
 
@@ -1031,13 +1006,13 @@ body {
   </div>
 </div>
 
-<!-- MODAL 4: REQUISITO 4 - CREAR ALIMENTO PROPIO (MEMORIA) -->
+<!-- MODAL: CREAR ALIMENTO PROPIO (MEMORIA) -->
 <div class="modal-overlay hidden" id="modalCustom">
   <div class="modal-box">
     <div class="modal-head">
       <div>
         <div class="modal-title">Crear Alimento Propio</div>
-        <div style="font-size:11px;color:var(--text-3)">Quedará guardado en la memoria de la aplicación</div>
+        <div style="font-size:11px;color:var(--text-3)">Quedará guardado en tu memoria personal</div>
       </div>
       <button class="modal-close" onclick="closeModal('modalCustom')">✕</button>
     </div>
@@ -1052,9 +1027,12 @@ body {
         <select class="sinput" id="cus-cat">
           <option value="Personalizados">Personalizados</option>
           <option value="Platos peruanos">Platos peruanos</option>
-          <option value="Supermercado">Supermercado</option>
+          <option value="Carnes y huevos">Carnes y huevos</option>
+          <option value="Vegetales">Vegetales</option>
+          <option value="Tubérculos">Tubérculos</option>
+          <option value="Legumbres y granos">Legumbres y granos</option>
           <option value="Desayuno">Desayuno</option>
-          <option value="Snacks">Snacks</option>
+          <option value="Snacks y bebidas">Snacks y bebidas</option>
         </select>
       </div>
       <div>
@@ -1089,8 +1067,7 @@ body {
   </div>
 </div>
 
-
-<!-- PANTALLA DE BIENVENIDA: pide datos la primera vez -->
+<!-- PANTALLA DE BIENVENIDA (ONBOARDING) -->
 <div class="ob-overlay hidden" id="onboarding">
   <div class="ob-card">
     <div class="ob-logo">🥑</div>
@@ -1148,476 +1125,124 @@ body {
 <!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-// ===== 1. BANCO DE COMIDAS PERUANAS CON RECETAS COMPUESTAS =====
+// ===== 1. BANCO DE ALIMENTOS Y COMIDAS PERUANAS (SIN MARCAS, CON INGREDIENTES GENERALES AGREGADOS) =====
 const INITIAL_FOODS = [
-  // PLATOS PERUANOS DESGLOSABLES
-  {
-    id: 1, n: "Lomo saltado tradicional", cat: "Platos peruanos", kcal: 637, p: 37, c: 66, g: 25, u: "1 plato (430g)", isComposite: true,
-    desc: "Lomo de res al wok con cebolla roja, tomate, papas fritas y arroz blanco",
-    ingredients: [
-      { id:"ls-1", name:"Lomo o cuadril de res magro", currentGrams:140, baseGrams:140, kcalPer100g:135, p:22, c:0, g:5 },
-      { id:"ls-2", name:"Papas fritas en bastones", currentGrams:90, baseGrams:90, kcalPer100g:230, p:3, c:32, g:11 },
-      { id:"ls-3", name:"Arroz blanco cocido", currentGrams:110, baseGrams:110, kcalPer100g:130, p:2.7, c:28, g:0.3 },
-      { id:"ls-4", name:"Cebolla roja y tomate salteado", currentGrams:80, baseGrams:80, kcalPer100g:35, p:1.2, c:7, g:0.2 },
-      { id:"ls-5", name:"Aceite y sillao (aderezo wok)", currentGrams:10, baseGrams:10, kcalPer100g:700, p:0, c:5, g:75 },
-    ]
-  },
-  {
-    id: 2, n: "Arroz con pollo criollo", cat: "Platos peruanos", kcal: 492, p: 43, c: 54, g: 11, u: "1 plato (400g)", isComposite: true,
-    desc: "Arroz al culantro con verduras, presa de pollo y salsa criolla",
-    ingredients: [
-      { id:"ap-1", name:"Presa de pollo dorada", currentGrams:150, baseGrams:150, kcalPer100g:145, p:24, c:0, g:5 },
-      { id:"ap-2", name:"Arroz verde con culantro", currentGrams:160, baseGrams:160, kcalPer100g:150, p:3, c:30, g:2 },
-      { id:"ap-3", name:"Alverjitas, zanahoria y pimiento", currentGrams:60, baseGrams:60, kcalPer100g:45, p:2.5, c:8, g:0.4 },
-      { id:"ap-4", name:"Salsa criolla de cebolla", currentGrams:30, baseGrams:30, kcalPer100g:25, p:0.8, c:5, g:0.1 },
-    ]
-  },
-  {
-    id: 3, n: "Ceviche de pescado clásico", cat: "Platos peruanos", kcal: 295, p: 41, c: 28, g: 3, u: "1 plato (320g)", isComposite: true,
-    desc: "Pescado fresco curado en limón piurano con camote y choclo",
-    ingredients: [
-      { id:"cev-1", name:"Filete de pescado fresco", currentGrams:180, baseGrams:180, kcalPer100g:95, p:21, c:0, g:1 },
-      { id:"cev-2", name:"Camote sancochado", currentGrams:80, baseGrams:80, kcalPer100g:86, p:1.6, c:20, g:0.1 },
-      { id:"cev-3", name:"Choclo desgranado cocido", currentGrams:50, baseGrams:50, kcalPer100g:90, p:3, c:19, g:1.2 },
-      { id:"cev-4", name:"Leche de tigre y cebolla roja", currentGrams:50, baseGrams:50, kcalPer100g:20, p:1, c:4, g:0.2 },
-    ]
-  },
-  {
-    id: 4, n: "Ají de gallina", cat: "Platos peruanos", kcal: 585, p: 48, c: 56, g: 19, u: "1 plato (380g)", isComposite: true,
-    desc: "Pechuga deshilachada en crema de ají amarillo con papa y arroz",
-    ingredients: [
-      { id:"ag-1", name:"Pechuga de pollo deshilachada", currentGrams:140, baseGrams:140, kcalPer100g:130, p:27, c:0, g:2.5 },
-      { id:"ag-2", name:"Crema de ají con leche y galleta", currentGrams:120, baseGrams:120, kcalPer100g:180, p:5, c:12, g:13 },
-      { id:"ag-3", name:"Papa amarilla sancochada", currentGrams:80, baseGrams:80, kcalPer100g:87, p:2, c:20, g:0.1 },
-      { id:"ag-4", name:"Arroz blanco cocido", currentGrams:90, baseGrams:90, kcalPer100g:130, p:2.7, c:28, g:0.3 },
-    ]
-  },
-  {
-    id: 5, n: "Seco de res con frejoles", cat: "Platos peruanos", kcal: 524, p: 46, c: 56, g: 13, u: "1 plato (420g)", isComposite: true,
-    desc: "Carne guisada al culantro con frejoles canarios y arroz",
-    ingredients: [
-      { id:"sr-1", name:"Guiso de carne de res", currentGrams:150, baseGrams:150, kcalPer100g:160, p:22, c:2, g:7 },
-      { id:"sr-2", name:"Frejoles canarios guisados", currentGrams:140, baseGrams:140, kcalPer100g:110, p:7, c:18, g:1.5 },
-      { id:"sr-3", name:"Arroz blanco cocido", currentGrams:100, baseGrams:100, kcalPer100g:130, p:2.7, c:28, g:0.3 },
-    ]
-  },
-  {
-    id: 6, n: "Causa limeña con pollo y palta", cat: "Platos peruanos", kcal: 313, p: 20, c: 36, g: 11, u: "1 porción (250g)", isComposite: true,
-    desc: "Papa amarilla sazonada rellena de pechuga deshilachada y palta",
-    ingredients: [
-      { id:"cl-1", name:"Masa de papa amarilla con ají", currentGrams:140, baseGrams:140, kcalPer100g:110, p:2, c:23, g:1.5 },
-      { id:"cl-2", name:"Relleno de pechuga con aliño", currentGrams:70, baseGrams:70, kcalPer100g:135, p:24, c:1, g:3.5 },
-      { id:"cl-3", name:"Palta fuerte fresca", currentGrams:40, baseGrams:40, kcalPer100g:160, p:2, c:8, g:15 },
-    ]
-  },
-  {
-    id: 7, n: "Tallarines verdes con bisteck", cat: "Platos peruanos", kcal: 683, p: 40, c: 68, g: 28, u: "1 plato (~400g)", isComposite: true,
-    desc: "Tallarín en salsa de albahaca y espinaca con bistec a la plancha y papas",
-    ingredients: [
-      { id:"tv-1", name:"Tallarín cocido", currentGrams:180, baseGrams:180, kcalPer100g:135, p:5, c:26, g:1.2 },
-      { id:"tv-2", name:"Salsa verde (albahaca, espinaca, queso)", currentGrams:50, baseGrams:50, kcalPer100g:224, p:6, c:5, g:20 },
-      { id:"tv-3", name:"Bistec de res a la plancha", currentGrams:110, baseGrams:110, kcalPer100g:168, p:24, c:0, g:8 },
-      { id:"tv-4", name:"Papas fritas en bastones", currentGrams:60, baseGrams:60, kcalPer100g:239, p:3, c:32, g:11 },
-    ]
-  },
-  {
-    id: 8, n: "Papa a la huancaína", cat: "Platos peruanos", kcal: 308, p: 11, c: 35, g: 14, u: "1 porción (~270g)", isComposite: true,
-    desc: "Papa sancochada con crema de ají amarillo y queso, huevo y aceituna",
-    ingredients: [
-      { id:"ph-1", name:"Papa sancochada", currentGrams:150, baseGrams:150, kcalPer100g:89, p:2, c:20, g:0.1 },
-      { id:"ph-2", name:"Crema huancaína (queso, ají amarillo, galleta)", currentGrams:60, baseGrams:60, kcalPer100g:174, p:5, c:7, g:14 },
-      { id:"ph-3", name:"Huevo sancochado", currentGrams:40, baseGrams:40, kcalPer100g:146, p:13, c:1, g:10 },
-      { id:"ph-4", name:"Aceituna y lechuga", currentGrams:20, baseGrams:20, kcalPer100g:61, p:1, c:3, g:5 },
-    ]
-  },
-  { id: 9, n: "Pollo a la brasa (1/4 sin piel)", cat: "Platos peruanos", kcal: 370, p: 34, c: 8, g: 18, u: "1/4 porción" },
-  {
-    id: 10, n: "Sangrecita criolla con yuca", cat: "Platos peruanos", kcal: 336, p: 25, c: 50, g: 4, u: "1 plato (~250g)", isComposite: true,
-    desc: "Sangrecita guisada con cebolla y ají, acompañada de yuca sancochada",
-    ingredients: [
-      { id:"sg-1", name:"Sangrecita saltada con cebolla y ají", currentGrams:130, baseGrams:130, kcalPer100g:111, p:18, c:3, g:3 },
-      { id:"sg-2", name:"Yuca sancochada", currentGrams:120, baseGrams:120, kcalPer100g:160, p:1.4, c:38, g:0.3 },
-    ]
-  },
-  { id: 11, n: "Menú criollo promedio", cat: "Platos peruanos", kcal: 690, p: 30, c: 80, g: 24, u: "1 menú completo" },
+  // PLATOS PERUANOS (LISTA LIMPIA, CON LOCRO Y VAINITA)
+  { id: 1, n: "Lomo saltado criollo con arroz y papas", cat: "Platos peruanos", kcal: 485, p: 32, c: 45, g: 19, u: "1 plato" },
+  { id: 2, n: "Arroz con pollo criollo", cat: "Platos peruanos", kcal: 490, p: 35, c: 54, g: 14, u: "1 plato" },
+  { id: 3, n: "Ceviche de pescado fresco", cat: "Platos peruanos", kcal: 240, p: 30, c: 22, g: 3, u: "1 plato" },
+  { id: 4, n: "Ají de gallina con arroz y huevo", cat: "Platos peruanos", kcal: 510, p: 34, c: 44, g: 20, u: "1 plato" },
+  { id: 5, n: "Seco de res con frejoles y arroz", cat: "Platos peruanos", kcal: 540, p: 38, c: 52, g: 18, u: "1 plato" },
+  { id: 6, n: "Locro de zapallo con arroz y queso fresco", cat: "Platos peruanos", kcal: 390, p: 14, c: 56, g: 11, u: "1 plato" },
+  { id: 7, n: "Locro de zapallo criollo casero (solo guiso)", cat: "Platos peruanos", kcal: 220, p: 9, c: 32, g: 6, u: "1 porción honda (250g)" },
+  { id: 8, n: "Vainita saltada con pollo y arroz", cat: "Platos peruanos", kcal: 420, p: 32, c: 46, g: 11, u: "1 plato" },
+  { id: 9, n: "Vainita saltada con carne de res y papas", cat: "Platos peruanos", kcal: 445, p: 31, c: 47, g: 14, u: "1 plato" },
+  { id: 10, n: "Causa limeña con pollo y palta", cat: "Platos peruanos", kcal: 330, p: 18, c: 40, g: 11, u: "1 porción" },
+  { id: 11, n: "Tallarines verdes con bistec de res", cat: "Platos peruanos", kcal: 620, p: 38, c: 66, g: 22, u: "1 plato" },
+  { id: 12, n: "Papa a la huancaína tradicional", cat: "Platos peruanos", kcal: 290, p: 9, c: 34, g: 13, u: "1 porción" },
+  { id: 13, n: "Pollo a la brasa (1/4 sin piel)", cat: "Platos peruanos", kcal: 360, p: 35, c: 6, g: 17, u: "1/4 porción" },
+  { id: 14, n: "Caldo de gallina con fideos y huevo", cat: "Platos peruanos", kcal: 440, p: 38, c: 40, g: 13, u: "1 plato hondo" },
+  { id: 15, n: "Aguadito de pollo con arroz", cat: "Platos peruanos", kcal: 420, p: 34, c: 42, g: 11, u: "1 plato hondo" },
+  { id: 16, n: "Arroz chaufa de pollo", cat: "Platos peruanos", kcal: 550, p: 32, c: 68, g: 15, u: "1 plato" },
+  { id: 17, n: "Tallarín saltado de pollo", cat: "Platos peruanos", kcal: 510, p: 34, c: 62, g: 12, u: "1 plato" },
+  { id: 18, n: "Estofado de pollo con papa y arroz", cat: "Platos peruanos", kcal: 480, p: 35, c: 54, g: 12, u: "1 plato" },
+  { id: 19, n: "Sangrecita criolla con yuca sancochada", cat: "Platos peruanos", kcal: 270, p: 26, c: 34, g: 3, u: "1 plato" },
+  { id: 20, n: "Arroz tapado de carne molida y huevo", cat: "Platos peruanos", kcal: 520, p: 28, c: 64, g: 16, u: "1 plato" },
+  { id: 21, n: "Olluquito con carne de res", cat: "Platos peruanos", kcal: 360, p: 26, c: 38, g: 10, u: "1 plato" },
+  { id: 22, n: "Pescado frito con arroz y ensalada", cat: "Platos peruanos", kcal: 490, p: 32, c: 52, g: 16, u: "1 plato" },
+  { id: 23, n: "Seco de pollo con frejoles", cat: "Platos peruanos", kcal: 510, p: 36, c: 54, g: 13, u: "1 plato" },
+  { id: 24, n: "Choclo sancochado con queso fresco", cat: "Platos peruanos", kcal: 240, p: 11, c: 26, g: 10, u: "1 porción" },
+  { id: 25, n: "Menú criollo promedio", cat: "Platos peruanos", kcal: 690, p: 30, c: 78, g: 24, u: "1 menú completo" },
 
-  // ===== PLATOS COMUNES DE LIMA (supermercados, chifas, rotiserías y menú del día) =====
-  {
-    id: 100, n: "Arroz chaufa de pollo", cat: "Platos peruanos", kcal: 577, p: 37, c: 70, g: 16, u: "1 plato (~380g)", isComposite: true,
-    desc: "Arroz frito al wok con huevo, cebolla china y pollo (comida preparada de supermercado y chifa)",
-    ingredients: [
-      { id:"ch-1", name:"Arroz frito chaufa (con huevo y sillao)", currentGrams:220, baseGrams:220, kcalPer100g:173, p:3.2, c:31, g:4 },
-      { id:"ch-2", name:"Pollo cocido (pechuga/pierna)", currentGrams:90, baseGrams:90, kcalPer100g:144, p:27, c:0, g:4 },
-      { id:"ch-3", name:"Tortilla de huevo en tiras", currentGrams:40, baseGrams:40, kcalPer100g:142, p:12, c:1, g:10 },
-      { id:"ch-4", name:"Cebolla china y pimiento", currentGrams:30, baseGrams:30, kcalPer100g:33, p:1.5, c:6, g:0.3 },
-    ]
-  },
-  {
-    id: 101, n: "Tallarín saltado de pollo", cat: "Platos peruanos", kcal: 525, p: 39, c: 65, g: 12, u: "1 plato (~410g)", isComposite: true,
-    desc: "Fideos salteados al wok con pollo, cebolla, tomate y vainita",
-    ingredients: [
-      { id:"ts-1", name:"Tallarín saltado con sillao y aceite", currentGrams:230, baseGrams:230, kcalPer100g:154, p:4.5, c:26, g:3.5 },
-      { id:"ts-2", name:"Pollo cocido (pechuga/pierna)", currentGrams:100, baseGrams:100, kcalPer100g:144, p:27, c:0, g:4 },
-      { id:"ts-3", name:"Cebolla, tomate y pimiento salteados", currentGrams:80, baseGrams:80, kcalPer100g:34, p:1.5, c:6, g:0.4 },
-    ]
-  },
-  {
-    id: 102, n: "Tallarín saltado de carne", cat: "Platos peruanos", kcal: 514, p: 34, c: 65, g: 13, u: "1 plato (~410g)", isComposite: true,
-    desc: "Fideos salteados al wok con lomo, cebolla, tomate y vainita",
-    ingredients: [
-      { id:"tc-1", name:"Tallarín saltado con sillao y aceite", currentGrams:230, baseGrams:230, kcalPer100g:154, p:4.5, c:26, g:3.5 },
-      { id:"tc-2", name:"Lomo o cuadril de res", currentGrams:100, baseGrams:100, kcalPer100g:133, p:22, c:0, g:5 },
-      { id:"tc-3", name:"Cebolla, tomate y pimiento salteados", currentGrams:80, baseGrams:80, kcalPer100g:34, p:1.5, c:6, g:0.4 },
-    ]
-  },
-  {
-    id: 103, n: "Aeropuerto (chaufa + tallarín saltado)", cat: "Platos peruanos", kcal: 732, p: 41, c: 98, g: 19, u: "1 plato (~500g)", isComposite: true,
-    desc: "Combinado chifa de arroz chaufa y tallarín saltado con pollo",
-    ingredients: [
-      { id:"ae-1", name:"Arroz frito chaufa (con huevo y sillao)", currentGrams:180, baseGrams:180, kcalPer100g:173, p:3.2, c:31, g:4 },
-      { id:"ae-2", name:"Tallarín saltado con sillao y aceite", currentGrams:150, baseGrams:150, kcalPer100g:154, p:4.5, c:26, g:3.5 },
-      { id:"ae-3", name:"Pollo cocido (pechuga/pierna)", currentGrams:90, baseGrams:90, kcalPer100g:144, p:27, c:0, g:4 },
-      { id:"ae-4", name:"Tortilla de huevo en tiras", currentGrams:30, baseGrams:30, kcalPer100g:142, p:12, c:1, g:10 },
-      { id:"ae-5", name:"Cebolla, tomate y pimiento salteados", currentGrams:50, baseGrams:50, kcalPer100g:34, p:1.5, c:6, g:0.4 },
-    ]
-  },
-  {
-    id: 104, n: "Pollo saltado", cat: "Platos peruanos", kcal: 652, p: 45, c: 65, g: 24, u: "1 plato (~430g)", isComposite: true,
-    desc: "Pollo al wok con cebolla roja y tomate, papas fritas y arroz",
-    ingredients: [
-      { id:"ps-1", name:"Pollo cocido (pechuga/pierna)", currentGrams:140, baseGrams:140, kcalPer100g:144, p:27, c:0, g:4 },
-      { id:"ps-2", name:"Papas fritas en bastones", currentGrams:90, baseGrams:90, kcalPer100g:239, p:3, c:32, g:11 },
-      { id:"ps-3", name:"Arroz blanco cocido", currentGrams:110, baseGrams:110, kcalPer100g:126, p:2.7, c:28, g:0.3 },
-      { id:"ps-4", name:"Cebolla, tomate y pimiento salteados", currentGrams:80, baseGrams:80, kcalPer100g:34, p:1.5, c:6, g:0.4 },
-      { id:"ps-5", name:"Aceite y sillao (aderezo wok)", currentGrams:10, baseGrams:10, kcalPer100g:695, p:0, c:5, g:75 },
-    ]
-  },
-  {
-    id: 105, n: "Tacu tacu con lomo saltado", cat: "Platos peruanos", kcal: 640, p: 42, c: 61, g: 25, u: "1 plato (~430g)", isComposite: true,
-    desc: "Tortilla de arroz y frejol canario dorada, con lomo saltado y huevo frito",
-    ingredients: [
-      { id:"tt-1", name:"Tacu tacu (arroz con frejol frito)", currentGrams:200, baseGrams:200, kcalPer100g:186, p:5, c:28, g:6 },
-      { id:"tt-2", name:"Lomo o cuadril de res", currentGrams:110, baseGrams:110, kcalPer100g:133, p:22, c:0, g:5 },
-      { id:"tt-3", name:"Cebolla, tomate y pimiento salteados", currentGrams:70, baseGrams:70, kcalPer100g:34, p:1.5, c:6, g:0.4 },
-      { id:"tt-4", name:"Huevo frito", currentGrams:50, baseGrams:50, kcalPer100g:195, p:14, c:1, g:15 },
-    ]
-  },
-  {
-    id: 106, n: "Estofado de pollo con arroz y papa", cat: "Platos peruanos", kcal: 495, p: 39, c: 58, g: 12, u: "1 plato (~400g)", isComposite: true,
-    desc: "Pollo guisado en salsa de tomate con papa y arroz",
-    ingredients: [
-      { id:"ep-1", name:"Pollo estofado", currentGrams:150, baseGrams:150, kcalPer100g:163, p:22, c:3, g:7 },
-      { id:"ep-2", name:"Papa sancochada", currentGrams:100, baseGrams:100, kcalPer100g:89, p:2, c:20, g:0.1 },
-      { id:"ep-3", name:"Arroz blanco cocido", currentGrams:110, baseGrams:110, kcalPer100g:126, p:2.7, c:28, g:0.3 },
-      { id:"ep-4", name:"Salsa del estofado", currentGrams:40, baseGrams:40, kcalPer100g:57, p:1.5, c:6, g:3 },
-    ]
-  },
-  {
-    id: 107, n: "Carapulcra con sopa seca", cat: "Platos peruanos", kcal: 620, p: 24, c: 68, g: 28, u: "1 plato (~350g)", isComposite: true,
-    desc: "Guiso de papa seca, maní y cerdo con tallarines en salsa",
-    ingredients: [
-      { id:"cp-1", name:"Carapulcra (papa seca, maní y cerdo)", currentGrams:200, baseGrams:200, kcalPer100g:200, p:8, c:15, g:12 },
-      { id:"cp-2", name:"Sopa seca (tallarín con salsa verde)", currentGrams:150, baseGrams:150, kcalPer100g:147, p:5, c:25, g:3 },
-    ]
-  },
-  {
-    id: 108, n: "Tallarines rojos con pollo", cat: "Platos peruanos", kcal: 541, p: 42, c: 66, g: 12, u: "1 plato (~400g)", isComposite: true,
-    desc: "Fideos en salsa roja de tomate y carne con presa de pollo",
-    ingredients: [
-      { id:"tr-1", name:"Tallarín en salsa roja", currentGrams:250, baseGrams:250, kcalPer100g:146, p:5, c:26, g:2.5 },
-      { id:"tr-2", name:"Pollo dorado/guisado", currentGrams:120, baseGrams:120, kcalPer100g:141, p:24, c:0, g:5 },
-      { id:"tr-3", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:30, baseGrams:30, kcalPer100g:24, p:0.8, c:5, g:0.1 },
-    ]
-  },
-  {
-    id: 109, n: "Milanesa de pollo con arroz y papas fritas", cat: "Platos peruanos", kcal: 638, p: 32, c: 71, g: 25, u: "1 plato (~370g)", isComposite: true,
-    desc: "Filete de pollo apanado frito con arroz, papas fritas y ensalada",
-    ingredients: [
-      { id:"mp-1", name:"Milanesa de pollo apanada y frita", currentGrams:130, baseGrams:130, kcalPer100g:245, p:20, c:12, g:13 },
-      { id:"mp-2", name:"Arroz blanco cocido", currentGrams:110, baseGrams:110, kcalPer100g:126, p:2.7, c:28, g:0.3 },
-      { id:"mp-3", name:"Papas fritas en bastones", currentGrams:70, baseGrams:70, kcalPer100g:239, p:3, c:32, g:11 },
-      { id:"mp-4", name:"Ensalada fresca (lechuga, tomate, pepino)", currentGrams:60, baseGrams:60, kcalPer100g:22, p:1, c:4, g:0.2 },
-    ]
-  },
-  {
-    id: 110, n: "Bistec a lo pobre", cat: "Platos peruanos", kcal: 816, p: 44, c: 73, g: 39, u: "1 plato (~435g)", isComposite: true,
-    desc: "Bistec de res con huevo frito, plátano frito, papas fritas y arroz",
-    ingredients: [
-      { id:"bp-1", name:"Bistec de res a la plancha", currentGrams:140, baseGrams:140, kcalPer100g:178, p:22, c:0, g:10 },
-      { id:"bp-2", name:"Huevo frito", currentGrams:55, baseGrams:55, kcalPer100g:195, p:14, c:1, g:15 },
-      { id:"bp-3", name:"Plátano frito", currentGrams:60, baseGrams:60, kcalPer100g:238, p:1.5, c:31, g:12 },
-      { id:"bp-4", name:"Papas fritas en bastones", currentGrams:80, baseGrams:80, kcalPer100g:239, p:3, c:32, g:11 },
-      { id:"bp-5", name:"Arroz blanco cocido", currentGrams:100, baseGrams:100, kcalPer100g:126, p:2.7, c:28, g:0.3 },
-    ]
-  },
-  {
-    id: 111, n: "Arroz tapado", cat: "Platos peruanos", kcal: 647, p: 29, c: 74, g: 26, u: "1 plato (~400g)", isComposite: true,
-    desc: "Arroz con picadillo de carne, pasas y aceituna, tapado, con huevo frito y plátano",
-    ingredients: [
-      { id:"at-1", name:"Arroz blanco cocido", currentGrams:180, baseGrams:180, kcalPer100g:126, p:2.7, c:28, g:0.3 },
-      { id:"at-2", name:"Picadillo de carne con pasas y aceituna", currentGrams:120, baseGrams:120, kcalPer100g:170, p:14, c:6, g:10 },
-      { id:"at-3", name:"Huevo frito", currentGrams:50, baseGrams:50, kcalPer100g:195, p:14, c:1, g:15 },
-      { id:"at-4", name:"Plátano frito", currentGrams:50, baseGrams:50, kcalPer100g:238, p:1.5, c:31, g:12 },
-    ]
-  },
-  {
-    id: 112, n: "Escabeche de pollo con arroz", cat: "Platos peruanos", kcal: 533, p: 41, c: 55, g: 16, u: "1 plato (~420g)", isComposite: true,
-    desc: "Pollo frito bañado en escabeche de cebolla y ají amarillo, con arroz y camote",
-    ingredients: [
-      { id:"es-1", name:"Pollo frito", currentGrams:150, baseGrams:150, kcalPer100g:168, p:24, c:0, g:8 },
-      { id:"es-2", name:"Cebolla escabechada con ají y aceite", currentGrams:80, baseGrams:80, kcalPer100g:81, p:1, c:8, g:5 },
-      { id:"es-3", name:"Arroz blanco cocido", currentGrams:130, baseGrams:130, kcalPer100g:126, p:2.7, c:28, g:0.3 },
-      { id:"es-4", name:"Camote sancochado", currentGrams:60, baseGrams:60, kcalPer100g:87, p:1.6, c:20, g:0.1 },
-    ]
-  },
-  {
-    id: 113, n: "Chicharrón de pescado con yuca frita", cat: "Platos peruanos", kcal: 642, p: 34, c: 50, g: 34, u: "1 plato (~310g)", isComposite: true,
-    desc: "Trozos de pescado apanado y frito con yuca frita, salsa criolla y salsa tártara",
-    ingredients: [
-      { id:"cf-1", name:"Pescado apanado y frito", currentGrams:160, baseGrams:160, kcalPer100g:220, p:20, c:8, g:12 },
-      { id:"cf-2", name:"Yuca frita", currentGrams:90, baseGrams:90, kcalPer100g:248, p:1.5, c:38, g:10 },
-      { id:"cf-3", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:40, baseGrams:40, kcalPer100g:24, p:0.8, c:5, g:0.1 },
-      { id:"cf-4", name:"Salsa tártara", currentGrams:20, baseGrams:20, kcalPer100g:288, p:0.5, c:4, g:30 },
-    ]
-  },
-  {
-    id: 114, n: "Sudado de pescado con arroz y yuca", cat: "Platos peruanos", kcal: 511, p: 41, c: 71, g: 7, u: "1 plato (~490g)", isComposite: true,
-    desc: "Pescado al vapor en sofrito de tomate y cebolla, con yuca y arroz",
-    ingredients: [
-      { id:"sp-1", name:"Filete de pescado fresco", currentGrams:170, baseGrams:170, kcalPer100g:102, p:21, c:0, g:2 },
-      { id:"sp-2", name:"Sofrito de tomate y cebolla (caldo)", currentGrams:120, baseGrams:120, kcalPer100g:46, p:1, c:5, g:2.5 },
-      { id:"sp-3", name:"Yuca sancochada", currentGrams:90, baseGrams:90, kcalPer100g:160, p:1.4, c:38, g:0.3 },
-      { id:"sp-4", name:"Arroz blanco cocido", currentGrams:110, baseGrams:110, kcalPer100g:126, p:2.7, c:28, g:0.3 },
-    ]
-  },
-  {
-    id: 115, n: "Arroz con mariscos", cat: "Platos peruanos", kcal: 441, p: 23, c: 65, g: 10, u: "1 plato (~350g)", isComposite: true,
-    desc: "Arroz al ají panca con pota, conchas y camarones",
-    ingredients: [
-      { id:"am-1", name:"Arroz al ají panca con sofrito", currentGrams:220, baseGrams:220, kcalPer100g:158, p:3.5, c:28, g:3.5 },
-      { id:"am-2", name:"Mariscos mixtos (pota, conchas, camarón)", currentGrams:100, baseGrams:100, kcalPer100g:86, p:15, c:2, g:2 },
-      { id:"am-3", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:30, baseGrams:30, kcalPer100g:24, p:0.8, c:5, g:0.1 },
-    ]
-  },
-  {
-    id: 116, n: "Anticuchos de corazón con papa y choclo", cat: "Platos peruanos", kcal: 361, p: 27, c: 43, g: 9, u: "1 plato (~340g)", isComposite: true,
-    desc: "Brochetas de corazón de res marinadas al ají panca, con papa y choclo",
-    ingredients: [
-      { id:"an-1", name:"Anticucho de corazón a la parrilla", currentGrams:120, baseGrams:120, kcalPer100g:134, p:18, c:2, g:6 },
-      { id:"an-2", name:"Papa sancochada", currentGrams:120, baseGrams:120, kcalPer100g:89, p:2, c:20, g:0.1 },
-      { id:"an-3", name:"Choclo desgranado cocido", currentGrams:80, baseGrams:80, kcalPer100g:99, p:3, c:19, g:1.2 },
-      { id:"an-4", name:"Ají de rocoto y huacatay", currentGrams:20, baseGrams:20, kcalPer100g:69, p:1, c:5, g:5 },
-    ]
-  },
-  {
-    id: 117, n: "Chicharrón de cerdo con camote", cat: "Platos peruanos", kcal: 445, p: 28, c: 26, g: 25, u: "1 plato (~270g)", isComposite: true,
-    desc: "Trozos de cerdo fritos con camote sancochado y salsa criolla",
-    ingredients: [
-      { id:"cc-1", name:"Chicharrón de cerdo", currentGrams:100, baseGrams:100, kcalPer100g:329, p:26, c:0, g:25 },
-      { id:"cc-2", name:"Camote sancochado", currentGrams:120, baseGrams:120, kcalPer100g:87, p:1.6, c:20, g:0.1 },
-      { id:"cc-3", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:50, baseGrams:50, kcalPer100g:24, p:0.8, c:5, g:0.1 },
-    ]
-  },
-  {
-    id: 118, n: "Olluquito con charqui y arroz", cat: "Platos peruanos", kcal: 364, p: 14, c: 58, g: 8, u: "1 plato (~330g)", isComposite: true,
-    desc: "Guiso andino de olluco con carne seca, servido con arroz",
-    ingredients: [
-      { id:"ol-1", name:"Olluquito guisado con charqui", currentGrams:200, baseGrams:200, kcalPer100g:100, p:5, c:11, g:4 },
-      { id:"ol-2", name:"Arroz blanco cocido", currentGrams:130, baseGrams:130, kcalPer100g:126, p:2.7, c:28, g:0.3 },
-    ]
-  },
-  {
-    id: 119, n: "Papa rellena", cat: "Platos peruanos", kcal: 262, p: 9, c: 32, g: 11, u: "1 unidad (~200g)", isComposite: true,
-    desc: "Papa frita rellena de carne picada, huevo y aceituna, con salsa criolla",
-    ingredients: [
-      { id:"pr-1", name:"Masa de papa frita", currentGrams:120, baseGrams:120, kcalPer100g:145, p:2, c:23, g:5 },
-      { id:"pr-2", name:"Relleno de carne, huevo y aceituna", currentGrams:50, baseGrams:50, kcalPer100g:162, p:13, c:5, g:10 },
-      { id:"pr-3", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:30, baseGrams:30, kcalPer100g:24, p:0.8, c:5, g:0.1 },
-    ]
-  },
-  {
-    id: 130, n: "Caldo de gallina", cat: "Sopas y menestras", kcal: 441, p: 39, c: 42, g: 13, u: "1 plato hondo", isComposite: true,
-    desc: "Caldo con fideos, presa de gallina, papa y huevo",
-    ingredients: [
-      { id:"cg-1", name:"Caldo de gallina", currentGrams:300, baseGrams:300, kcalPer100g:23, p:1.5, c:2, g:1 },
-      { id:"cg-2", name:"Fideos cabello de ángel cocidos", currentGrams:80, baseGrams:80, kcalPer100g:129, p:5, c:25, g:1 },
-      { id:"cg-3", name:"Presa de gallina cocida", currentGrams:100, baseGrams:100, kcalPer100g:154, p:25, c:0, g:6 },
-      { id:"cg-4", name:"Papa sancochada", currentGrams:80, baseGrams:80, kcalPer100g:89, p:2, c:20, g:0.1 },
-      { id:"cg-5", name:"Huevo sancochado (½)", currentGrams:30, baseGrams:30, kcalPer100g:146, p:13, c:1, g:10 },
-    ]
-  },
-  {
-    id: 131, n: "Aguadito de pollo", cat: "Sopas y menestras", kcal: 434, p: 37, c: 44, g: 12, u: "1 plato hondo", isComposite: true,
-    desc: "Sopa verde de arroz con culantro, presa de pollo, papa y arvejas",
-    ingredients: [
-      { id:"ag-1", name:"Caldo de arroz al culantro", currentGrams:300, baseGrams:300, kcalPer100g:66, p:3, c:9, g:2 },
-      { id:"ag-2", name:"Presa de pollo cocida", currentGrams:100, baseGrams:100, kcalPer100g:154, p:25, c:0, g:6 },
-      { id:"ag-3", name:"Papa sancochada", currentGrams:70, baseGrams:70, kcalPer100g:89, p:2, c:20, g:0.1 },
-      { id:"ag-4", name:"Arvejas y zanahoria", currentGrams:40, baseGrams:40, kcalPer100g:48, p:3, c:8, g:0.4 },
-    ]
-  },
-  {
-    id: 132, n: "Chupe de camarones", cat: "Sopas y menestras", kcal: 448, p: 32, c: 40, g: 18, u: "1 plato hondo", isComposite: true,
-    desc: "Sopa cremosa de camarones con papa, choclo, huevo y queso fresco",
-    ingredients: [
-      { id:"cu-1", name:"Caldo cremoso de camarones (leche y ají panca)", currentGrams:250, baseGrams:250, kcalPer100g:63, p:3, c:6, g:3 },
-      { id:"cu-2", name:"Camarones", currentGrams:60, baseGrams:60, kcalPer100g:98, p:20, c:1, g:1.5 },
-      { id:"cu-3", name:"Papa sancochada", currentGrams:80, baseGrams:80, kcalPer100g:89, p:2, c:20, g:0.1 },
-      { id:"cu-4", name:"Choclo desgranado cocido", currentGrams:40, baseGrams:40, kcalPer100g:99, p:3, c:19, g:1.2 },
-      { id:"cu-5", name:"Huevo pochado", currentGrams:50, baseGrams:50, kcalPer100g:146, p:13, c:1, g:10 },
-      { id:"cu-6", name:"Queso fresco", currentGrams:20, baseGrams:20, kcalPer100g:242, p:18, c:2, g:18 },
-    ]
-  },
-  {
-    id: 133, n: "Lentejas con arroz y pollo a la plancha", cat: "Sopas y menestras", kcal: 577, p: 55, c: 69, g: 9, u: "1 plato (~470g)", isComposite: true,
-    desc: "Menestra clásica del menú: lentejas guisadas, arroz y pechuga a la plancha",
-    ingredients: [
-      { id:"le-1", name:"Lentejas guisadas", currentGrams:180, baseGrams:180, kcalPer100g:120, p:7.5, c:17, g:2.5 },
-      { id:"le-2", name:"Arroz blanco cocido", currentGrams:130, baseGrams:130, kcalPer100g:126, p:2.7, c:28, g:0.3 },
-      { id:"le-3", name:"Pechuga de pollo a la plancha", currentGrams:120, baseGrams:120, kcalPer100g:156, p:31, c:0, g:3.6 },
-      { id:"le-4", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:40, baseGrams:40, kcalPer100g:24, p:0.8, c:5, g:0.1 },
-    ]
-  },
-  {
-    id: 134, n: "Frejoles canarios con arroz y bistec", cat: "Sopas y menestras", kcal: 592, p: 43, c: 71, g: 15, u: "1 plato (~470g)", isComposite: true,
-    desc: "Frejoles guisados con arroz, bistec a la plancha y salsa criolla",
-    ingredients: [
-      { id:"fr-1", name:"Frejoles canarios guisados", currentGrams:180, baseGrams:180, kcalPer100g:114, p:7, c:18, g:1.5 },
-      { id:"fr-2", name:"Arroz blanco cocido", currentGrams:130, baseGrams:130, kcalPer100g:126, p:2.7, c:28, g:0.3 },
-      { id:"fr-3", name:"Bistec de res a la plancha", currentGrams:120, baseGrams:120, kcalPer100g:178, p:22, c:0, g:10 },
-      { id:"fr-4", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:40, baseGrams:40, kcalPer100g:24, p:0.8, c:5, g:0.1 },
-    ]
-  },
-  {
-    id: 135, n: "1/4 pollo rostizado con papas fritas y ensalada", cat: "Sopas y menestras", kcal: 853, p: 47, c: 52, g: 51, u: "1 combo (~445g)", isComposite: true,
-    desc: "Combo de rotisería de supermercado: 1/4 de pollo con piel, papas fritas, ensalada y cremas",
-    ingredients: [
-      { id:"pq-1", name:"Pollo rostizado con piel (carne comestible)", currentGrams:190, baseGrams:190, kcalPer100g:196, p:22, c:0, g:12 },
-      { id:"pq-2", name:"Papas fritas en bastones", currentGrams:150, baseGrams:150, kcalPer100g:239, p:3, c:32, g:11 },
-      { id:"pq-3", name:"Ensalada fresca (lechuga, tomate, pepino)", currentGrams:80, baseGrams:80, kcalPer100g:22, p:1, c:4, g:0.2 },
-      { id:"pq-4", name:"Cremas (ají y mayonesa)", currentGrams:25, baseGrams:25, kcalPer100g:419, p:0.5, c:3, g:45 },
-    ]
-  },
-  {
-    id: 140, n: "Tamal de pollo", cat: "Desayuno", kcal: 377, p: 20, c: 39, g: 16, u: "1 unidad (~235g)", isComposite: true,
-    desc: "Masa de maíz con pollo, huevo y aceituna, envuelto en hoja de plátano",
-    ingredients: [
-      { id:"tp-1", name:"Masa de maíz sazonada con ají amarillo", currentGrams:160, baseGrams:160, kcalPer100g:164, p:3.5, c:24, g:6 },
-      { id:"tp-2", name:"Relleno de pollo", currentGrams:50, baseGrams:50, kcalPer100g:150, p:24, c:0, g:6 },
-      { id:"tp-3", name:"Huevo sancochado, aceituna y maní", currentGrams:25, baseGrams:25, kcalPer100g:160, p:10, c:3, g:12 },
-    ]
-  },
-  {
-    id: 141, n: "Tamal de chancho", cat: "Desayuno", kcal: 418, p: 18, c: 40, g: 21, u: "1 unidad (~225g)", isComposite: true,
-    desc: "Masa de maíz con trozo de cerdo, maní y aceituna, en hoja de plátano",
-    ingredients: [
-      { id:"tch-1", name:"Masa de maíz sazonada con ají panca", currentGrams:160, baseGrams:160, kcalPer100g:164, p:3.5, c:24, g:6 },
-      { id:"tch-2", name:"Relleno de cerdo", currentGrams:50, baseGrams:50, kcalPer100g:223, p:22, c:0, g:15 },
-      { id:"tch-3", name:"Maní molido y aceituna", currentGrams:15, baseGrams:15, kcalPer100g:297, p:10, c:8, g:25 },
-    ]
-  },
-  {
-    id: 142, n: "Humita salada", cat: "Desayuno", kcal: 223, p: 7, c: 28, g: 9, u: "1 unidad (~130g)", isComposite: true,
-    desc: "Choclo molido con queso fresco, cocido en su hoja",
-    ingredients: [
-      { id:"hu-1", name:"Masa de choclo con cebolla y ají", currentGrams:110, baseGrams:110, kcalPer100g:159, p:3.5, c:25, g:5 },
-      { id:"hu-2", name:"Queso fresco", currentGrams:20, baseGrams:20, kcalPer100g:242, p:18, c:2, g:18 },
-    ]
-  },
-  {
-    id: 143, n: "Pan con chicharrón y camote", cat: "Desayuno", kcal: 658, p: 30, c: 69, g: 29, u: "1 sándwich (~260g)", isComposite: true,
-    desc: "Sándwich de pan francés con chicharrón de cerdo, camote frito y salsa criolla",
-    ingredients: [
-      { id:"pc-1", name:"Pan francés", currentGrams:80, baseGrams:80, kcalPer100g:298, p:10, c:60, g:2 },
-      { id:"pc-2", name:"Chicharrón de cerdo", currentGrams:80, baseGrams:80, kcalPer100g:329, p:26, c:0, g:25 },
-      { id:"pc-3", name:"Camote frito", currentGrams:60, baseGrams:60, kcalPer100g:244, p:2, c:32, g:12 },
-      { id:"pc-4", name:"Salsa criolla (cebolla, limón, ají)", currentGrams:40, baseGrams:40, kcalPer100g:24, p:0.8, c:5, g:0.1 },
-    ]
-  },
-  {
-    id: 144, n: "Empanada de carne al horno", cat: "Snacks", kcal: 260, p: 9, c: 27, g: 13, u: "1 unidad (~100g)", isComposite: true,
-    desc: "Empanada de masa horneada rellena de carne, huevo y aceituna (panadería de supermercado)",
-    ingredients: [
-      { id:"em-1", name:"Masa de empanada horneada", currentGrams:55, baseGrams:55, kcalPer100g:343, p:7, c:45, g:15 },
-      { id:"em-2", name:"Relleno de carne, cebolla, huevo y pasas", currentGrams:45, baseGrams:45, kcalPer100g:158, p:12, c:5, g:10 },
-    ]
-  },
-  {
-    id: 145, n: "Choclo con queso", cat: "Snacks", kcal: 245, p: 12, c: 29, g: 9, u: "1 choclo + queso (~190g)", isComposite: true,
-    desc: "Mazorca de choclo cocida con queso fresco, snack tradicional",
-    ingredients: [
-      { id:"cq-1", name:"Choclo cocido", currentGrams:150, baseGrams:150, kcalPer100g:99, p:3, c:19, g:1.2 },
-      { id:"cq-2", name:"Queso fresco", currentGrams:40, baseGrams:40, kcalPer100g:242, p:18, c:2, g:18 },
-    ]
-  },
-  {
-    id: 150, n: "Mazamorra morada", cat: "Postres", kcal: 196, p: 1, c: 48, g: 0, u: "1 vaso (200g)", isComposite: true,
-    desc: "Postre de maíz morado con frutas y harina de camote",
-    ingredients: [
-      { id:"mm-1", name:"Mazamorra morada", currentGrams:200, baseGrams:200, kcalPer100g:98, p:0.3, c:24, g:0.1 },
-    ]
-  },
-  {
-    id: 151, n: "Arroz con leche", cat: "Postres", kcal: 210, p: 4, c: 36, g: 5, u: "1 porción (150g)", isComposite: true,
-    desc: "Arroz cocido en leche con canela y azúcar",
-    ingredients: [
-      { id:"al-1", name:"Arroz con leche", currentGrams:150, baseGrams:150, kcalPer100g:140, p:3, c:24, g:3.5 },
-    ]
-  },
-  {
-    id: 152, n: "Picarones con miel de chancaca", cat: "Postres", kcal: 492, p: 4, c: 79, g: 18, u: "3 unidades (~130g)", isComposite: true,
-    desc: "Anillos fritos de camote y zapallo con miel de chancaca (3 unidades)",
-    ingredients: [
-      { id:"pi-1", name:"Picarones fritos", currentGrams:90, baseGrams:90, kcalPer100g:404, p:4, c:52, g:20 },
-      { id:"pi-2", name:"Miel de chancaca", currentGrams:40, baseGrams:40, kcalPer100g:320, p:0, c:80, g:0 },
-    ]
-  },
+  // CARNES Y HUEVOS (GENÉRICOS SIN MARCAS)
+  { id: 30, n: "Pechuga de pollo a la plancha", cat: "Carnes y huevos", kcal: 155, p: 31, c: 0, g: 3.5, u: "100g cocido" },
+  { id: 31, n: "Pechuga de pollo deshilachada", cat: "Carnes y huevos", kcal: 140, p: 28, c: 0, g: 3, u: "100g" },
+  { id: 32, n: "Bistec de res a la plancha", cat: "Carnes y huevos", kcal: 175, p: 25, c: 0, g: 8, u: "100g" },
+  { id: 33, n: "Lomo de res magro salteado", cat: "Carnes y huevos", kcal: 150, p: 26, c: 0, g: 5, u: "100g" },
+  { id: 34, n: "Filete de pescado fresco a la plancha", cat: "Carnes y huevos", kcal: 110, p: 22, c: 0, g: 2, u: "100g" },
+  { id: 35, n: "Filete de bonito fresco (rico en Omega 3)", cat: "Carnes y huevos", kcal: 135, p: 24, c: 0, g: 4, u: "100g" },
+  { id: 36, n: "Atún en agua (lata escurrida)", cat: "Carnes y huevos", kcal: 125, p: 28, c: 0, g: 1.2, u: "1 lata (140g)" },
+  { id: 37, n: "Huevo sancochado / duro", cat: "Carnes y huevos", kcal: 74, p: 6.5, c: 0.5, g: 5, u: "1 unidad" },
+  { id: 38, n: "Huevo frito con poco aceite", cat: "Carnes y huevos", kcal: 95, p: 6.5, c: 0.5, g: 7, u: "1 unidad" },
+  { id: 39, n: "Huevos revueltos (2 unidades)", cat: "Carnes y huevos", kcal: 160, p: 13, c: 1, g: 11, u: "2 huevos" },
+  { id: 40, n: "Claras de huevo cocidas", cat: "Carnes y huevos", kcal: 50, p: 11, c: 0, g: 0.2, u: "100g" },
+  { id: 41, n: "Pavita en trozos magra", cat: "Carnes y huevos", kcal: 130, p: 27, c: 0, g: 2.5, u: "100g" },
+  { id: 42, n: "Queso fresco bajo en sal", cat: "Carnes y huevos", kcal: 115, p: 9, c: 1.5, g: 8.5, u: "50g" },
+  { id: 43, n: "Yogur griego natural sin azúcar", cat: "Carnes y huevos", kcal: 95, p: 14, c: 4.5, g: 1.5, u: "1 pote (150g)" },
+  { id: 44, n: "Leche evaporada light", cat: "Carnes y huevos", kcal: 98, p: 6.8, c: 9.5, g: 3.8, u: "100 ml" },
+  { id: 45, n: "Sangrecita de pollo cocida aliñada", cat: "Carnes y huevos", kcal: 95, p: 16, c: 2, g: 2, u: "100g" },
 
-  // PRODUCTOS DE SUPERMERCADO (METRO / PLAZA VEA / TOTTUS)
-  { id: 40, n: "Pechuga de pollo San Fernando (100g)", cat: "Supermercado", kcal: 115, p: 25, c: 0, g: 1.5, u: "100g crudo" },
-  { id: 41, n: "Filete de pescado Bonito fresco (100g)", cat: "Supermercado", kcal: 120, p: 23, c: 0, g: 3, u: "100g (Omega 3)" },
-  { id: 42, n: "Atún en agua y sal Primor / Fanny", cat: "Supermercado", kcal: 125, p: 28, c: 0, g: 1.2, u: "1 lata escurrida" },
-  { id: 43, n: "Huevo fresco La Calera (1 und)", cat: "Supermercado", kcal: 75, p: 6.5, c: 0.5, g: 5, u: "1 unidad" },
-  { id: 44, n: "Yogur Griego Gloria Natural Sin Azúcar", cat: "Supermercado", kcal: 92, p: 14, c: 4.5, g: 1.5, u: "1 pote (150g)" },
-  { id: 45, n: "Yogur Danlac Natural en Vidrio", cat: "Supermercado", kcal: 110, p: 6, c: 11, g: 4.5, u: "1 frasco (180g)" },
-  { id: 46, n: "Leche Gloria Evaporada Light (tarro azul)", cat: "Supermercado", kcal: 98, p: 6.8, c: 9.5, g: 3.8, u: "100 ml" },
-  { id: 47, n: "Queso fresco pasteurizado Laive (50g)", cat: "Supermercado", kcal: 115, p: 9, c: 1.5, g: 8.5, u: "50g" },
-  { id: 48, n: "Arroz Extra Costeño (100g cocido)", cat: "Supermercado", kcal: 130, p: 2.7, c: 28, g: 0.3, u: "100g cocido" },
-  { id: 49, n: "Quinua perlada andina cocida (100g)", cat: "Supermercado", kcal: 120, p: 4.4, c: 21, g: 1.9, u: "100g cocido" },
-  { id: 50, n: "Papa amarilla sancochada (100g)", cat: "Supermercado", kcal: 90, p: 2.1, c: 20.5, g: 0.1, u: "100g" },
-  { id: 51, n: "Camote sancochado (100g)", cat: "Supermercado", kcal: 86, p: 1.6, c: 20, g: 0.1, u: "100g" },
-  { id: 52, n: "Palta Hass peruana (½ und)", cat: "Supermercado", kcal: 125, p: 1.5, c: 6, g: 11.5, u: "½ unidad" },
-  { id: 53, n: "Avena Quaker clásica (40g)", cat: "Supermercado", kcal: 148, p: 5.5, c: 25, g: 2.8, u: "porción 40g" },
-  { id: 54, n: "Pan francés de panadería (1 und)", cat: "Supermercado", kcal: 135, p: 4.5, c: 27, g: 1, u: "1 unidad (~45g)" },
-  { id: 55, n: "Aceite de oliva El Olivar (1 cda)", cat: "Supermercado", kcal: 119, p: 0, c: 0, g: 13.5, u: "1 cucharada" },
+  // VEGETALES Y AGREGADOS (GENÉRICOS)
+  { id: 50, n: "Vainitas cocidas al vapor", cat: "Vegetales", kcal: 35, p: 2, c: 7, g: 0.2, u: "100g" },
+  { id: 51, n: "Vainitas salteadas con cebolla y tomate", cat: "Vegetales", kcal: 65, p: 2.5, c: 9, g: 2, u: "1 porción" },
+  { id: 52, n: "Zapallo macre cocido en trozos", cat: "Vegetales", kcal: 26, p: 1, c: 6, g: 0.1, u: "100g" },
+  { id: 53, n: "Cebolla y tomate salteados al wok", cat: "Vegetales", kcal: 45, p: 1.2, c: 8, g: 1, u: "100g" },
+  { id: 54, n: "Salsa criolla (cebolla roja, ají limo, limón)", cat: "Vegetales", kcal: 25, p: 0.8, c: 5, g: 0.1, u: "1 porción (40g)" },
+  { id: 55, n: "Espinaca fresca / al vapor", cat: "Vegetales", kcal: 23, p: 3, c: 3.5, g: 0.3, u: "100g" },
+  { id: 56, n: "Brócoli cocido al vapor", cat: "Vegetales", kcal: 35, p: 2.8, c: 7, g: 0.4, u: "100g" },
+  { id: 57, n: "Ensalada fresca (lechuga, tomate, pepino)", cat: "Vegetales", kcal: 25, p: 1, c: 5, g: 0.2, u: "1 plato" },
+  { id: 58, n: "Zanahoria cocida en rodajas", cat: "Vegetales", kcal: 38, p: 0.9, c: 8.5, g: 0.2, u: "100g" },
+  { id: 59, n: "Betarraga cocida en cubos o rodajas", cat: "Vegetales", kcal: 43, p: 1.6, c: 10, g: 0.2, u: "100g" },
+  { id: 60, n: "Ensalada rusa criolla", cat: "Vegetales", kcal: 110, p: 2.5, c: 18, g: 3.5, u: "1 porción" },
 
-  // DESAYUNOS
-  { id: 60, n: "Pan francés con 2 huevos revueltos", cat: "Desayuno", kcal: 285, p: 15, c: 28, g: 11, u: "1 porción" },
-  { id: 61, n: "Pan con palta y tomate", cat: "Desayuno", kcal: 220, p: 5, c: 30, g: 9, u: "1 pan" },
-  { id: 62, n: "Avena con leche y canela", cat: "Desayuno", kcal: 215, p: 8.5, c: 36, g: 4, u: "1 tazón" },
-  { id: 63, n: "Yogur griego con granola y plátano", cat: "Desayuno", kcal: 240, p: 15, c: 34, g: 5, u: "1 bowl" },
+  // TUBÉRCULOS Y GRANOS (GENÉRICOS SIN MARCAS)
+  { id: 70, n: "Arroz blanco cocido", cat: "Tubérculos y granos", kcal: 130, p: 2.7, c: 28, g: 0.3, u: "100g (3 cdas colmadas)" },
+  { id: 71, n: "Arroz integral cocido", cat: "Tubérculos y granos", kcal: 112, p: 2.5, c: 24, g: 0.8, u: "100g" },
+  { id: 72, n: "Papa sancochada (blanca o amarilla)", cat: "Tubérculos y granos", kcal: 89, p: 2, c: 20, g: 0.1, u: "1 unidad mediana (100g)" },
+  { id: 73, n: "Papas fritas en bastones", cat: "Tubérculos y granos", kcal: 240, p: 3, c: 32, g: 11, u: "1 porción (100g)" },
+  { id: 74, n: "Camote sancochado", cat: "Tubérculos y granos", kcal: 86, p: 1.6, c: 20, g: 0.1, u: "100g" },
+  { id: 75, n: "Camote frito o al horno", cat: "Tubérculos y granos", kcal: 140, p: 1.6, c: 26, g: 4, u: "100g" },
+  { id: 76, n: "Yuca sancochada", cat: "Tubérculos y granos", kcal: 160, p: 1.4, c: 38, g: 0.3, u: "100g" },
+  { id: 77, n: "Choclo desgranado cocido", cat: "Tubérculos y granos", kcal: 95, p: 3.2, c: 20, g: 1.2, u: "100g" },
+  { id: 78, n: "Quinua andina cocida", cat: "Tubérculos y granos", kcal: 120, p: 4.4, c: 21, g: 1.9, u: "100g" },
+  { id: 79, n: "Avena en hojuelas cocida", cat: "Tubérculos y granos", kcal: 148, p: 5.5, c: 25, g: 2.8, u: "1 tazón (40g seco)" },
+  { id: 80, n: "Fideos / tallarines cocidos al dente", cat: "Tubérculos y granos", kcal: 135, p: 5, c: 27, g: 1, u: "100g" },
+  { id: 81, n: "Pan francés criollo", cat: "Tubérculos y granos", kcal: 135, p: 4.5, c: 27, g: 1, u: "1 unidad (~45g)" },
+  { id: 82, n: "Pan de molde integral", cat: "Tubérculos y granos", kcal: 68, p: 3.2, c: 12, g: 0.8, u: "1 rebanada" },
+  { id: 83, n: "Pan francés con palta", cat: "Tubérculos y granos", kcal: 230, p: 5.5, c: 29, g: 10.5, u: "1 pan" },
+  { id: 84, n: "Pan francés con huevo frito o revuelto", cat: "Tubérculos y granos", kcal: 225, p: 10.5, c: 27, g: 8.5, u: "1 pan" },
+  { id: 85, n: "Tostadas integrales", cat: "Tubérculos y granos", kcal: 65, p: 2.2, c: 12, g: 0.8, u: "2 tostadas" },
 
-  // BEBIDAS
-  { id: 70, n: "Chicha morada casera natural", cat: "Bebidas", kcal: 45, p: 0.2, c: 11, g: 0, u: "1 vaso" },
-  { id: 71, n: "Emoliente con linaza y limón", cat: "Bebidas", kcal: 60, p: 0.5, c: 14, g: 0.2, u: "1 vaso" },
-  { id: 72, n: "Agua mineral San Mateo / San Luis", cat: "Bebidas", kcal: 0, p: 0, c: 0, g: 0, u: "botella" },
-  { id: 73, n: "Café pasado sin azúcar", cat: "Bebidas", kcal: 4, p: 0.2, c: 0.5, g: 0, u: "1 taza" },
-  { id: 74, n: "Inca Kola Zero", cat: "Bebidas", kcal: 1, p: 0, c: 0, g: 0, u: "1 lata" },
+  // LEGUMBRES
+  { id: 90, n: "Frejoles canarios guisados", cat: "Legumbres", kcal: 114, p: 7.2, c: 18, g: 1.5, u: "100g cocido" },
+  { id: 91, n: "Lentejas guisadas caseras", cat: "Legumbres", kcal: 118, p: 8, c: 19, g: 1.2, u: "100g cocido" },
+  { id: 92, n: "Alverjitas verdes cocidas", cat: "Legumbres", kcal: 80, p: 5, c: 14, g: 0.4, u: "100g" },
+  { id: 93, n: "Garbanzos guisados caseros", cat: "Legumbres", kcal: 125, p: 7.5, c: 20, g: 2, u: "100g cocido" },
 
-  // SNACKS
-  { id: 80, n: "Cancha serrana tostada (25g)", cat: "Snacks", kcal: 85, p: 2.2, c: 16, g: 1.5, u: "puñado" },
-  { id: 81, n: "Chifles piuranos (30g)", cat: "Snacks", kcal: 135, p: 1.2, c: 18, g: 7, u: "bolsita" },
-  { id: 82, n: "Almendras tostadas sin sal (28g)", cat: "Snacks", kcal: 165, p: 6, c: 6, g: 14, u: "puñado" },
+  // FRUTAS Y GRASAS SALUDABLES
+  { id: 100, n: "Palta madura fresca", cat: "Frutas y grasas", kcal: 125, p: 1.5, c: 6, g: 11.5, u: "½ unidad (80g)" },
+  { id: 101, n: "Aceite de oliva virgen", cat: "Frutas y grasas", kcal: 119, p: 0, c: 0, g: 13.5, u: "1 cucharada (15ml)" },
+  { id: 102, n: "Aceite vegetal común", cat: "Frutas y grasas", kcal: 120, p: 0, c: 0, g: 13.5, u: "1 cucharada (15ml)" },
+  { id: 103, n: "Plátano de seda", cat: "Frutas y grasas", kcal: 95, p: 1.2, c: 24, g: 0.3, u: "1 unidad mediana" },
+  { id: 104, n: "Manzana fresca", cat: "Frutas y grasas", kcal: 75, p: 0.4, c: 19, g: 0.2, u: "1 unidad" },
+  { id: 105, n: "Papaya picada en cubos", cat: "Frutas y grasas", kcal: 43, p: 0.5, c: 11, g: 0.1, u: "1 taza" },
+  { id: 106, n: "Mandarina fresca", cat: "Frutas y grasas", kcal: 45, p: 0.7, c: 11, g: 0.3, u: "1 unidad" },
+  { id: 107, n: "Maní tostado sin sal", cat: "Frutas y grasas", kcal: 160, p: 7, c: 5, g: 13.5, u: "1 puñado (28g)" },
+  { id: 108, n: "Almendras sin sal", cat: "Frutas y grasas", kcal: 165, p: 6, c: 6, g: 14, u: "1 puñado (28g)" },
+
+  // BEBIDAS Y SNACKS
+  { id: 120, n: "Chicha morada casera natural", cat: "Bebidas y snacks", kcal: 45, p: 0.2, c: 11, g: 0, u: "1 vaso (250ml)" },
+  { id: 121, n: "Emoliente con linaza y limón", cat: "Bebidas y snacks", kcal: 55, p: 0.5, c: 13, g: 0.2, u: "1 vaso tibio" },
+  { id: 122, n: "Agua de manzana casera sin azúcar", cat: "Bebidas y snacks", kcal: 15, p: 0.1, c: 3.8, g: 0, u: "1 vaso (250ml)" },
+  { id: 123, n: "Agua mineral o hervida", cat: "Bebidas y snacks", kcal: 0, p: 0, c: 0, g: 0, u: "vaso / botella" },
+  { id: 124, n: "Café pasado sin azúcar", cat: "Bebidas y snacks", kcal: 4, p: 0.2, c: 0.5, g: 0, u: "1 taza" },
+  { id: 125, n: "Infusión de manzanilla / anís sin azúcar", cat: "Bebidas y snacks", kcal: 2, p: 0, c: 0.4, g: 0, u: "1 taza" },
+  { id: 126, n: "Gaseosa Zero (sin calorías)", cat: "Bebidas y snacks", kcal: 1, p: 0, c: 0, g: 0, u: "1 lata" },
+  { id: 127, n: "Cancha serrana tostada", cat: "Bebidas y snacks", kcal: 85, p: 2.2, c: 16, g: 1.5, u: "1 puñado (25g)" },
+  { id: 128, n: "Chifles salados", cat: "Bebidas y snacks", kcal: 135, p: 1.2, c: 18, g: 7, u: "1 bolsita pequeña" }
 ];
 
 let customFoods = [];
 try { customFoods = JSON.parse(localStorage.getItem('nutrifit_custom_foods') || '[]'); } catch(e){}
 
+let savedDishes = [];
+try { savedDishes = JSON.parse(localStorage.getItem('nutrifit_saved_dishes') || '[]'); } catch(e){}
+
 function getAllFoods() {
   return [...customFoods, ...INITIAL_FOODS];
 }
 
-const CATEGORIES = ["Todos", "Platos peruanos", "Sopas y menestras", "Supermercado", "Desayuno", "Bebidas", "Snacks", "Postres", "Mis Alimentos"];
+const CATEGORIES = ["Todos", "Platos peruanos", "Carnes y huevos", "Vegetales", "Tubérculos y granos", "Legumbres", "Frutas y grasas", "Bebidas y snacks", "Mis Alimentos"];
 
 // ===== 2. PERFIL DE USUARIO Y METAS =====
 let perfil = null;
@@ -1631,12 +1256,24 @@ if (!perfil) {
     talla: 163,
     meta: 60,
     ls: "moderado",
-    goal: "perdida", // 'perdida' | 'ganancia'
+    goal: "perdida",
   };
 }
 if (!perfil.sexo) perfil.sexo = 'mujer';
+
 let onboardingDone = false;
 try { onboardingDone = localStorage.getItem('nutrifit_onboarded') === '1'; } catch(e){}
+
+// HISTORIAL POR DÍAS
+let historyDays = {};
+try { historyDays = JSON.parse(localStorage.getItem('nutrifit_history_days') || '{}'); } catch(e){}
+
+// HISTORIAL DE PESO SEMANAL
+let weightLog = [];
+try { weightLog = JSON.parse(localStorage.getItem('nutrifit_weight_log') || '[]'); } catch(e){}
+if (!weightLog.length && perfil.peso) {
+  weightLog.push({ date: new Date().toISOString().split('T')[0], weight: perfil.peso });
+}
 
 let platoItems = [];
 try { platoItems = JSON.parse(localStorage.getItem('nutrifit_plate_items') || '[]'); } catch(e){}
@@ -1649,13 +1286,16 @@ let calCatActive = 'Todos';
 let pickerCatActive = 'Todos';
 let currentDay = 0;
 let pickerTarget = null;
-let chartInst = null;
-let currentBreakdownFood = null;
-let tempBreakdownIngredients = [];
+let chartPesoInst = null;
+let chartSemanaKcalInst = null;
+let pendingFoodToAdd = null;
 let labelBasis = '100g';
 
-// REQUISITO 1: CÁLCULO DINÁMICO DE METAS SEGÚN OBJETIVO
 const LS_FACTORS = { sedentario: 1.2, ligero: 1.375, moderado: 1.55, activo: 1.725, deportista: 1.9, embarazo: 1.35 };
+
+function getTodayKey() {
+  return new Date().toISOString().split('T')[0];
+}
 
 function recalculateMacros() {
   const { peso, talla, edad, ls, goal } = perfil;
@@ -1675,17 +1315,14 @@ function recalculateMacros() {
     deltaText = `superávit +${surplus} kcal`;
   }
 
-  // Proteína: 1.9g/kg en déficit para preservar músculo, 2.0g/kg en superávit
   const protPerKg = goal === 'perdida' ? 1.9 : 2.0;
   const prot = Math.round(peso * protPerKg);
   const protKcal = prot * 4;
 
-  // Grasas: 25% en déficit, 28% en superávit
   const fatPct = goal === 'perdida' ? 0.25 : 0.28;
   const gras = Math.round((kcal * fatPct) / 9);
   const grasKcal = gras * 9;
 
-  // Carbos: restantes
   const carb = Math.max(50, Math.round((kcal - protKcal - grasKcal) / 4));
 
   perfil.macros = { kcal, prot, carb, gras, tdee, deltaText };
@@ -1748,27 +1385,26 @@ function updateUI() {
   document.getElementById('macroDisplay').innerHTML = `
     <div style="margin-bottom:8px">
       <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:2px">
-        <span>Proteínas — <strong>${macros.prot}g/día</strong> (Pollo, pescado bonito, huevos, yogur griego)</span>
+        <span>Proteínas — <strong>${macros.prot}g/día</strong></span>
         <span style="color:var(--azul-dark)">${pPct}%</span>
       </div>
       <div class="pb"><div class="pf" style="width:${pPct}%;background:var(--azul)"></div></div>
     </div>
     <div style="margin-bottom:8px">
       <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:2px">
-        <span>Carbohidratos — <strong>${macros.carb}g/día</strong> (Camote, arroz Costeño, quinua andina, avena)</span>
+        <span>Carbohidratos — <strong>${macros.carb}g/día</strong></span>
         <span style="color:var(--amber)">${cPct}%</span>
       </div>
       <div class="pb"><div class="pf" style="width:${cPct}%;background:var(--amber)"></div></div>
     </div>
     <div>
       <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:2px">
-        <span>Grasas saludables — <strong>${macros.gras}g/día</strong> (Palta Hass, aceite de oliva, maní)</span>
+        <span>Grasas saludables — <strong>${macros.gras}g/día</strong></span>
         <span style="color:var(--verde-dark)">${gPct}%</span>
       </div>
       <div class="pb"><div class="pf" style="width:${gPct}%;background:var(--verde)"></div></div>
     </div>`;
 
-  renderChart(peso, meta, meses);
   renderPlato();
   renderMetasMacrosLive();
   renderCombCats();
@@ -1778,44 +1414,185 @@ function updateUI() {
   initWeekMenu();
   renderExercise();
   renderMetas();
+  renderHistorialDias();
+  renderGraficaSemanaCalorias();
+  renderGraficaPesoSemanal();
+  updateMisPlatosCount();
 }
 
-// ===== 3. GRÁFICO PROYECCIÓN =====
-function renderChart(peso, meta, meses) {
-  const canvas = document.getElementById('chartPeso');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  if (chartInst) chartInst.destroy();
+// ===== 3. INICIO: HISTORIAL POR DÍAS, PESO SEMANAL/DIARIO Y GRÁFICAS =====
+let modoPeso = 'semanal';
+try { modoPeso = localStorage.getItem('nutrifit_modo_peso') || 'semanal'; } catch(e){}
 
-  const labels = [], data = [];
-  const now = new Date();
-  for (let i = 0; i <= meses; i++) {
-    const d = new Date(now);
-    d.setMonth(d.getMonth() + i);
-    labels.push(d.toLocaleDateString('es-PE', { month: 'short' }));
-    data.push(+(peso + ((meta - peso) * (i / meses))).toFixed(1));
+function setModoPeso(modo) {
+  modoPeso = modo;
+  try { localStorage.setItem('nutrifit_modo_peso', modo); } catch(e){}
+  const btnSemanal = document.getElementById('btnModoSemanal');
+  const btnDiario = document.getElementById('btnModoDiario');
+  const infoEl = document.getElementById('pesoModoInfo');
+  const btnGuardar = document.getElementById('btnGuardarPesoTxt');
+  const lblFecha = document.getElementById('lblFechaPeso');
+  const inpFecha = document.getElementById('inp-fecha-peso');
+
+  if (btnSemanal) btnSemanal.classList.toggle('on', modo === 'semanal');
+  if (btnDiario) btnDiario.classList.toggle('on', modo === 'diario');
+
+  if (modo === 'semanal') {
+    if (infoEl) infoEl.innerHTML = '💡 <strong>Recomendación Semanal:</strong> Pésate 1 vez por semana en ayunas (ej: cada lunes). Así evitas el estrés y las oscilaciones diarias de retención de agua.';
+    if (btnGuardar) btnGuardar.textContent = '💾 Guardar Peso Semanal';
+    if (lblFecha) lblFecha.textContent = 'Semana / Fecha de pesaje';
+  } else {
+    if (infoEl) infoEl.innerHTML = '📆 <strong>Modo Diario:</strong> Registra tu peso cada mañana en ayunas para observar tus fluctuaciones diarias.';
+    if (btnGuardar) btnGuardar.textContent = '💾 Guardar Peso Diario';
+    if (lblFecha) lblFecha.textContent = 'Fecha de pesaje';
+  }
+  if (inpFecha && !inpFecha.value) inpFecha.value = getTodayKey();
+  renderGraficaPesoSemanal();
+}
+
+function syncTodayToHistory() {
+  const today = getTodayKey();
+  const totals = getPlatoTotals();
+  if (platoItems.length > 0) {
+    historyDays[today] = {
+      date: today,
+      totals,
+      items: platoItems.map(p => ({
+        n: p.n,
+        kcal: p.kcal,
+        u: p.u,
+        p: p.p,
+        c: p.c,
+        g: p.g
+      }))
+    };
+  }
+  localStorage.setItem('nutrifit_history_days', JSON.stringify(historyDays));
+}
+
+function eliminarHistorialDia(diaKey) {
+  if (confirm(`¿Eliminar el registro de comidas del ${diaKey}?`)) {
+    delete historyDays[diaKey];
+    if (diaKey === getTodayKey()) {
+      platoItems = [];
+      localStorage.setItem('nutrifit_plate_items', '[]');
+      renderPlato();
+    }
+    localStorage.setItem('nutrifit_history_days', JSON.stringify(historyDays));
+    renderHistorialDias();
+    renderGraficaSemanaCalorias();
+  }
+}
+
+function renderHistorialDias() {
+  syncTodayToHistory();
+  const c = document.getElementById('historialDiasContainer');
+  const todayKey = getTodayKey();
+  const dates = Object.keys(historyDays).sort().reverse();
+
+  if (!dates.length) {
+    c.innerHTML = `
+      <div style="color:var(--text-3);font-size:13px;text-align:center;padding:1.4rem 1rem">
+        🍽️ Aún no has registrado comidas hoy.<br>
+        <button class="btn-action btn-action-primary" style="margin-top:8px" onclick="showSec('combinador', document.querySelectorAll('.nav-btn')[1])">
+          Ir a Mi Plato y agregar comidas →
+        </button>
+      </div>`;
+    return;
   }
 
-  chartInst = new Chart(ctx, {
-    type: 'line',
+  c.innerHTML = dates.slice(0, 14).map(d => {
+    const dayData = historyDays[d];
+    const targetKcal = perfil.macros.kcal;
+    const diffKcal = dayData.totals.kcal - targetKcal;
+    const isToday = d === todayKey;
+
+    let badgeClass = 'bt';
+    let badgeText = 'En objetivo';
+    if (diffKcal > 150) {
+      badgeClass = 'bc';
+      badgeText = `+${diffKcal} kcal sobre meta`;
+    } else if (diffKcal < -300) {
+      badgeClass = 'ba';
+      badgeText = `${Math.abs(diffKcal)} kcal bajo meta`;
+    }
+
+    const itemsListHtml = (dayData.items || []).map(it => `
+      <span style="display:inline-block;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 8px;margin:2px 4px 2px 0;font-size:11.5px">
+        ${it.n} <strong style="color:var(--coral-dark)">(${it.kcal} kcal)</strong>
+      </span>
+    `).join('');
+
+    return `
+      <div class="history-day-card" style="${isToday ? 'border: 1.5px solid var(--verde);background:rgba(29,158,117,0.03)' : ''}">
+        <div class="history-day-header">
+          <div style="display:flex;align-items:center;gap:6px">
+            <span>${isToday ? '🟢 Hoy' : '📅'} ${d}</span>
+            <span class="badge ${badgeClass}" style="font-size:10px">${badgeText}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="color:var(--coral-dark);font-weight:700">${dayData.totals.kcal} kcal <span style="font-size:11px;font-weight:normal;color:var(--text-3)">/ ${targetKcal}</span></span>
+            <button onclick="eliminarHistorialDia('${d}')" title="Eliminar registro" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:12px">✕</button>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text-2);margin-bottom:6px">
+          <strong>P:</strong> ${dayData.totals.prot}g · <strong>C:</strong> ${dayData.totals.carb}g · <strong>G:</strong> ${dayData.totals.gras}g
+        </div>
+        <div class="history-day-items" style="margin-top:4px">
+          ${itemsListHtml || '<em>Sin comidas guardadas</em>'}
+        </div>
+        ${isToday ? `
+          <div style="margin-top:8px;padding-top:6px;border-top:1px dashed var(--border);display:flex;justify-content:flex-end">
+            <button class="cb on" onclick="showSec('combinador', document.querySelectorAll('.nav-btn')[1])" style="font-size:11px;padding:3px 10px">
+              🍽️ Modificar comidas de hoy en Mi Plato →
+            </button>
+          </div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+function renderGraficaSemanaCalorias() {
+  const canvas = document.getElementById('chartSemanaCalorias');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (chartSemanaKcalInst) chartSemanaKcalInst.destroy();
+
+  const labels = [];
+  const data = [];
+  let sumKcal = 0;
+  const now = new Date();
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().split('T')[0];
+    const dayName = d.toLocaleDateString('es-PE', { weekday: 'short' });
+    labels.push(dayName.charAt(0).toUpperCase() + dayName.slice(1));
+    const k = (historyDays[key] && historyDays[key].totals.kcal) || (key === getTodayKey() ? getPlatoTotals().kcal : 0);
+    data.push(k);
+    sumKcal += k;
+  }
+
+  const avg = Math.round(sumKcal / 7);
+  document.getElementById('semanaPromedioKcal').textContent = `Promedio 7 días: ${avg} kcal/día`;
+
+  chartSemanaKcalInst = new Chart(ctx, {
+    type: 'bar',
     data: {
       labels,
       datasets: [
         {
-          label: 'Peso Proyectado',
+          label: 'Calorías Consumidas',
           data,
-          borderColor: '#1D9E75',
-          backgroundColor: 'rgba(29, 158, 117, 0.12)',
-          fill: true,
-          tension: 0.35,
-          pointRadius: 4,
-          pointBackgroundColor: '#0F6E56'
+          backgroundColor: data.map(val => val > perfil.macros.kcal * 1.1 ? '#D85A30' : '#1D9E75'),
+          borderRadius: 6,
         },
         {
-          label: `Meta ${meta}kg`,
-          data: Array(labels.length).fill(meta),
-          borderColor: '#D85A30',
-          borderDash: [5, 4],
+          label: 'Meta Diaria',
+          data: Array(7).fill(perfil.macros.kcal),
+          type: 'line',
+          borderColor: '#BA7517',
+          borderDash: [4, 4],
           pointRadius: 0,
           fill: false
         }
@@ -1826,14 +1603,157 @@ function renderChart(peso, meta, meses) {
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { font: { size: 10 } } },
-        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+        y: { beginAtZero: true, suggestedMax: perfil.macros.kcal + 400, grid: { color: 'rgba(0,0,0,0.04)' } },
+        x: { grid: { display: false } }
       }
     }
   });
 }
 
-// ===== 4. COMBINADOR Y PLATO =====
+function guardarPesoSemanal() {
+  const inpPeso = document.getElementById('inp-peso-semanal');
+  const inpFecha = document.getElementById('inp-fecha-peso');
+  const w = parseFloat(inpPeso.value);
+  const f = inpFecha.value || getTodayKey();
+
+  if (!w || w < 30 || w > 300) {
+    alert('Ingresa un peso válido en kg (ej: 67.5)');
+    return;
+  }
+
+  const existingIdx = weightLog.findIndex(x => x.date === f);
+  const entry = { date: f, weight: w, modo: modoPeso };
+  if (existingIdx >= 0) {
+    weightLog[existingIdx] = entry;
+  } else {
+    weightLog.push(entry);
+  }
+
+  weightLog.sort((a, b) => a.date.localeCompare(b.date));
+  localStorage.setItem('nutrifit_weight_log', JSON.stringify(weightLog));
+
+  // Actualizar peso actual de perfil con el más reciente
+  const ultimo = weightLog[weightLog.length - 1];
+  perfil.peso = ultimo.weight;
+  localStorage.setItem('nutrifit_perfil', JSON.stringify(perfil));
+
+  inpPeso.value = '';
+  renderGraficaPesoSemanal();
+  updateUI();
+}
+
+function eliminarPesoLog(idx) {
+  if (confirm('¿Eliminar este registro de peso?')) {
+    weightLog.splice(idx, 1);
+    localStorage.setItem('nutrifit_weight_log', JSON.stringify(weightLog));
+    if (weightLog.length > 0) {
+      perfil.peso = weightLog[weightLog.length - 1].weight;
+      localStorage.setItem('nutrifit_perfil', JSON.stringify(perfil));
+    }
+    renderGraficaPesoSemanal();
+    updateUI();
+  }
+}
+
+function renderGraficaPesoSemanal() {
+  const canvas = document.getElementById('chartPeso');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (chartPesoInst) chartPesoInst.destroy();
+
+  const sorted = weightLog.slice().sort((a, b) => a.date.localeCompare(b.date));
+  const labels = sorted.map(w => {
+    const parts = w.date.split('-');
+    return `${parts[2]}/${parts[1]}`;
+  });
+  const data = sorted.map(w => w.weight);
+
+  // Lista de historial de peso con cálculo de delta
+  const listaEl = document.getElementById('historialPesoLista');
+  if (listaEl) {
+    if (!sorted.length) {
+      listaEl.innerHTML = '<div style="color:var(--text-3);padding:6px 0;text-align:center">Aún no tienes registros de peso. Ingresa tu peso arriba.</div>';
+    } else {
+      const reversed = sorted.slice().reverse();
+      listaEl.innerHTML = reversed.map((w, revIdx) => {
+        const origIdx = sorted.length - 1 - revIdx;
+        const prev = origIdx > 0 ? sorted[origIdx - 1].weight : null;
+        let deltaHtml = '';
+        if (prev !== null) {
+          const diff = +(w.weight - prev).toFixed(1);
+          if (diff < 0) {
+            deltaHtml = `<span style="color:var(--verde);font-weight:600;font-size:11px">📉 ${diff} kg</span>`;
+          } else if (diff > 0) {
+            deltaHtml = `<span style="color:var(--coral);font-weight:600;font-size:11px">📈 +${diff} kg</span>`;
+          } else {
+            deltaHtml = `<span style="color:var(--text-3);font-size:11px">= sin cambios</span>`;
+          }
+        }
+        const tipoLabel = w.modo === 'semanal' ? 'Semana' : 'Día';
+
+        return `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--border)">
+            <div>
+              <span style="font-weight:600">📅 ${w.date}</span>
+              <span style="font-size:10px;color:var(--text-3);margin-left:4px">(${tipoLabel})</span>
+              <span style="margin-left:6px">${deltaHtml}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <strong style="color:var(--text)">${w.weight} kg</strong>
+              <button onclick="eliminarPesoLog(${origIdx})" title="Eliminar este pesaje" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:12px">✕</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  chartPesoInst = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels.length ? labels : ['Hoy'],
+      datasets: [
+        {
+          label: 'Peso Registrado (kg)',
+          data: data.length ? data : [perfil.peso],
+          borderColor: '#1D9E75',
+          backgroundColor: 'rgba(29, 158, 117, 0.12)',
+          fill: true,
+          tension: 0.25,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          pointBackgroundColor: '#0F6E56'
+        },
+        {
+          label: `Meta (${perfil.meta} kg)`,
+          data: Array(Math.max(labels.length, 1)).fill(perfil.meta),
+          borderColor: '#D85A30',
+          borderDash: [5, 4],
+          pointRadius: 0,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => `Peso: ${ctx.parsed.y} kg (Meta: ${perfil.meta} kg)`
+          }
+        }
+      },
+      scales: {
+        y: { grid: { color: 'rgba(0,0,0,0.04)' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ===== 4. COMBINADOR Y MI PLATO =====
 function renderMetasMacrosLive() {
   const m = perfil.macros;
   const t = getPlatoTotals();
@@ -1845,12 +1765,14 @@ function renderMetasMacrosLive() {
   ];
 
   document.getElementById('metasMacrosLive').innerHTML = items.map(it => {
-    const pct = Math.min(Math.round((it.cur / it.max) * 100), 120);
+    const pct = Math.min(Math.round((it.cur / it.max) * 100), 125);
+    const remaining = it.max - it.cur;
+    const remainingText = remaining > 0 ? `${remaining} ${it.unit} restantes` : '¡Meta cumplida!';
     return `
-      <div style="margin-bottom:7px">
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:2px">
-          <span><strong>${it.n}</strong></span>
-          <span style="font-family:monospace">${it.cur} / ${it.max} ${it.unit} (${pct}%)</span>
+      <div style="margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:2px">
+          <span><strong>${it.n}</strong> <small style="color:var(--text-3);font-size:11px">(${remainingText})</small></span>
+          <span style="font-family:monospace;font-weight:600">${it.cur} / ${it.max} ${it.unit} (${pct}%)</span>
         </div>
         <div class="pb"><div class="pf" style="width:${Math.min(pct, 100)}%;background:${pct > 105 ? 'var(--coral)' : it.col}"></div></div>
       </div>`;
@@ -1869,13 +1791,27 @@ function getPlatoTotals() {
 function renderPlato() {
   const el = document.getElementById('platoItems');
   if (!platoItems.length) {
-    el.innerHTML = '<div class="plato-empty">Tu plato está vacío. Agrega platos o alimentos abajo.</div>';
+    el.innerHTML = '<div class="plato-empty">Tu plato está vacío. Agrega alimentos abajo con el botón <strong>+</strong>.</div>';
   } else {
     el.innerHTML = platoItems.map((f, i) => `
       <div class="plato-item">
-        <span class="pi-name">${f.n}</span>
-        <span class="pi-cal">${f.kcal} kcal</span>
-        <button class="pi-remove" onclick="removePlatoItem(${i})">✕</button>
+        <div class="pi-info">
+          <div class="pi-name">${f.n} <span style="font-size:11px;font-weight:normal;color:var(--text-3)">(${f.u || '1 porción'})</span></div>
+          <div class="pi-macros">
+            <span style="color:var(--azul);font-weight:600">P: ${f.p}g</span>
+            <span style="color:var(--amber);font-weight:600">C: ${f.c}g</span>
+            <span style="color:var(--verde);font-weight:600">G: ${f.g}g</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="display:flex;align-items:center;background:var(--bg);border:1px solid var(--border-2);border-radius:8px;padding:2px 4px">
+            <button style="border:none;background:none;cursor:pointer;font-weight:bold;font-size:13px;padding:0 5px;color:var(--text-2)" onclick="cambiarPorcionPlato(${i}, -0.25)" title="Reducir porción">-</button>
+            <span style="font-size:11.5px;font-weight:700;min-width:26px;text-align:center">${f.mult || 1}x</span>
+            <button style="border:none;background:none;cursor:pointer;font-weight:bold;font-size:13px;padding:0 5px;color:var(--text-2)" onclick="cambiarPorcionPlato(${i}, 0.25)" title="Aumentar porción">+</button>
+          </div>
+          <span class="pi-cal">${f.kcal} kcal</span>
+          <button class="pi-remove" onclick="removePlatoItem(${i})" title="Quitar de mi plato">✕</button>
+        </div>
       </div>`).join('');
   }
 
@@ -1884,25 +1820,309 @@ function renderPlato() {
   document.getElementById('pt-prot').textContent = t.prot + 'g';
   document.getElementById('pt-carb').textContent = t.carb + 'g';
   document.getElementById('pt-gras').textContent = t.gras + 'g';
+
   localStorage.setItem('nutrifit_plate_items', JSON.stringify(platoItems));
   renderMetasMacrosLive();
+  syncTodayToHistory();
+}
+
+function cambiarPorcionPlato(i, delta) {
+  const it = platoItems[i];
+  if (!it) return;
+  const oldMult = it.mult || 1;
+  const newMult = Math.max(0.25, +(oldMult + delta).toFixed(2));
+  if (newMult === oldMult) return;
+
+  const baseKcal = it.baseKcal || (it.kcal / oldMult);
+  const baseP = it.baseP !== undefined ? it.baseP : (it.p / oldMult);
+  const baseC = it.baseC !== undefined ? it.baseC : (it.c / oldMult);
+  const baseG = it.baseG !== undefined ? it.baseG : (it.g / oldMult);
+
+  it.mult = newMult;
+  it.baseKcal = baseKcal;
+  it.baseP = baseP;
+  it.baseC = baseC;
+  it.baseG = baseG;
+
+  it.kcal = Math.round(baseKcal * newMult);
+  it.p = +(baseP * newMult).toFixed(1);
+  it.c = +(baseC * newMult).toFixed(1);
+  it.g = +(baseG * newMult).toFixed(1);
+
+  renderPlato();
+  renderHistorialDias();
+  renderGraficaSemanaCalorias();
 }
 
 function removePlatoItem(i) {
   platoItems.splice(i, 1);
   renderPlato();
+  renderHistorialDias();
+  renderGraficaSemanaCalorias();
 }
 
 function clearPlato() {
-  platoItems = [];
-  renderPlato();
+  if (platoItems.length && confirm('¿Deseas vaciar tu plato actual?')) {
+    platoItems = [];
+    renderPlato();
+    renderHistorialDias();
+    renderGraficaSemanaCalorias();
+  }
 }
 
-function addFoodToPlato(food) {
-  platoItems.push({ ...food });
-  renderPlato();
+// GUARDAR EL PLATO ACTUAL COMO PLATO FAVORITO Y PODER MODIFICARLO
+function guardarPlatoActualModal() {
+  if (!platoItems.length) {
+    alert('Agrega al menos un alimento a tu plato antes de guardarlo.');
+    return;
+  }
+  const t = getPlatoTotals();
+  document.getElementById('resumenGuardarPlato').innerHTML = `
+    <strong>Contenido del plato:</strong> ${platoItems.map(p => p.n).join(', ')}<br>
+    <strong>Totales:</strong> ${t.kcal} kcal · P: ${t.prot}g · C: ${t.carb}g · G: ${t.gras}g
+  `;
+  document.getElementById('inp-nombre-plato-guardado').value = '';
+  openModal('modalGuardarPlato');
 }
 
+function confirmarGuardarPlato() {
+  const nombre = document.getElementById('inp-nombre-plato-guardado').value.trim();
+  if (!nombre) {
+    alert('Ingresa un nombre para tu plato guardado.');
+    return;
+  }
+
+  const t = getPlatoTotals();
+  const nuevoPlato = {
+    id: 'plato_' + Date.now(),
+    n: nombre,
+    cat: 'Mis Alimentos',
+    u: 'plato guardado',
+    kcal: t.kcal,
+    p: t.prot,
+    c: t.carb,
+    g: t.gras,
+    items: JSON.parse(JSON.stringify(platoItems.map(it => ({
+      ...it,
+      mult: it.mult || 1,
+      baseKcal: it.baseKcal || (it.kcal / (it.mult || 1)),
+      baseP: it.baseP !== undefined ? it.baseP : (it.p / (it.mult || 1)),
+      baseC: it.baseC !== undefined ? it.baseC : (it.c / (it.mult || 1)),
+      baseG: it.baseG !== undefined ? it.baseG : (it.g / (it.mult || 1))
+    })))),
+    isSavedDish: true
+  };
+
+  savedDishes.unshift(nuevoPlato);
+  localStorage.setItem('nutrifit_saved_dishes', JSON.stringify(savedDishes));
+
+  closeModal('modalGuardarPlato');
+  updateMisPlatosCount();
+  alert(`¡Plato "${nombre}" guardado con éxito! Puedes cargarlo o modificarlo en "Mis Platos Guardados".`);
+}
+
+function updateMisPlatosCount() {
+  const el = document.getElementById('countMisPlatos');
+  if (el) el.textContent = savedDishes.length;
+}
+
+function openMisPlatosModal() {
+  const c = document.getElementById('listaMisPlatosGuardados');
+  if (!savedDishes.length) {
+    c.innerHTML = '<div style="text-align:center;color:var(--text-3);padding:2rem">No has guardado ningún plato todavía. Arma tu comida y pulsa "💾 Guardar este plato".</div>';
+  } else {
+    c.innerHTML = savedDishes.map((p, idx) => `
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:11px 12px;margin-bottom:9px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <strong style="font-size:14px">${p.n}</strong>
+          <span style="color:var(--coral-dark);font-weight:700">${p.kcal} kcal</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-2);margin-bottom:6px">
+          P: ${p.p}g · C: ${p.c}g · G: ${p.g}g · ${p.items.map(it => it.n).join(', ')}
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn-action btn-action-primary" style="padding:5px 12px;font-size:11.5px" onclick="cargarPlatoGuardado(${idx})">📥 Cargar a mi plato</button>
+          <button class="btn-action" style="padding:5px 12px;font-size:11.5px" onclick="abrirEditarPlatoGuardado(${idx})">✏️ Modificar plato</button>
+          <button class="btn-action" style="padding:5px 12px;font-size:11.5px;color:var(--coral-dark)" onclick="eliminarPlatoGuardado(${idx})">🗑️ Eliminar</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  openModal('modalMisPlatos');
+}
+
+// ===== MODIFICAR PLATO GUARDADO =====
+let editingDishIndex = null;
+let editingDishData = null;
+
+function abrirEditarPlatoGuardado(idx) {
+  const p = savedDishes[idx];
+  if (!p) return;
+  editingDishIndex = idx;
+  editingDishData = JSON.parse(JSON.stringify(p));
+
+  editingDishData.items = (editingDishData.items || []).map(it => ({
+    ...it,
+    mult: it.mult || 1,
+    baseKcal: it.baseKcal || (it.kcal / (it.mult || 1)),
+    baseP: it.baseP !== undefined ? it.baseP : (it.p / (it.mult || 1)),
+    baseC: it.baseC !== undefined ? it.baseC : (it.c / (it.mult || 1)),
+    baseG: it.baseG !== undefined ? it.baseG : (it.g / (it.mult || 1))
+  }));
+
+  document.getElementById('edit-plato-nombre').value = editingDishData.n || 'Plato guardado';
+
+  const sel = document.getElementById('edit-plato-add-select');
+  if (sel) {
+    sel.innerHTML = getAllFoods().map(f => `
+      <option value="${f.id}">${f.n} (${f.u})</option>
+    `).join('');
+  }
+
+  renderEditPlatoItems();
+  closeModal('modalMisPlatos');
+  openModal('modalEditarPlatoGuardado');
+}
+
+function renderEditPlatoItems() {
+  if (!editingDishData) return;
+  const listEl = document.getElementById('edit-plato-items-list');
+  if (!editingDishData.items || !editingDishData.items.length) {
+    listEl.innerHTML = '<div style="color:var(--text-3);padding:10px;text-align:center;font-size:12px">Este plato no tiene ingredientes. Añade uno abajo.</div>';
+  } else {
+    listEl.innerHTML = editingDishData.items.map((it, i) => `
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface);border-radius:8px;padding:6px 8px;margin-bottom:5px;border:1px solid var(--border)">
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:12.5px">${it.n}</div>
+          <div style="font-size:11px;color:var(--text-2)">${it.kcal} kcal · P:${it.p}g C:${it.c}g G:${it.g}g</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="display:flex;align-items:center;background:var(--bg);border:1px solid var(--border-2);border-radius:6px;padding:1px 4px">
+            <button style="border:none;background:none;cursor:pointer;font-weight:bold;font-size:13px;padding:0 4px;color:var(--text-2)" onclick="cambiarPorcionEditPlato(${i}, -0.25)">-</button>
+            <span style="font-size:11px;font-weight:700;min-width:22px;text-align:center">${it.mult || 1}x</span>
+            <button style="border:none;background:none;cursor:pointer;font-weight:bold;font-size:13px;padding:0 4px;color:var(--text-2)" onclick="cambiarPorcionEditPlato(${i}, 0.25)">+</button>
+          </div>
+          <button style="background:none;border:none;color:var(--coral-dark);cursor:pointer;font-size:13px;padding:2px 4px" onclick="eliminarItemEditPlato(${i})" title="Quitar ingrediente">🗑️</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  const tot = (editingDishData.items || []).reduce((acc, f) => ({
+    kcal: acc.kcal + f.kcal,
+    prot: +(acc.prot + f.p).toFixed(1),
+    carb: +(acc.carb + f.c).toFixed(1),
+    gras: +(acc.gras + f.g).toFixed(1)
+  }), { kcal: 0, prot: 0, carb: 0, gras: 0 });
+
+  editingDishData.kcal = tot.kcal;
+  editingDishData.p = tot.prot;
+  editingDishData.c = tot.carb;
+  editingDishData.g = tot.gras;
+
+  document.getElementById('edit-plato-total-kcal').textContent = tot.kcal + ' kcal';
+  document.getElementById('edit-plato-total-macros').textContent = `P: ${tot.prot}g · C: ${tot.carb}g · G: ${tot.gras}g`;
+}
+
+function cambiarPorcionEditPlato(idx, delta) {
+  if (!editingDishData || !editingDishData.items[idx]) return;
+  const it = editingDishData.items[idx];
+  const oldMult = it.mult || 1;
+  const newMult = Math.max(0.25, +(oldMult + delta).toFixed(2));
+  if (newMult === oldMult) return;
+
+  const baseKcal = it.baseKcal || (it.kcal / oldMult);
+  const baseP = it.baseP !== undefined ? it.baseP : (it.p / oldMult);
+  const baseC = it.baseC !== undefined ? it.baseC : (it.c / oldMult);
+  const baseG = it.baseG !== undefined ? it.baseG : (it.g / oldMult);
+
+  it.mult = newMult;
+  it.baseKcal = baseKcal;
+  it.baseP = baseP;
+  it.baseC = baseC;
+  it.baseG = baseG;
+
+  it.kcal = Math.round(baseKcal * newMult);
+  it.p = +(baseP * newMult).toFixed(1);
+  it.c = +(baseC * newMult).toFixed(1);
+  it.g = +(baseG * newMult).toFixed(1);
+
+  renderEditPlatoItems();
+}
+
+function eliminarItemEditPlato(idx) {
+  if (!editingDishData) return;
+  editingDishData.items.splice(idx, 1);
+  renderEditPlatoItems();
+}
+
+function agregarItemAPlatoEditado() {
+  if (!editingDishData) return;
+  const sel = document.getElementById('edit-plato-add-select');
+  const fid = sel ? sel.value : null;
+  const f = getAllFoods().find(x => x.id == fid);
+  if (!f) return;
+
+  editingDishData.items.push({
+    id: 'it_' + Date.now() + Math.random(),
+    n: f.n,
+    u: f.u,
+    mult: 1,
+    baseKcal: f.kcal,
+    baseP: f.p,
+    baseC: f.c,
+    baseG: f.g,
+    kcal: f.kcal,
+    p: f.p,
+    c: f.c,
+    g: f.g
+  });
+
+  renderEditPlatoItems();
+}
+
+function guardarCambiosPlatoEditado() {
+  if (!editingDishData || editingDishIndex === null) return;
+  const nombre = document.getElementById('edit-plato-nombre').value.trim();
+  if (!nombre) {
+    alert('Ingresa un nombre para el plato.');
+    return;
+  }
+  editingDishData.n = nombre;
+
+  savedDishes[editingDishIndex] = JSON.parse(JSON.stringify(editingDishData));
+  localStorage.setItem('nutrifit_saved_dishes', JSON.stringify(savedDishes));
+
+  closeModal('modalEditarPlatoGuardado');
+  openMisPlatosModal();
+  updateMisPlatosCount();
+}
+
+function guardarYCargarPlatoEditado() {
+  guardarCambiosPlatoEditado();
+  cargarPlatoGuardado(editingDishIndex);
+}
+
+function cargarPlatoGuardado(idx) {
+  const p = savedDishes[idx];
+  if (!p) return;
+  platoItems = JSON.parse(JSON.stringify(p.items));
+  renderPlato();
+  closeModal('modalMisPlatos');
+  closeModal('modalEditarPlatoGuardado');
+  showSec('combinador', document.querySelectorAll('.nav-btn')[1]);
+}
+
+function eliminarPlatoGuardado(idx) {
+  if (confirm('¿Eliminar este plato de tus favoritos?')) {
+    savedDishes.splice(idx, 1);
+    localStorage.setItem('nutrifit_saved_dishes', JSON.stringify(savedDishes));
+    updateMisPlatosCount();
+    openMisPlatosModal();
+  }
+}
+
+// ===== 5. LISTA DE ALIMENTOS LIMPIA (SIN CALORÍAS EN LA FILA, BOTÓN '+' CON CANTIDAD/PORCIÓN) =====
 function renderCombCats() {
   document.getElementById('combCats').innerHTML = CATEGORIES.map(c => `
     <button class="cb ${combCatActive === c ? 'on' : ''}" onclick="setCombCat('${c}')">${c}</button>
@@ -1922,145 +2142,81 @@ function renderCombResults() {
     const matchCat = combCatActive === 'Todos' || f.cat === combCatActive || (combCatActive === 'Mis Alimentos' && f.isCustom);
     const matchQ = f.n.toLowerCase().includes(q);
     return matchCat && matchQ;
-  }).slice(0, 35);
+  }).slice(0, 45);
 
   document.getElementById('combResults').innerHTML = list.map(f => `
     <div class="food-result-item">
-      <div style="flex:1">
-        <div class="fri-name">${f.n}</div>
-        <div class="fri-macros">${f.kcal} kcal · P:${f.p}g · C:${f.c}g · G:${f.g}g <span style="color:var(--text-3)">(${f.u})</span></div>
+      <div class="fri-name">
+        ${f.n} <span class="fri-unit">(${f.u})</span>
       </div>
       <div class="fri-actions">
-        ${f.isComposite ? `<button class="fri-btn-breakdown" onclick="openBreakdownModal(${f.id})">🔍 Desglosar</button>` : ''}
-        <button class="fri-add" onclick="addFoodToPlatoById(${f.id})">+</button>
+        <button class="fri-add" onclick="abrirModalPorcion(${f.id})" title="Agregar con porción">+</button>
       </div>
     </div>`).join('');
 }
 
-function addFoodToPlatoById(id) {
+function abrirModalPorcion(id) {
   const f = getAllFoods().find(x => x.id == id);
-  if (f) addFoodToPlato(f);
+  if (!f) return;
+  pendingFoodToAdd = f;
+
+  document.getElementById('mpTitle').textContent = f.n;
+  document.getElementById('mpSub').textContent = `Porción estándar de referencia: ${f.u}`;
+  document.getElementById('inp-porcion-val').value = 1;
+  actualizarPreviewPorcion();
+  openModal('modalPorcion');
 }
 
-// ===== REQUISITO 2: MODAL DE DESGLOSE DE RECETAS =====
-function openBreakdownModal(foodId) {
-  const f = getAllFoods().find(x => x.id == foodId);
-  if (!f || !f.ingredients) return;
-  currentBreakdownFood = f;
-  tempBreakdownIngredients = f.ingredients.map(ing => ({ ...ing }));
-
-  document.getElementById('mbTitle').textContent = f.n;
-  document.getElementById('mbDesc').textContent = f.desc || 'Desglose detallado de ingredientes';
-  renderBreakdownIngredients();
-  openModal('modalBreakdown');
+function ajustarPorcionInput(delta) {
+  const inp = document.getElementById('inp-porcion-val');
+  let val = parseFloat(inp.value) || 1;
+  val = Math.max(0.25, val + delta);
+  inp.value = val;
+  actualizarPreviewPorcion();
 }
 
-function renderBreakdownIngredients() {
-  let totalGrams = 0, totalKcal = 0, totalProt = 0, totalCarb = 0, totalGras = 0;
+document.getElementById('inp-porcion-val')?.addEventListener('input', actualizarPreviewPorcion);
 
-  document.getElementById('mbIngredientsList').innerHTML = tempBreakdownIngredients.map((ing, idx) => {
-    const ratio = ing.currentGrams / 100;
-    const k = Math.round(ing.kcalPer100g * ratio);
-    const p = +(ing.p * ratio).toFixed(1);
-    const c = +(ing.c * ratio).toFixed(1);
-    const g = +(ing.g * ratio).toFixed(1);
+function actualizarPreviewPorcion() {
+  if (!pendingFoodToAdd) return;
+  const mult = parseFloat(document.getElementById('inp-porcion-val').value) || 1;
+  const k = Math.round(pendingFoodToAdd.kcal * mult);
+  const p = +(pendingFoodToAdd.p * mult).toFixed(1);
+  const c = +(pendingFoodToAdd.c * mult).toFixed(1);
+  const g = +(pendingFoodToAdd.g * mult).toFixed(1);
 
-    totalGrams += ing.currentGrams;
-    totalKcal += k;
-    totalProt += p;
-    totalCarb += c;
-    totalGras += g;
-
-    return `
-      <div class="ingredient-row">
-        <div style="flex:1">
-          <strong>${ing.name}</strong>
-          <div style="font-size:11px;color:var(--text-3)">${k} kcal · P:${p}g C:${c}g G:${g}g</div>
-        </div>
-        <div class="ing-ctrl">
-          <button class="ing-btn" onclick="adjustIngGrams(${idx}, -10)">-</button>
-          <input class="ing-input" type="number" value="${ing.currentGrams}" onchange="setIngGrams(${idx}, this.value)">
-          <span style="font-size:10px">g</span>
-          <button class="ing-btn" onclick="adjustIngGrams(${idx}, 10)">+</button>
-        </div>
-      </div>`;
-  }).join('');
-
-  document.getElementById('mbTotalGrams').textContent = totalGrams;
-  document.getElementById('mbKcal').textContent = totalKcal;
-  document.getElementById('mbProt').textContent = totalProt.toFixed(1) + 'g';
-  document.getElementById('mbCarb').textContent = totalCarb.toFixed(1) + 'g';
-  document.getElementById('mbGras').textContent = totalGras.toFixed(1) + 'g';
+  document.getElementById('mpPreview').innerHTML = `
+    Se sumará a tu plato: <strong>${k} kcal</strong> · P: ${p}g · C: ${c}g · G: ${g}g
+  `;
 }
 
-function adjustIngGrams(idx, delta) {
-  tempBreakdownIngredients[idx].currentGrams = Math.max(0, tempBreakdownIngredients[idx].currentGrams + delta);
-  renderBreakdownIngredients();
-}
+function confirmarAgregarAlPlato() {
+  if (!pendingFoodToAdd) return;
+  const mult = parseFloat(document.getElementById('inp-porcion-val').value) || 1;
 
-function setIngGrams(idx, val) {
-  tempBreakdownIngredients[idx].currentGrams = Math.max(0, parseInt(val) || 0);
-  renderBreakdownIngredients();
-}
+  const itemToAdd = {
+    id: 'it_' + Date.now() + Math.random(),
+    n: pendingFoodToAdd.n,
+    u: pendingFoodToAdd.u,
+    mult: mult,
+    baseKcal: pendingFoodToAdd.kcal,
+    baseP: pendingFoodToAdd.p,
+    baseC: pendingFoodToAdd.c,
+    baseG: pendingFoodToAdd.g,
+    kcal: Math.round(pendingFoodToAdd.kcal * mult),
+    p: +(pendingFoodToAdd.p * mult).toFixed(1),
+    c: +(pendingFoodToAdd.c * mult).toFixed(1),
+    g: +(pendingFoodToAdd.g * mult).toFixed(1)
+  };
 
-function resetMbIngredients() {
-  if (currentBreakdownFood && currentBreakdownFood.ingredients) {
-    tempBreakdownIngredients = currentBreakdownFood.ingredients.map(ing => ({ ...ing, currentGrams: ing.baseGrams }));
-    renderBreakdownIngredients();
-  }
-}
-
-function addCustomizedDishToPlate() {
-  let totalKcal = 0, totalProt = 0, totalCarb = 0, totalGras = 0, totalGrams = 0;
-  tempBreakdownIngredients.forEach(ing => {
-    const ratio = ing.currentGrams / 100;
-    totalGrams += ing.currentGrams;
-    totalKcal += Math.round(ing.kcalPer100g * ratio);
-    totalProt += +(ing.p * ratio);
-    totalCarb += +(ing.c * ratio);
-    totalGras += +(ing.g * ratio);
-  });
-
-  platoItems.push({
-    id: 'cust_' + Date.now(),
-    n: `${currentBreakdownFood.n} (${totalGrams}g modificado)`,
-    kcal: totalKcal,
-    p: +totalProt.toFixed(1),
-    c: +totalCarb.toFixed(1),
-    g: +totalGras.toFixed(1),
-    u: `${totalGrams}g`
-  });
-
-  closeModal('modalBreakdown');
+  platoItems.push(itemToAdd);
+  closeModal('modalPorcion');
   renderPlato();
+  renderHistorialDias();
+  renderGraficaSemanaCalorias();
 }
 
-function addSeparateIngredientsToPlate() {
-  tempBreakdownIngredients.filter(ing => ing.currentGrams > 0).forEach(ing => {
-    const ratio = ing.currentGrams / 100;
-    platoItems.push({
-      id: 'sep_' + Date.now() + Math.random(),
-      n: `${ing.name} (${ing.currentGrams}g)`,
-      kcal: Math.round(ing.kcalPer100g * ratio),
-      p: +(ing.p * ratio).toFixed(1),
-      c: +(ing.c * ratio).toFixed(1),
-      g: +(ing.g * ratio).toFixed(1),
-      u: `${ing.currentGrams}g`
-    });
-  });
-
-  closeModal('modalBreakdown');
-  renderPlato();
-}
-
-function addStandardDishToPlate() {
-  if (currentBreakdownFood) {
-    addFoodToPlato(currentBreakdownFood);
-    closeModal('modalBreakdown');
-  }
-}
-
-// ===== REQUISITO 3: INGRESO POR ETIQUETA NUTRICIONAL =====
+// ===== 6. INGRESO POR ETIQUETA NUTRICIONAL =====
 function openLabelModal() {
   openModal('modalLabel');
   calcLabelPreview();
@@ -2090,13 +2246,12 @@ function calcLabelPreview() {
   const resC = (c * ratio).toFixed(1);
   const resG = (g * ratio).toFixed(1);
 
-  document.getElementById('lblPreviewResult').textContent = `Resultado para ${consumed}g: ${resKcal} kcal · P:${resP}g · C:${resC}g · G:${resG}g`;
+  document.getElementById('lblPreviewResult').textContent = `Aportará: ${resKcal} kcal · P:${resP}g · C:${resC}g · G:${resG}g`;
 }
 
 function submitLabelFood() {
   const nombre = document.getElementById('lbl-nombre').value.trim();
   if (!nombre) { alert('Ingresa el nombre del alimento'); return; }
-  const marca = document.getElementById('lbl-marca').value.trim();
   const kcal = parseFloat(document.getElementById('lbl-kcal').value) || 0;
   const p = parseFloat(document.getElementById('lbl-p').value) || 0;
   const c = parseFloat(document.getElementById('lbl-c').value) || 0;
@@ -2107,17 +2262,21 @@ function submitLabelFood() {
 
   const base = labelBasis === '100g' ? 100 : (serving || 100);
   const ratio = consumed / base;
-  const finalName = marca ? `${nombre} (${marca})` : nombre;
 
   const plateEntry = {
     id: 'lbl_' + Date.now(),
-    n: finalName,
+    n: nombre,
+    mult: 1,
+    baseKcal: Math.round(kcal * ratio),
+    baseP: +(p * ratio).toFixed(1),
+    baseC: +(c * ratio).toFixed(1),
+    baseG: +(g * ratio).toFixed(1),
     kcal: Math.round(kcal * ratio),
     p: +(p * ratio).toFixed(1),
     c: +(c * ratio).toFixed(1),
     g: +(g * ratio).toFixed(1),
     u: `${consumed}g`,
-    cat: 'Supermercado'
+    cat: 'Mis Alimentos'
   };
 
   platoItems.push(plateEntry);
@@ -2126,13 +2285,13 @@ function submitLabelFood() {
     const base100Ratio = 100 / base;
     customFoods.unshift({
       id: 'cust_lib_' + Date.now(),
-      n: finalName,
+      n: nombre,
       kcal: Math.round(kcal * base100Ratio),
       p: +(p * base100Ratio).toFixed(1),
       c: +(c * base100Ratio).toFixed(1),
       g: +(g * base100Ratio).toFixed(1),
       u: '100g',
-      cat: 'Personalizados',
+      cat: 'Mis Alimentos',
       isCustom: true
     });
     localStorage.setItem('nutrifit_custom_foods', JSON.stringify(customFoods));
@@ -2143,7 +2302,7 @@ function submitLabelFood() {
   renderCombResults();
 }
 
-// ===== REQUISITO 4: CREACIÓN Y MEMORIA DE USUARIO =====
+// ===== 7. CREAR ALIMENTO PROPIO =====
 function openCustomFoodModal() {
   openModal('modalCustom');
 }
@@ -2163,6 +2322,11 @@ function submitCustomFood() {
     n: nombre,
     cat,
     u,
+    mult: 1,
+    baseKcal: kcal,
+    baseP: p,
+    baseC: c,
+    baseG: g,
     kcal,
     p,
     c,
@@ -2173,7 +2337,6 @@ function submitCustomFood() {
   customFoods.unshift(newFood);
   localStorage.setItem('nutrifit_custom_foods', JSON.stringify(customFoods));
 
-  // Agregar al plato
   platoItems.push({ ...newFood });
 
   closeModal('modalCustom');
@@ -2181,98 +2344,7 @@ function submitCustomFood() {
   renderCombResults();
 }
 
-// ===== REQUISITO 5: INTEGRACIÓN NUTRICHOACH IA =====
-async function sendChat() {
-  const inp = document.getElementById('chatInput');
-  const txt = inp.value.trim();
-  if (!txt) return;
-  inp.value = '';
-
-  appendChatMessage(txt, 'user');
-
-  // Loading indicator
-  const loadingId = appendChatMessage('⏳ NutriCoach está pensando su recomendación...', 'ai');
-
-  try {
-    const res = await fetch('/api/gemini/coach', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        prompt: txt,
-        userProfile: perfil,
-        currentLog: { items: platoItems, totals: getPlatoTotals() }
-      })
-    });
-    const data = await res.json();
-    const reply = data.reply || 'No pude procesar la consulta en este momento.';
-    updateChatMessage(loadingId, reply);
-  } catch(e) {
-    // Fallback inteligente offline
-    const reply = getOfflineKnowledge(txt);
-    updateChatMessage(loadingId, reply);
-  }
-}
-
-function askCoachPrompt(p) {
-  document.getElementById('chatInput').value = p;
-  sendChat();
-}
-
-function askPlateAnalysis() {
-  const t = getPlatoTotals();
-  if (!platoItems.length) {
-    appendChatMessage('🍽️ Tu plato está vacío. Agrega algunos alimentos en la pestaña "Mi Plato" y luego presiona este botón.', 'ai');
-    return;
-  }
-  const p = `Por favor evalúa mi plato actual con ${t.kcal} kcal, ${t.prot}g de proteína, ${t.carb}g de carbos y ${t.gras}g de grasas. Mi meta actual es ${perfil.goal === 'ganancia' ? 'Ganancia Muscular' : 'Pérdida de Grasa'}.`;
-  askCoachPrompt(p);
-}
-
-function appendChatMessage(text, sender) {
-  const c = document.getElementById('chatMessages');
-  const id = 'msg_' + Date.now() + Math.random();
-  const d = document.createElement('div');
-  d.className = `msg msg-${sender}`;
-  d.id = id;
-  d.innerHTML = formatMarkdown(text);
-  c.appendChild(d);
-  c.scrollTop = c.scrollHeight;
-  return id;
-}
-
-function updateChatMessage(id, text) {
-  const el = document.getElementById(id);
-  if (el) {
-    el.innerHTML = formatMarkdown(text);
-    document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
-  }
-}
-
-function clearChat() {
-  document.getElementById('chatMessages').innerHTML = `
-    <div class="msg msg-ai">
-      Conversación reiniciada. ¿En qué te ayudo con tu plan de nutrición peruano?
-    </div>`;
-}
-
-function getOfflineKnowledge(prompt) {
-  const p = prompt.toLowerCase();
-  if (p.includes('lomo') || p.includes('saltado')) {
-    return '🍽️ <strong>Lomo Saltado Fit:</strong> Pide o prepara 160g de lomo fino con doble porción de cebolla y tomate al wok. Reemplaza las papas fritas profundas por papas al air fryer o doradas con 1 cdta de aceite de oliva. ¡Ahorras 250 kcal y sumas proteína magra!';
-  }
-  if (p.includes('proteina') || p.includes('supermercado') || p.includes('metro') || p.includes('plaza vea')) {
-    return '🛒 <strong>Proteínas económicas en el súper:</strong><br>• Atún en agua Primor/Fanny<br>• Pechuga de pollo San Fernando<br>• Huevos La Calera pardos<br>• Filete de bonito fresco en terminal o plaza vea (alto Omega 3)<br>• Yogur Griego Gloria natural sin azúcar (14g prot).';
-  }
-  return `💪 <strong>Consejo NutriCoach Perú:</strong> Para tu meta de <strong>${perfil.goal === 'ganancia' ? 'Ganancia Muscular' : 'Pérdida de Grasa'}</strong>, apunta a <strong>${perfil.macros.prot}g de proteína al día</strong> repartidos en tus 3 o 4 comidas principales. ¡No elimines la papa ni el camote: solo ajusta la porción pesada!`;
-}
-
-function formatMarkdown(t) {
-  return t
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\n/g, '<br>');
-}
-
-// ===== 6. MENÚ SEMANAL =====
+// ===== 8. MENÚ SEMANAL =====
 const DAYS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 const SLOTS = [
   { key: 'desayuno', label: 'Desayuno', time: '7:30 am' },
@@ -2286,10 +2358,10 @@ function initWeekMenu() {
   if (!Object.keys(weekMenu).length) {
     for (let d = 0; d < 7; d++) {
       weekMenu[d] = {
-        desayuno: { ...INITIAL_FOODS[18] },
-        'media-manana': { ...INITIAL_FOODS[14] },
-        almuerzo: { ...INITIAL_FOODS[d % 2 === 0 ? 0 : 1] },
-        'media-tarde': { ...INITIAL_FOODS[25] },
+        desayuno: { ...INITIAL_FOODS[9] },
+        'media-manana': { ...INITIAL_FOODS[20] },
+        almuerzo: { ...INITIAL_FOODS[d % 2 === 0 ? 0 : 5] },
+        'media-tarde': { ...INITIAL_FOODS[35] },
         cena: { ...INITIAL_FOODS[2] }
       };
     }
@@ -2387,8 +2459,7 @@ function renderPickerResults() {
   document.getElementById('pickerResults').innerHTML = list.map(f => `
     <div class="food-result-item" style="cursor:pointer" onclick="selectPickerMeal(${f.id})">
       <div style="flex:1">
-        <div class="fri-name">${f.n}</div>
-        <div class="fri-macros">${f.kcal} kcal · P:${f.p}g</div>
+        <div class="fri-name">${f.n} <span class="fri-unit">(${f.u})</span></div>
       </div>
       <button class="cb on">Elegir</button>
     </div>`).join('');
@@ -2410,7 +2481,7 @@ function removeMeal(day, key) {
   renderDayMenu(day);
 }
 
-// ===== 7. BASE DE ALIMENTOS TAB =====
+// ===== 9. BASE DE ALIMENTOS TAB =====
 function renderCalCats() {
   document.getElementById('calCats').innerHTML = CATEGORIES.map(c => `
     <button class="cb ${calCatActive === c ? 'on' : ''}" onclick="setCalCat('${c}')">${c}</button>
@@ -2443,7 +2514,7 @@ function renderCalList() {
     </div>`).join('');
 }
 
-// ===== 8. EJERCICIO =====
+// ===== 10. EJERCICIO =====
 const EXERCISES = [
   { name: "Caminata enérgica 30 min", level: ["sedentario", "ligero"], kcal: 120, sets: "30 min", col: "var(--verde-light)", ico: "🚶", desc: "Activa el metabolismo sin estrés articular.", ytq: "caminata rapida para quemar grasa" },
   { name: "Sentadillas al aire", level: ["sedentario", "ligero", "moderado"], kcal: 90, sets: "3×12", col: "var(--azul-light)", ico: "🦵", desc: "Espalda recta, baja a 90 grados.", ytq: "sentadillas correctas principiantes" },
@@ -2476,7 +2547,7 @@ function renderExercise() {
 }
 function filterEx(l) { exLevelActive = l; renderExercise(); }
 
-// ===== 9. METAS DIARIAS =====
+// ===== 11. METAS DIARIAS =====
 function renderMetas() {
   const waterTarget = (perfil.peso * 0.035).toFixed(1);
   const metas = [
@@ -2510,7 +2581,7 @@ function toggleMetaCheck(i) {
   renderMetas();
 }
 
-// ===== 10. MODALES GENERALES =====
+// ===== 12. MODALES GENERALES =====
 function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
 function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
@@ -2577,7 +2648,6 @@ function triggerPWAInstall() {
     }
   }
 }
-
 
 // ===== PANTALLA DE BIENVENIDA (ONBOARDING) =====
 let obStep = 1, obSexo = 'mujer', obGoal = 'perdida';
@@ -2663,7 +2733,6 @@ function obNext() {
   if (err) { document.getElementById('obErr').textContent = err; return; }
 
   if (obStep === 2) {
-    // sugerir objetivo según peso meta
     const p = parseFloat(document.getElementById('ob-peso').value);
     const m = parseFloat(document.getElementById('ob-meta').value);
     obSetGoal(m > p ? 'ganancia' : 'perdida');
@@ -2688,11 +2757,7 @@ function obNext() {
 
     const notes = [];
     const imcMeta = perfil.meta / ((perfil.talla / 100) ** 2);
-    if (imcMeta < 18.5) notes.push(`Tu peso meta da un IMC de ${imcMeta.toFixed(1)}, por debajo del rango saludable (18.5–24.9). Considera una meta más alta o consúltalo con un profesional.`);
-    if (perfil.goal === 'perdida' && perfil.meta >= perfil.peso) notes.push('Elegiste perder grasa, pero tu peso meta es igual o mayor al actual. Puedes ajustarlo en "Mi perfil".');
-    if (perfil.goal === 'ganancia' && perfil.meta <= perfil.peso) notes.push('Elegiste ganar músculo, pero tu peso meta es igual o menor al actual. Puedes ajustarlo en "Mi perfil".');
-    if (perfil.edad < 18) notes.push('Esta calculadora está pensada para adultos. En menores de 18 años consulta a un pediatra o nutricionista.');
-    if (perfil.ls === 'embarazo') notes.push('En embarazo o lactancia, tu plan debe ser supervisado por tu médico u obstetra.');
+    if (imcMeta < 18.5) notes.push(`Tu peso meta da un IMC de ${imcMeta.toFixed(1)}, por debajo del rango saludable (18.5–24.9).`);
     document.getElementById('obNotes').innerHTML = notes.map(n => `<div class="ob-note">⚠️ ${n}</div>`).join('');
   }
   obStep++;
@@ -2712,9 +2777,9 @@ window.cloudToggle = function(){ alert('La sincronización con la nube no pudo c
 // INICIALIZACIÓN
 window.onload = () => {
   updateUI();
+  setModoPeso(modoPeso);
   if (!onboardingDone) showOnboarding();
   
-  // REGISTRO DEL SERVICE WORKER (PWA & MODO OFFLINE)
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
       .then(reg => console.log('NutriFit PWA lista:', reg.scope))
@@ -2754,7 +2819,6 @@ function setBtn() {
   b.textContent = user ? '☁️ ' + (user.displayName || user.email || 'Cuenta').split(' ')[0] + ' · Salir' : '☁️ Iniciar sesión';
 }
 
-// Junta todo lo que la app guarda en el teléfono
 function collect() {
   const d = {};
   for (let i = 0; i < localStorage.length; i++) {
@@ -2764,7 +2828,6 @@ function collect() {
   return d;
 }
 
-// Cada vez que la app guarda algo, se programa el respaldo en la nube
 Storage.prototype.setItem = function (k, v) {
   rawSet.call(this, k, v);
   if (this === window.localStorage && typeof k === 'string' && k.startsWith(PREFIX) && k !== TS_KEY && !applying) schedule();
@@ -2803,11 +2866,6 @@ async function initialSync() {
     const c = snap.data();
     const cTs = c.updatedAt || 0;
     if (cTs > localTs) {
-      const localHasData = !!localStorage.getItem('nutrifit_onboarded');
-      if (localTs === 0 && localHasData &&
-          !confirm('Encontramos datos guardados en tu cuenta.\n\nAceptar = usar los datos de tu cuenta (reemplaza los de este dispositivo).\nCancelar = mantener los de este dispositivo (reemplaza los de tu cuenta).')) {
-        await upload(true); return;
-      }
       applying = true;
       Object.entries(c.data || {}).forEach(([k, v]) => rawSet.call(localStorage, k, v));
       rawSet.call(localStorage, TS_KEY, String(cTs));
@@ -2832,9 +2890,9 @@ window.cloudToggle = async function () {
   } catch (e) {
     const c = e.code || '';
     if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return;
-    if (c === 'auth/unauthorized-domain') alert('Falta autorizar este dominio en Firebase:\nAuthentication → Configuración → Dominios autorizados → agrega dastan-beep.github.io');
+    if (c === 'auth/unauthorized-domain') alert('Falta autorizar este dominio en Firebase:\nAuthentication → Configuración → Dominios autorizados');
     else if (c === 'auth/operation-not-allowed') alert('Activa Google como método de acceso en Firebase → Authentication → Método de acceso.');
-    else if (c === 'auth/popup-blocked') alert('El navegador bloqueó la ventana de inicio de sesión. Permite las ventanas emergentes para este sitio e inténtalo otra vez.');
+    else if (c === 'auth/popup-blocked') alert('El navegador bloqueó la ventana emergente. Permite ventanas emergentes e inténtalo otra vez.');
     else alert('No se pudo iniciar sesión (' + (c || e.message) + ').');
   }
 };
@@ -2842,9 +2900,11 @@ window.cloudToggle = async function () {
 onAuthStateChanged(auth, u => {
   user = u;
   setBtn();
-  if (u) initialSync(); else setStatus('');
+  if (u) { initialSync(); }
+  else { setStatus(''); }
 });
 window.addEventListener('online', () => { if (user) upload(true); });
 </script>
 </body>
 </html>
+
