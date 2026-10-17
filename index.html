@@ -1484,6 +1484,30 @@ function eliminarHistorialDia(diaKey) {
   }
 }
 
+function eliminarItemHistorialDia(diaKey, itemIdx) {
+  if (!historyDays[diaKey] || !historyDays[diaKey].items) return;
+  const item = historyDays[diaKey].items[itemIdx];
+  const nombre = item ? item.n : 'este alimento';
+  if (confirm(`¿Eliminar "${nombre}" de las comidas de este día?`)) {
+    historyDays[diaKey].items.splice(itemIdx, 1);
+    const tot = historyDays[diaKey].items.reduce((acc, f) => ({
+      kcal: acc.kcal + f.kcal,
+      prot: +(acc.prot + f.p).toFixed(1),
+      carb: +(acc.carb + f.c).toFixed(1),
+      gras: +(acc.gras + f.g).toFixed(1)
+    }), { kcal: 0, prot: 0, carb: 0, gras: 0 });
+    historyDays[diaKey].totals = tot;
+    if (diaKey === getTodayKey()) {
+      platoItems.splice(itemIdx, 1);
+      localStorage.setItem('nutrifit_plate_items', JSON.stringify(platoItems));
+      renderPlato();
+    }
+    localStorage.setItem('nutrifit_history_days', JSON.stringify(historyDays));
+    renderHistorialDias();
+    renderGraficaSemanaCalorias();
+  }
+}
+
 function renderHistorialDias() {
   syncTodayToHistory();
   const c = document.getElementById('historialDiasContainer');
@@ -1517,9 +1541,10 @@ function renderHistorialDias() {
       badgeText = `${Math.abs(diffKcal)} kcal bajo meta`;
     }
 
-    const itemsListHtml = (dayData.items || []).map(it => `
-      <span style="display:inline-block;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 8px;margin:2px 4px 2px 0;font-size:11.5px">
-        ${it.n} <strong style="color:var(--coral-dark)">(${it.kcal} kcal)</strong>
+    const itemsListHtml = (dayData.items || []).map((it, itIdx) => `
+      <span style="display:inline-flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 8px;margin:2px 4px 2px 0;font-size:11.5px">
+        <span>${it.n} <strong style="color:var(--coral-dark)">(${it.kcal} kcal)</strong></span>
+        <button onclick="eliminarItemHistorialDia('${d}', ${itIdx})" title="Borrar comida" style="background:none;border:none;color:var(--coral-dark);cursor:pointer;font-size:11px;padding:0 2px;line-height:1">✕</button>
       </span>
     `).join('');
 
@@ -2136,32 +2161,78 @@ function setCombCat(cat) {
 }
 
 function renderCombResults() {
-  const q = (document.getElementById('combSearch').value || '').toLowerCase();
+  const q = (document.getElementById('combSearch').value || '').trim().toLowerCase();
   const all = getAllFoods();
   const list = all.filter(f => {
-    const matchCat = combCatActive === 'Todos' || f.cat === combCatActive || (combCatActive === 'Mis Alimentos' && f.isCustom);
+    const isCustom = f.isCustom || customFoods.some(c => String(c.id) === String(f.id));
+    const matchCat = combCatActive === 'Todos' || f.cat === combCatActive || (combCatActive === 'Mis Alimentos' && isCustom);
     const matchQ = f.n.toLowerCase().includes(q);
     return matchCat && matchQ;
-  }).slice(0, 45);
+  }).slice(0, 50);
 
-  document.getElementById('combResults').innerHTML = list.map(f => `
-    <div class="food-result-item">
-      <div class="fri-name">
-        ${f.n} <span class="fri-unit">(${f.u})</span>
+  const container = document.getElementById('combResults');
+  if (!list.length) {
+    if (combCatActive === 'Mis Alimentos') {
+      container.innerHTML = `
+        <div style="text-align:center;padding:1.6rem 1rem;color:var(--text-3);font-size:13px;background:var(--bg);border-radius:10px;border:1px dashed var(--border)">
+          🍽️ Aún no tienes comidas subidas por ti.<br>
+          <span style="font-size:11.5px">Crea un alimento personalizado o ingrésalo por foto/etiqueta nutricional:</span>
+          <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap">
+            <button class="cb on" onclick="openCustomFoodModal()">➕ Crear alimento</button>
+            <button class="cb on" onclick="openLabelModal()">📷 Por etiqueta</button>
+          </div>
+        </div>
+      `;
+      return;
+    } else {
+      container.innerHTML = '<div style="text-align:center;padding:1.2rem;color:var(--text-3);font-size:12.5px">No se encontraron alimentos para esta búsqueda.</div>';
+      return;
+    }
+  }
+
+  container.innerHTML = list.map(f => {
+    const isCustom = f.isCustom || customFoods.some(c => String(c.id) === String(f.id));
+    return `
+      <div class="food-result-item">
+        <div class="fri-name">
+          ${f.n} <span class="fri-unit">(${f.u || '1 porción'})</span>
+          ${isCustom ? '<span style="font-size:9.5px;background:rgba(29,158,117,0.12);color:var(--verde);padding:2px 6px;border-radius:4px;font-weight:700;margin-left:5px">Mi comida</span>' : ''}
+        </div>
+        <div class="fri-actions" style="display:flex;align-items:center;gap:5px">
+          ${isCustom ? `
+            <button onclick="eliminarComidaPropia('${f.id}')" title="Borrar de mis comidas guardadas" style="background:rgba(224,86,36,0.1);border:1px solid rgba(224,86,36,0.25);color:var(--coral-dark);cursor:pointer;width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:13px">🗑️</button>
+          ` : ''}
+          <button class="fri-add" onclick="abrirModalPorcion('${f.id}')" title="Agregar con porción">+</button>
+        </div>
       </div>
-      <div class="fri-actions">
-        <button class="fri-add" onclick="abrirModalPorcion(${f.id})" title="Agregar con porción">+</button>
-      </div>
-    </div>`).join('');
+    `;
+  }).join('');
+}
+
+function eliminarComidaPropia(id) {
+  const f = customFoods.find(x => String(x.id) === String(id));
+  const nombre = f ? f.n : 'este alimento';
+  if (confirm(`¿Estás seguro de que deseas eliminar "${nombre}" de tus comidas guardadas?`)) {
+    customFoods = customFoods.filter(x => String(x.id) !== String(id));
+    localStorage.setItem('nutrifit_custom_foods', JSON.stringify(customFoods));
+    renderCombResults();
+    const sel = document.getElementById('edit-plato-add-select');
+    if (sel) {
+      sel.innerHTML = getAllFoods().map(food => `
+        <option value="${food.id}">${food.n} (${food.u})</option>
+      `).join('');
+    }
+    alert(`Comida "${nombre}" eliminada de tu lista.`);
+  }
 }
 
 function abrirModalPorcion(id) {
-  const f = getAllFoods().find(x => x.id == id);
+  const f = getAllFoods().find(x => String(x.id) === String(id));
   if (!f) return;
   pendingFoodToAdd = f;
 
   document.getElementById('mpTitle').textContent = f.n;
-  document.getElementById('mpSub').textContent = `Porción estándar de referencia: ${f.u}`;
+  document.getElementById('mpSub').textContent = `Porción de referencia: ${f.u || '1 porción'}`;
   document.getElementById('inp-porcion-val').value = 1;
   actualizarPreviewPorcion();
   openModal('modalPorcion');
@@ -2170,7 +2241,7 @@ function abrirModalPorcion(id) {
 function ajustarPorcionInput(delta) {
   const inp = document.getElementById('inp-porcion-val');
   let val = parseFloat(inp.value) || 1;
-  val = Math.max(0.25, val + delta);
+  val = Math.max(0.25, +(val + delta).toFixed(2));
   inp.value = val;
   actualizarPreviewPorcion();
 }
@@ -2180,10 +2251,15 @@ document.getElementById('inp-porcion-val')?.addEventListener('input', actualizar
 function actualizarPreviewPorcion() {
   if (!pendingFoodToAdd) return;
   const mult = parseFloat(document.getElementById('inp-porcion-val').value) || 1;
-  const k = Math.round(pendingFoodToAdd.kcal * mult);
-  const p = +(pendingFoodToAdd.p * mult).toFixed(1);
-  const c = +(pendingFoodToAdd.c * mult).toFixed(1);
-  const g = +(pendingFoodToAdd.g * mult).toFixed(1);
+  const baseK = pendingFoodToAdd.baseKcal !== undefined ? pendingFoodToAdd.baseKcal : pendingFoodToAdd.kcal;
+  const baseP = pendingFoodToAdd.baseP !== undefined ? pendingFoodToAdd.baseP : pendingFoodToAdd.p;
+  const baseC = pendingFoodToAdd.baseC !== undefined ? pendingFoodToAdd.baseC : pendingFoodToAdd.c;
+  const baseG = pendingFoodToAdd.baseG !== undefined ? pendingFoodToAdd.baseG : pendingFoodToAdd.g;
+
+  const k = Math.round(baseK * mult);
+  const p = +(baseP * mult).toFixed(1);
+  const c = +(baseC * mult).toFixed(1);
+  const g = +(baseG * mult).toFixed(1);
 
   document.getElementById('mpPreview').innerHTML = `
     Se sumará a tu plato: <strong>${k} kcal</strong> · P: ${p}g · C: ${c}g · G: ${g}g
@@ -2194,19 +2270,25 @@ function confirmarAgregarAlPlato() {
   if (!pendingFoodToAdd) return;
   const mult = parseFloat(document.getElementById('inp-porcion-val').value) || 1;
 
+  const baseK = pendingFoodToAdd.baseKcal !== undefined ? pendingFoodToAdd.baseKcal : pendingFoodToAdd.kcal;
+  const baseP = pendingFoodToAdd.baseP !== undefined ? pendingFoodToAdd.baseP : pendingFoodToAdd.p;
+  const baseC = pendingFoodToAdd.baseC !== undefined ? pendingFoodToAdd.baseC : pendingFoodToAdd.c;
+  const baseG = pendingFoodToAdd.baseG !== undefined ? pendingFoodToAdd.baseG : pendingFoodToAdd.g;
+
   const itemToAdd = {
-    id: 'it_' + Date.now() + Math.random(),
+    id: 'it_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
     n: pendingFoodToAdd.n,
-    u: pendingFoodToAdd.u,
+    u: pendingFoodToAdd.u || '1 porción',
     mult: mult,
-    baseKcal: pendingFoodToAdd.kcal,
-    baseP: pendingFoodToAdd.p,
-    baseC: pendingFoodToAdd.c,
-    baseG: pendingFoodToAdd.g,
-    kcal: Math.round(pendingFoodToAdd.kcal * mult),
-    p: +(pendingFoodToAdd.p * mult).toFixed(1),
-    c: +(pendingFoodToAdd.c * mult).toFixed(1),
-    g: +(pendingFoodToAdd.g * mult).toFixed(1)
+    baseKcal: baseK,
+    baseP: baseP,
+    baseC: baseC,
+    baseG: baseG,
+    kcal: Math.round(baseK * mult),
+    p: +(baseP * mult).toFixed(1),
+    c: +(baseC * mult).toFixed(1),
+    g: +(baseG * mult).toFixed(1),
+    isCustom: !!pendingFoodToAdd.isCustom
   };
 
   platoItems.push(itemToAdd);
@@ -2449,15 +2531,16 @@ function setPickerCat(cat) {
 }
 
 function renderPickerResults() {
-  const q = (document.getElementById('pickerSearch').value || '').toLowerCase();
+  const q = (document.getElementById('pickerSearch').value || '').trim().toLowerCase();
   const list = getAllFoods().filter(f => {
-    const matchCat = pickerCatActive === 'Todos' || f.cat === pickerCatActive || (pickerCatActive === 'Mis Alimentos' && f.isCustom);
+    const isCustom = f.isCustom || customFoods.some(c => String(c.id) === String(f.id));
+    const matchCat = pickerCatActive === 'Todos' || f.cat === pickerCatActive || (pickerCatActive === 'Mis Alimentos' && isCustom);
     const matchQ = f.n.toLowerCase().includes(q);
     return matchCat && matchQ;
   }).slice(0, 30);
 
   document.getElementById('pickerResults').innerHTML = list.map(f => `
-    <div class="food-result-item" style="cursor:pointer" onclick="selectPickerMeal(${f.id})">
+    <div class="food-result-item" style="cursor:pointer" onclick="selectPickerMeal('${f.id}')">
       <div style="flex:1">
         <div class="fri-name">${f.n} <span class="fri-unit">(${f.u})</span></div>
       </div>
@@ -2466,7 +2549,7 @@ function renderPickerResults() {
 }
 
 function selectPickerMeal(fid) {
-  const f = getAllFoods().find(x => x.id == fid);
+  const f = getAllFoods().find(x => String(x.id) === String(fid));
   if (!f || !pickerTarget) return;
   if (!weekMenu[pickerTarget.day]) weekMenu[pickerTarget.day] = {};
   weekMenu[pickerTarget.day][pickerTarget.mealKey] = { ...f };
@@ -2907,4 +2990,5 @@ window.addEventListener('online', () => { if (user) upload(true); });
 </script>
 </body>
 </html>
+
 
