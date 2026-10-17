@@ -1,6 +1,0 @@
-{
-  "name": "NutriFit Perú — Nutrición, Macros y Recetas",
-  "description": "Calculadora de macros y nutrición adaptada a la gastronomía peruana y supermercados locales con desglose de recetas, escáner de etiquetas y asistente IA.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
